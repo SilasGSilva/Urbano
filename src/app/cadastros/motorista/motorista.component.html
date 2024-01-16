@@ -1,1 +1,27 @@
-<p>motorista works!</p>
+<po-page-default
+    p-title = "Motoristas/Colaboradores"
+    [p-breadcrumb]="breadcrumb"
+    [p-actions]="actions"> 
+
+	<!-- Grid-->
+	<po-container class=" po-lg-12 po-pr-0 po-pl-0">
+		<!--po-loading-overlay
+			p-screen-lock="true"
+			[hidden]="hideLoadingGrig"
+			p-text="{{ litComarca?.loading }}"
+		>
+		</po-loading-overlay-->
+		<!-- Tabela com o retorno de comarcas
+            (p-show-more)="showMore()"
+        [p-show-more-disabled]="isDisableShowMore"-->
+		<po-table
+			[p-columns]="columns"
+			[p-items]="listMotoristas"
+			p-sort="true"
+			p-hide-columns-manager="true"
+			p-striped="true"
+			p-hide-text-overflow
+		>
+		</po-table>
+	</po-container>
+</po-page-default>

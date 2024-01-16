@@ -1,0 +1,47 @@
+<po-page-default
+    p-title = "Frota"
+    [p-breadcrumb]="breadcrumb"
+    [p-actions]="actions">
+
+    <po-multiselect
+        class="po-md-2 po-xl-3 po-lg-2 po-sm-2"
+        p-placeholder="Selecione"
+        p-label="Prefixo veículo">        
+    </po-multiselect>
+
+    <po-multiselect
+        class="po-md-2 po-xl-3 po-lg-2 po-sm-2"
+        p-placeholder="Selecione"
+        p-label="Placa">        
+    </po-multiselect>
+    
+    <po-multiselect
+        class="po-md-2 po-xl-3 po-lg-2 po-sm-2"
+        p-placeholder="Selecione"
+        p-label="Tipo de veículo">        
+    </po-multiselect>
+
+    <po-multiselect
+        class="po-md-2 po-xl-3 po-lg-2 po-sm-2"
+        p-placeholder="Selecione"
+        p-label="Status">        
+    </po-multiselect>
+
+    <po-container
+        class=" po-lg-12 po-pr-0 po-pl-0">        
+
+        <po-table
+            p-container="border"
+            [p-height]="300"
+            [p-hide-text-overflow]="true"
+            [p-selectable]="true"
+            [p-sort]="true"
+            [p-striped]="true"
+            [p-columns]="columns"
+            [p-items]="items"
+            [p-max-columns]="7"
+            p-actions-right="true"   
+        >
+        </po-table>
+    </po-container>
+</po-page-default>
