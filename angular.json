@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "urbano": {
+    "urbano-protheus": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/urbano",
+            "outputPath": "dist/urbano-protheus",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -25,8 +25,9 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@po-ui/style/css/po-theme-default.min.css",
-              "src/styles.css"
+              "node_modules/@totvs/po-theme/css/po-theme-default-variables.min.css",
+              "node_modules/@totvs/po-theme/css/po-theme-default.min.css",
+              "node_modules/@po-ui/style/css/po-theme-core.min.css"
             ],
             "scripts": []
           },
@@ -61,10 +62,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "urbano:build:production"
+              "browserTarget": "urbano-protheus:build:production"
             },
             "development": {
-              "browserTarget": "urbano:build:development"
+              "browserTarget": "urbano-protheus:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -72,7 +73,20 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "urbano:build"
+            "browserTarget": "urbano-protheus:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "tsconfig.app.json",
+              "tsconfig.spec.json",
+              "e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -88,8 +102,9 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@po-ui/style/css/po-theme-default.min.css",
-              "src/styles.css"
+              "node_modules/@totvs/po-theme/css/po-theme-default-variables.min.css",
+              "node_modules/@totvs/po-theme/css/po-theme-default.min.css",
+              "node_modules/@po-ui/style/css/po-theme-core.min.css"
             ],
             "scripts": []
           }
