@@ -23,7 +23,7 @@ export class FrotaComponent implements OnInit {
     constructor(
 	    private poDialog : PoDialogService,
         private frotaServive : FrotaService,
-	) {}
+	) { }
 
     ngOnInit(): void {
         this.columns = this.frotaServive.getColumns()

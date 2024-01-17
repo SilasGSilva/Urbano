@@ -84,7 +84,7 @@ export class FrotaService {
                 Prefixo: '03040',
                 Placa: 'LMM2209',
                 Tipo: 'MICRO',
-                Status: 'Inativo',
+                Status: 'Inativo', 
             },
         ];
     }
