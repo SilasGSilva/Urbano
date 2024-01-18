@@ -13,7 +13,8 @@ const host = 'http://localhost:12173/rest/';
 export class ProtheusService {
     pathParam: string = '';
     private cBody: string = '{}';
-    constructor(private httpServ: HttpService, private http: HttpClient) {}
+    constructor(private httpServ: HttpService) {}
+
     /**
      * params padrão
      */
@@ -81,4 +82,42 @@ export class ProtheusService {
     setBody(cBody: string = '') {
         this.cBody = cBody;
     }
+
+    /**
+	 * acrescenta um novo valor de cabeçalho ao conjunto já existente
+	 * @param name Nome do parametro
+	 * @param value Valor do parametro
+	 */
+	setOptionsHeaders(name: string, value: string[] | string) {
+		// Tratamento para chamada pelo Mingle
+		this.optionsGetHeader = this.optionsGetHeader.set(name, value);
+	}
+
+    /**
+	 * Retorna o valor do Header passado por parâmetro
+	 * @param paramName - Header solicitado
+	 */
+	getHeaderValue(paramName: string): string | null {
+		// Tratamento para chamada pelo Mingle
+		return this.optionsGetHeader.get(paramName);
+	}
+    /**
+	 * constroi um novo corpo URL acrescentando ao parametro o valor fornecido
+	 * @param param Nome do parametro
+	 * @param value Valor do parametro
+	 */
+	setOptionsParams(param: string, value: string) {
+		// Tratamento para chamada pelo Mingle
+		this.optionsGetParams = this.optionsGetParams.set(param, value);
+	}
+
+    /**
+	 * Retorna o valor do QueryParam passado por parâmetro
+	 * @param paramName - QueryParam solicitado
+	 */
+	getParamValue(paramName: string): string | null {
+		// Tratamento para chamada pelo Mingle
+		return this.optionsGetParams.get(paramName);
+	}
+    
 }
