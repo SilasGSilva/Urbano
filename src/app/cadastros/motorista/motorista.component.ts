@@ -95,7 +95,7 @@ export class MotoristaComponent implements OnInit {
 			if (this.filters != ''){
 				this.filters += ' AND '
 			}
-			this.filters += " GYG_TURNO1 LIKE '%" + this.cmbTurno.selectedOption.value + "%'";
+			this.filters += " GYG_TURNO LIKE '%" + this.cmbTurno.selectedOption.value + "%'";
 		}
 
         this.getMotoristas();
@@ -129,7 +129,7 @@ export class MotoristaComponent implements OnInit {
 
 				let motorista = new MotoristaModel;
 				let status : string = resource.getModel('GYGMASTER').getValue('GYG_STATUS');
-				let turno: string = resource.getModel('GYGMASTER').getValue('GYG_TURNO1');
+				let turno: string = resource.getModel('GYGMASTER').getValue('GYG_TURNO');
 				let descTurno : string = ''
 				
 				if (turno.includes('1')){
