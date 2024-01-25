@@ -8,11 +8,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { MotoristaComponent } from './cadastros/motorista/motorista.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
+import { LocalidadesComponent } from './cadastros/localidades/localidades.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MotoristaComponent,
+    LocalidadesComponent,
     NavMenuComponent
   ],
   imports: [

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PoDialogService, PoMenuItem, PoNotificationService, PoToolbarAction, PoToolbarProfile } from '@po-ui/ng-components';
+import { PoDialogService, PoMenuItem } from '@po-ui/ng-components';
 import { AppComponent } from '../app.component';
 import { Router } from '@angular/router';
 
@@ -26,7 +26,8 @@ export class NavMenuComponent {
 		subItems: [
 			{ label: 
 				'Motorista/Colaboradores', action: this.navigate.bind(this, '/motorista'), },
-			{ label: 'Localidades', action: () => {this.teste('2') }}
+			{ label: 
+				'Localidades', action: this.navigate.bind(this, '/localidades'), },
 		]
 	}
   ];
