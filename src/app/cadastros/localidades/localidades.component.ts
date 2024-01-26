@@ -4,13 +4,13 @@ import { localComboService, muniComboService } from 'src/app/services/combo-filt
 import { HttpParams } from '@angular/common/http';
 import { FwProtheusModel, Resource } from 'src/app/services/models/fw-protheus.model';
 import { CollumnsLocalidade, ListStatus, LocalidadesModel } from './localidade.struct';
-import { UtilsService } from 'src/app/services/utils.service';
+import { UtilsService } from 'src/app/services/functions/util.function';
 
 @Component({
   selector: 'app-motorista',
   templateUrl: './localidades.component.html',
   styleUrls: ['./localidades.component.css'],
-  providers: [localComboService, muniComboService]
+  providers: []
 })
 export class LocalidadesComponent implements OnInit {
 	
@@ -217,5 +217,5 @@ export class LocalidadesComponent implements OnInit {
 		  this._utilsService.sort(value, valueToCompare, event)
 		);
 		this.listLocalidade = result;
-	  }
+	}
 }

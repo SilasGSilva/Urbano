@@ -14,16 +14,10 @@ export class PoComboMatriculaStruct implements PoComboOption {
 	matricula?: string = ''
 }
 
-export class LocalComboStruct implements PoComboOption {
+export class FilterComboStruct implements PoComboOption {
 	label: string = '';
 	value: string = '';
-	descMuni: string = '';
-}
-
-export class MunicComboStruct implements PoComboOption {
-	label: string = '';
-	value: string = '';
-	descLocal: string = '';
+	desc: string = '';
 }
 /**
  * RecursoComboService
@@ -156,11 +150,14 @@ export class MatriculaComboService implements PoComboFilter {
 		}))
 	}
 }
+
 /**
  * localComboService
  * Utilizado no combo de Local
  */
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class localComboService implements PoComboFilter {
 
 	private endpoint: string = 'GTPA001'
@@ -181,16 +178,16 @@ export class localComboService implements PoComboFilter {
 
 		return this.apiService.get(this.endpoint, httpParams).pipe(map((response: any) => {
 
-			const items: LocalComboStruct[] = [];
+			const items: FilterComboStruct[] = [];
 			let hasNext = true;
 
 			response.resources.forEach((resource : any) => {
 
-				let itemReturn: LocalComboStruct = new LocalComboStruct();
+				let itemReturn: FilterComboStruct = new FilterComboStruct();
 
 				itemReturn.value = resource.models[0].fields.find((field : any) => field.id == 'GI1_COD').value;
 				itemReturn.label = resource.models[0].fields.find((field : any) => field.id == 'GI1_DESCRI').value;
-				itemReturn.descMuni = resource.models[0].fields.find((field : any) => field.id == 'GI1_DSMUNI').value;
+				itemReturn.desc = resource.models[0].fields.find((field : any) => field.id == 'GI1_DSMUNI').value;
 
 				items.push(itemReturn)
 
@@ -227,7 +224,9 @@ export class localComboService implements PoComboFilter {
  * muniComboService
  * Utilizado no combo de Municipio
  */
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class muniComboService implements PoComboFilter {
 
 	private endpoint: string = 'GTPA001'
@@ -248,16 +247,16 @@ export class muniComboService implements PoComboFilter {
 
 		return this.apiService.get(this.endpoint, httpParams).pipe(map((response: any) => {
 
-			const items: MunicComboStruct[] = [];
+			const items: FilterComboStruct[] = [];
 			let hasNext = true;
 
 			response.resources.forEach((resource : any) => {
 
-				let itemReturn: MunicComboStruct = new MunicComboStruct();
+				let itemReturn: FilterComboStruct = new FilterComboStruct();
 
 				itemReturn.value = resource.models[0].fields.find((field : any) => field.id == 'GI1_CDMUNI').value;
 				itemReturn.label = resource.models[0].fields.find((field : any) => field.id == 'GI1_DSMUNI').value;
-				itemReturn.descLocal = resource.models[0].fields.find((field : any) => field.id == 'GI1_DESCRI').value;
+				itemReturn.desc = resource.models[0].fields.find((field : any) => field.id == 'GI1_DESCRI').value;
 
 				items.push(itemReturn)
 

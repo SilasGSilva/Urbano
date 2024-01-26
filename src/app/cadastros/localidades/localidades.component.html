@@ -4,7 +4,7 @@
     [p-actions]="actions"> 
 
 	<!-- Grid-->
-
+	<!-- Combo de Local -->
 	<po-combo
 		#filterLocal
 		name="local" 
@@ -14,18 +14,20 @@
 		(p-change)="setFilters()"
 		p-placeholder="Selecionar"
 		p-clean="true"
+		[p-sort]="true"
 	>
 		<ng-template p-combo-option-template let-option>
 			<div class="po-row">
 			<div class="po-sm-10 po-md-9 po-lg-11">
 				<div class="po-font-text-large-bold">{{ option.label }}</div>
 				<div class="po-font-text-smaller">Código: {{ option.value }}</div>
-				<div class="po-font-text-smaller">Município: {{ option.descMuni }}</div>
+				<div class="po-font-text-smaller">Município: {{ option.desc }}</div>
 			</div>
 			</div>
 		</ng-template>
 	</po-combo>
-	<!-- combo de tipo de recurso-->
+
+	<!-- Combo de Município -->
 	<po-combo
 		#filterMuni
 		name="municipio" 
@@ -35,18 +37,20 @@
 		(p-change)="setFilters()"
 		p-placeholder="Selecionar"
 		p-clean="true"
+		[p-sort]="true"
 	>
 		<ng-template p-combo-option-template let-option>
 			<div class="po-row">
 			<div class="po-sm-10 po-md-9 po-lg-11">
 				<div class="po-font-text-large-bold">{{ option.label }}</div>
 				<div class="po-font-text-smaller">Código: {{ option.value }}</div>
-				<div class="po-font-text-smaller">Local: {{ option.descLocal }}</div>
+				<div class="po-font-text-smaller">Local: {{ option.desc }}</div>
 			</div>
 			</div>
 		</ng-template>
   	</po-combo>
 
+	<!-- Combo de Status -->
 	<po-combo
 		#cmbStatus
 		name="status" 
@@ -58,6 +62,7 @@
 		p-placeholder="Selecionar"
 	> </po-combo>
 	
+	<!-- Tabela com itens de localidades -->
 	<po-table
 		class="po-md-12 po-pl-0 po-pt-2"
 		[p-columns]="itemsColumns"
