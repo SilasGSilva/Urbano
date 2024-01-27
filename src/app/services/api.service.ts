@@ -7,7 +7,7 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ApiService {
-	private apiUrl = 'http://localhost:8023/rest/fwmodel/';
+	private apiUrl = 'http://localhost:12173/rest/';
 
 	constructor(private http: HttpClient) {}
 	/**

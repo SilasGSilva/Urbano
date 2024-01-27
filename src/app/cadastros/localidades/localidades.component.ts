@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PoBreadcrumb, PoComboComponent, PoNotificationService, PoPageAction, PoSelectOption, PoTableColumn, PoTableColumnSort } from '@po-ui/ng-components';
-import { localComboService, muniComboService } from 'src/app/services/combo-filter.service';
 import { HttpParams } from '@angular/common/http';
 import { FwProtheusModel, Resource } from 'src/app/services/models/fw-protheus.model';
 import { CollumnsLocalidade, ListStatus, LocalidadesModel } from './localidade.struct';
 import { UtilsService } from 'src/app/services/functions/util.function';
+import { localComboService, muniComboService } from 'src/app/services/adaptors/wsurbano-adapter.service';
 
 @Component({
   selector: 'app-motorista',
@@ -15,7 +15,9 @@ import { UtilsService } from 'src/app/services/functions/util.function';
 export class LocalidadesComponent implements OnInit {
 	
 	//Declaração de variaveis 
-	filters: string = ''
+	filters: string = '';
+	filtroLocal: string = '';
+	filtroMuni: string = '';
 	
 	isLoading: boolean = true
 	resetFilters: boolean = false;
@@ -87,23 +89,33 @@ export class LocalidadesComponent implements OnInit {
 
         }
         if (this.filterLocal.selectedOption != undefined) {
+			this.filtroMuni = (
+				" AND ( UPPER(GI1_COD) LIKE UPPER('" + this.filterLocal.selectedOption.value + "') OR " +
+				" UPPER(GI1_DESCRI) LIKE UPPER('" + this.filterLocal.selectedOption.label + "') )"
+			)
 			if (this.filters != ''){
 				this.filters += ' AND '
 			}
 			this.filters += (
-                " ( UPPER(GI1_COD) LIKE UPPER('%" + this.filterLocal.selectedOption.value + "%') OR " +
-                " UPPER(GI1_DESCRI) LIKE UPPER('%" + this.filterLocal.selectedOption.value + "%') )"
-            );              
+            	" ( UPPER(GI1_COD) LIKE UPPER('" + this.filterLocal.selectedOption.value + "') OR " +
+            	" UPPER(GI1_DESCRI) LIKE UPPER('" + this.filterLocal.selectedOption.value + "') )"
+            );
+			             
 		}
         
         if (this.filterMuni.selectedOption != undefined) {
+			this.filtroLocal = ( 
+				" AND ( UPPER(GI1_CDMUNI) LIKE UPPER('" + this.filterMuni.selectedOption.value + "') OR " +
+				" UPPER(GI1_DSMUNI) LIKE UPPER('" + this.filterMuni.selectedOption.label + "') )"
+			);
+
 			if (this.filters != ''){
 				this.filters += ' AND '
 			}
 			this.filters += (
-                " ( UPPER(GI1_CDMUNI) LIKE UPPER('%" + this.filterMuni.selectedOption.value + "%') OR " +
-                " UPPER(GI1_DSMUNI) LIKE UPPER('%" + this.filterMuni.selectedOption.value + "%') )"
-            );              
+            	" ( UPPER(GI1_CDMUNI) LIKE UPPER('" + this.filterMuni.selectedOption.value + "') OR " +
+            	" UPPER(GI1_DSMUNI) LIKE UPPER('" + this.filterMuni.selectedOption.value + "') )"
+            );           
 		}
 
         this.getLocalidades();
@@ -217,5 +229,23 @@ export class LocalidadesComponent implements OnInit {
 		  this._utilsService.sort(value, valueToCompare, event)
 		);
 		this.listLocalidade = result;
+	}
+
+	/**
+	 * Realiza limpeza dos combos
+	 * @param filter nome do combo para ser limpo
+	 */
+	cleanFilter(filter: string = '') {
+		switch (filter) {
+			case 'local': {
+				this.filtroLocal = '';
+				break
+			}
+			case 'municipio': {
+				this.filtroMuni = '';
+				break;
+			}
+		}
+		
 	}
 }

@@ -11,9 +11,11 @@
 		class="po-lg-4 po-pl-0" 
 		p-label="Local"
 		[p-filter-service]="localComboService"
+		[p-filter-params]="filtroLocal"
 		(p-change)="setFilters()"
-		p-placeholder="Selecionar"
 		p-clean="true"
+		(p-change)="cleanFilter('local')"
+		p-placeholder="Selecionar"
 		[p-sort]="true"
 	>
 		<ng-template p-combo-option-template let-option>
@@ -21,7 +23,6 @@
 			<div class="po-sm-10 po-md-9 po-lg-11">
 				<div class="po-font-text-large-bold">{{ option.label }}</div>
 				<div class="po-font-text-smaller">Código: {{ option.value }}</div>
-				<div class="po-font-text-smaller">Município: {{ option.desc }}</div>
 			</div>
 			</div>
 		</ng-template>
@@ -34,9 +35,11 @@
 		class="po-lg-4 po-pl-1" 
 		p-label="Município"
 		[p-filter-service]="municipioComboService"
+		[p-filter-params]="filtroMuni"
 		(p-change)="setFilters()"
 		p-placeholder="Selecionar"
 		p-clean="true"
+		(p-change)="cleanFilter('municipio')"
 		[p-sort]="true"
 	>
 		<ng-template p-combo-option-template let-option>
@@ -44,7 +47,7 @@
 			<div class="po-sm-10 po-md-9 po-lg-11">
 				<div class="po-font-text-large-bold">{{ option.label }}</div>
 				<div class="po-font-text-smaller">Código: {{ option.value }}</div>
-				<div class="po-font-text-smaller">Local: {{ option.desc }}</div>
+				<div class="po-font-text-smaller">UF: {{ option.desc }}</div>
 			</div>
 			</div>
 		</ng-template>
