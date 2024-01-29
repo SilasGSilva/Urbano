@@ -129,4 +129,17 @@ export function validacaoCaracteresEsp(campo: string = '') {
 	} else {
 		return false;
 	}
+	
+}
+
+/**
+	 * Altera o valor `undefined` para vazio
+	 * @param value - Valor a ser validado
+	 * @returns O valor passado ou vazio `("")`
+	 */
+export function changeUndefinedToEmpty(value: string | undefined): string {
+	if (value === undefined || value === 'undefined' || value === null) {
+		value = '';
+	}
+	return value;
 }

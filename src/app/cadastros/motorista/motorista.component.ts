@@ -1,15 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PoBreadcrumb, PoComboComponent, PoNotificationService, PoPageAction, PoSelectOption, PoTableColumn } from '@po-ui/ng-components';
-import { CollumnsMotoristas, ListTurno, MotoristaModel } from './motorista.struct';
-import { MatriculaComboService, RecursoComboService } from 'src/app/services/combo-filter.service';
+import { CollumnsMotoristas, ComboFilial, ListTurno, MotoristaModel } from './motorista.struct';
+import { MotoristaComboService, RecursoComboService } from 'src/app/services/combo-filter.service';
 import { HttpParams } from '@angular/common/http';
 import { FwProtheusModel, Resource } from 'src/app/services/models/fw-protheus.model';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-motorista',
   templateUrl: './motorista.component.html',
   styleUrls: ['./motorista.component.css'],
-  providers: [RecursoComboService, MatriculaComboService]
+  providers: [RecursoComboService, MotoristaComboService]
 })
 export class MotoristaComponent implements OnInit {
 	
@@ -40,12 +41,14 @@ export class MotoristaComponent implements OnInit {
 	 
 	@ViewChild('cmbTurno', { static: true }) cmbTurno!: PoComboComponent;
 	@ViewChild('cmbRecurso', { static: true }) cmbRecurso!: PoComboComponent;
-	@ViewChild('cmbMotorista', { static: true }) cmbMotorista!: PoComboComponent; 
+	@ViewChild('cmbMotorista', { static: true }) cmbMotorista!: ComboFilial; 
 	
 	constructor(
 		public poNotification: PoNotificationService,
 		public recursoComboService: RecursoComboService,
-		public matriculaComboService : MatriculaComboService,
+		public motoristaComboService : MotoristaComboService,
+		private route: ActivatedRoute,
+		private router: Router,
 		private fwModel: FwProtheusModel,
 	  ) {
 		this.setColProperties();
@@ -84,12 +87,12 @@ export class MotoristaComponent implements OnInit {
 			}
 			this.filters += "GYG_RECCOD='" + this.cmbRecurso.selectedOption.value + "'";
 		}
-		if (this.cmbMotorista.selectedOption != undefined){
+		if (this.cmbMotorista != undefined){
 			if (this.filters != ''){
 				this.filters += ' AND '
 			}
-			this.filters += "(GYG_NOME='" + this.cmbMotorista.selectedOption.label + "'";
-			this.filters += "OR GYG_CODIGO='" + this.cmbMotorista.selectedOption.value + "')";
+			this.filters += "GYG_CODIGO ='" + this.cmbMotorista['visibleOptions'][0].value + "'";
+			this.filters += " AND GYG_FILIAL ='" + this.cmbMotorista['visibleOptions'][0].filial + "'";
 		}
 		if (this.cmbTurno.selectedOption != undefined){
 			if (this.filters != ''){
@@ -143,6 +146,7 @@ export class MotoristaComponent implements OnInit {
 				}
 
 				motorista.id = resource.getModel('GYGMASTER').getValue('GYG_CODIGO');
+				motorista.filial = resource.getModel('GYGMASTER').getValue('GYG_FILIAL');
 				motorista.pk = resource.pk;
 				motorista.matricula = resource.getModel('GYGMASTER').getValue('GYG_FUNCIO');
 				motorista.descMotorista = resource.getModel('GYGMASTER').getValue('GYG_NOME');
@@ -199,9 +203,8 @@ export class MotoristaComponent implements OnInit {
 	 * Redireciona para a página de edição
 	 * @param row linha selecionada
 	 */
-	editar() {
-		this.poNotification.warning("Página em construção!")
-		//this.router.navigate([`./${row.pk}`], { relativeTo: this.route });
+	editar(item : any) {
+		this.router.navigate(["./detMotorista", "editar", btoa(item.filial), item.pk ], { relativeTo: this.route });
 	}
 	/**
 	 * Redireciona para a página de visualização
@@ -216,8 +219,7 @@ export class MotoristaComponent implements OnInit {
 	 * @param row linha selecionada
 	 */
 	incluir() {
-		this.poNotification.warning("Página em construção!")
-		//this.router.navigate([`./${row.pk}`], { relativeTo: this.route });
+		this.router.navigate(["./detMotorista", "incluir"], { relativeTo: this.route });
 	}
 
 }
