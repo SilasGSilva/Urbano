@@ -156,17 +156,17 @@ export class localComboService implements PoComboFilter {
 
 		let params = new HttpParams();
 
-		let filter: string = `RA_MAT='${value}'`;
+		let filter: string = ``;
 
 		params = params.append('FILTER', filter)
 
 		return this.apiService.get(this.endpoint, params).pipe(map((response: any) => {
 
-			let itemReturn = new AdaptorReturnStruct();
+			let itemReturn = new FilterComboStruct();
 
-			itemReturn.value = response.matricula
-			itemReturn.label = response.nome
-			itemReturn.cpf = response.cic
+			itemReturn.value = response.codLocal
+			itemReturn.label = response.descLocal
+			itemReturn.desc = response.codMuni
 
 			return itemReturn
 

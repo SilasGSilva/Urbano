@@ -7,7 +7,7 @@ import { UtilsService } from 'src/app/services/functions/util.function';
 import { localComboService, muniComboService } from 'src/app/services/adaptors/wsurbano-adapter.service';
 
 @Component({
-  selector: 'app-motorista',
+  selector: 'app-localidades',
   templateUrl: './localidades.component.html',
   styleUrls: ['./localidades.component.css'],
   providers: []
@@ -222,6 +222,10 @@ export class LocalidadesComponent implements OnInit {
 		//this.router.navigate([`./${row.pk}`], { relativeTo: this.route });
 	}
 
+	/**
+	 * Ordena colunas da tabela de crescente para decrescente
+	 * @param event  
+	 */
 	sortTable(event: PoTableColumnSort) {
 		const result = [...this.listLocalidade];
 	
