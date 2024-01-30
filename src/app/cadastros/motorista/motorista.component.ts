@@ -88,11 +88,13 @@ export class MotoristaComponent implements OnInit {
 			this.filters += "GYG_RECCOD='" + this.cmbRecurso.selectedOption.value + "'";
 		}
 		if (this.cmbMotorista != undefined){
-			if (this.filters != ''){
-				this.filters += ' AND '
+			if (this.cmbMotorista['visibleOptions'][0] != undefined){
+				if (this.filters != ''){
+					this.filters += ' AND '
+				}
+				this.filters += "GYG_CODIGO ='" + this.cmbMotorista['visibleOptions'][0].value + "'";
+				this.filters += " AND GYG_FILIAL ='" + this.cmbMotorista['visibleOptions'][0].filial + "'";
 			}
-			this.filters += "GYG_CODIGO ='" + this.cmbMotorista['visibleOptions'][0].value + "'";
-			this.filters += " AND GYG_FILIAL ='" + this.cmbMotorista['visibleOptions'][0].filial + "'";
 		}
 		if (this.cmbTurno.selectedOption != undefined){
 			if (this.filters != ''){

@@ -137,9 +137,82 @@ export function validacaoCaracteresEsp(campo: string = '') {
 	 * @param value - Valor a ser validado
 	 * @returns O valor passado ou vazio `("")`
 	 */
-export function changeUndefinedToEmpty(value: string | undefined): string {
+export function ChangeUndefinedToEmpty(value: string | undefined): string {
 	if (value === undefined || value === 'undefined' || value === null) {
 		value = '';
 	}
 	return value;
 }
+
+/** Monta a data no formato mm-dd-yyyy para utilizar como Data
+	 * @param strDate - Recebe a data no formato Protheus (yyyymmdd)
+	 * @param formato - Formato da mascara. No default será considerado o formato ("mm-dd-yyyy"). Padrão do JavaScript.
+	 * @param separador - Separador a ser trocado da mascara, caso seja diferente do que está na mascara
+	 *
+	 * @example Para utiizar a data "20190129" provinda do Protheus a data precisa estar no formato mm-dd-yyyy
+	 * makeDate("20190129")  = 01-29-2019
+	 * makeDate("20190129","dd/mm/yyyy")  = 29/01/2019
+	 * makeDate("20190129",,"_")  = 01_29_2019
+	 *
+	 */
+export function MakeDate(strDate: string, formato: string = 'mm-dd-yyyy', separador: string = '-'): string {
+	let dataFinal: string;
+	let strMes: string;
+
+	if (!isNullOrUndefined(strDate)) {
+		const dia: string = strDate.substring(6, 8);
+		const mes: string = strDate.substring(4, 6);
+		const ano: string = strDate.substring(0, 4);
+
+		if (formato.indexOf('MMMM') > -1) {
+			strMes = this.getStrMonth(mes);
+			formato = formato.replace('MMMM', 'MM');
+		} else if (formato.indexOf('MM') > -1) {
+			strMes = this.getStrMonth(mes, true);
+		}
+
+		dataFinal = formato
+			.replace(/dd/g, dia)
+			.replace(/MM/g, strMes)
+			.replace(/mm/g, mes)
+			.replace(/yyyy/g, ano)
+			.replace(/-/g, separador);
+	} else {
+		dataFinal = '';
+	}
+
+	return dataFinal;
+}
+
+/**
+	 * Busca dados a partir de um array. Se não encontrar, retorna `undefined`
+	 * @param aDados - Array de dados
+	 * @param cCampo - Campo a ser encontrado
+	 * @example
+	 * ```
+	 * aDados[0].id = "GYG_CODIGO"
+	 * aDados[0].order = 1
+	 * aDados[0].value = "000111"
+	 * aDados[1].id = "GYG_NOME"
+	 * aDados[1].order = 2
+	 * aDados[1].value = "TESTE"
+	 *
+	 * this.findValueByName(aDados, "GYG_CODIGO") // Retorna "000111"
+	 * this.findValueByName(aDados, "GYG_NOME") // Retorna "TESTE"
+	 * ```
+	 */
+export function FindValueByName(aDados: Array<any>, cCampo: string) {
+	const aEncontrado = aDados.find(x => x.id == cCampo);
+
+	if (
+		!isNullOrUndefined(aEncontrado) &&
+		typeof aEncontrado.value === 'string'
+	) {
+		return typeof aEncontrado.value == 'string'
+			? DecodeHtmlEntities(aEncontrado.value)
+			: aEncontrado.value;
+	} else {
+		return '';
+	}
+}
+

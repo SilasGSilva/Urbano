@@ -18,6 +18,7 @@
 				p-label="Matrícula"
 				[p-filter-service]="matriculaComboService"
 				[p-filter-params]="filterParamMatricula"
+				(p-change)="setFilters()"
 				p-clean="true"
 				p-placeholder="Selecione"
 			>
@@ -111,7 +112,7 @@
 							p-help="Não encontrou a função? Criar função"
 						> </po-combo-->
 						<po-combo
-							formControlName="descFuncao"
+							formControlName="codFuncao"
 							class="po-md-6 po-lg-6"
 							p-label="Função*"
 							[p-filter-service]="funcaoComboService"
@@ -139,6 +140,7 @@
 							p-help="Não encontrou o turno? Criar turno"
 						> </po-combo-->
 						<po-checkbox-group
+							#checkTurno
 							formControlName="turno"
 							class="po-md-6"
 							name="turno"
@@ -176,9 +178,24 @@
 	</form>
 	<div class="po-row po-mt-4 " style="justify-content: flex-end">
 		<div class="po-pull-right">
-			<po-button p-label="Calcelar" (p-click)="incluirDocumento()" p-kind="tertiary"> </po-button>
-			<po-button *ngIf="isVisibleBtn"  class="po-ml-1" p-label="Salvar e incluir novo" (p-click)="incluirDocumento()" p-kind="secondary"> </po-button>
-			<po-button class="po-ml-1" p-label="Salvar" (p-click)="incluirDocumento()" p-kind="primary"> </po-button>
+			<po-button 
+				p-label="Calcelar" 
+				(p-click)="close()" 
+				p-kind="tertiary"> 
+			</po-button>
+			<po-button 
+				*ngIf="isVisibleBtn"  
+				class="po-ml-1" 
+				p-label="Salvar e incluir novo" 
+				(p-click)="saveMotorista(true)"
+				p-kind="secondary"> 
+			</po-button>
+			<po-button 
+				class="po-ml-1" 
+				p-label="Salvar" 
+				(p-click)="saveMotorista()"
+				p-kind="primary"> 
+			</po-button>
 		</div>
 	</div>
 </po-page-default>

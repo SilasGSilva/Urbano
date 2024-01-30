@@ -41,7 +41,7 @@ export class MatriculaComboService implements PoComboFilter {
 		let filter: string = '';
 
 		if (params.value != '')
-			filter = "UPPER(RA_MAT) LIKE '%" + params.value + "%' OR UPPER(RA_CIC) LIKE '%" + params.value + "%'OR UPPER(RA_NOME) LIKE '%" + params.value + "%'"
+			filter = "AND UPPER(RA_MAT) LIKE '%" + params.value + "%' OR UPPER(RA_CIC) LIKE '%" + params.value + "%'OR UPPER(RA_NOME) LIKE '%" + params.value + "%'"
 
 		httpParams = httpParams.append('FILTER', filter);
 		httpParams = httpParams.append('FIELDEMPTY', true)
@@ -79,7 +79,7 @@ export class MatriculaComboService implements PoComboFilter {
 	getObjectByValue(value: string | number, filterParams?: any): Observable<PoComboOption> {
 
 		let params = new HttpParams();
-		let filter: string = `RA_MAT='${value}'`;
+		let filter: string = `AND RA_MAT='${value}'`;
 
 		if (filterParams != undefined){
 			filter += ' AND ' + filterParams
