@@ -17,7 +17,7 @@
 				p-label="Matrícula"
 				[p-filter-service]="matriculaComboService"
 				[p-filter-params]="filterParamMatricula"
-				(p-change)="setFilters()"
+				(p-change)="setFilters($event)"
 				p-clean="true"
 				p-placeholder="Selecione"
 			>

@@ -247,9 +247,9 @@ export class DetMotoristaComponent implements OnInit {
 	/**
 	 * Ação do combo de matricula, ao clicar, será carregado o nome e o CPF
 	 */
-	setFilters() {
+	setFilters(newValue: any) {
 		//filtros
-        if (this.comboMatricula != undefined){
+        if (this.comboMatricula != undefined && newValue != undefined){
 			this.comboMatricula['visibleOptions'].forEach( (item: any) => {
 				if(item.selected){
 					let cpf: string = item.cpf;
@@ -269,6 +269,12 @@ export class DetMotoristaComponent implements OnInit {
 						this.changeDocumento('2');
 					}
 				}
+			})
+		} else {
+			this.motoristaForm.patchValue({
+				nome: '',
+				tipoDocumento: '',
+				numeroDocumento: ''
 			})
 		}
 
