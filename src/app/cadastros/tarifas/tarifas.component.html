@@ -5,13 +5,13 @@
 >
   <!-- Grid-->
   <!-- Combo de Local -->
-  <!-- <po-combo
-    #filterLocal
-    name="local"
+  <po-combo
+    #tariffFilterCombo
+    name="tariff"
     class="po-lg-4 po-pl-0"
-    p-label="Local"
+    p-label="Tarifa"
     [p-filter-service]="localComboService"
-    [p-filter-params]="filtroLocal"
+    [p-filter-params]="tariffFilter"
     (p-change)="setFilters()"
     p-clean="true"
     (p-change)="cleanFilter('local')"
@@ -26,7 +26,7 @@
         </div>
       </div>
     </ng-template>
-  </po-combo> -->
+  </po-combo>
 
   <!-- Combo de Município -->
   <!-- <po-combo

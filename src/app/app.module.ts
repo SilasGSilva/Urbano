@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { MotoristaComponent } from './cadastros/motorista/motorista.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { LocalidadesComponent } from './cadastros/localidades/localidades.component';
+import { TarifasComponent } from './cadastros/tarifas/tarifas.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { LocalidadesComponent } from './cadastros/localidades/localidades.compon
     MotoristaComponent,
     LocalidadesComponent,
     NavMenuComponent,
+    TarifasComponent,
   ],
   imports: [
     BrowserModule,
