@@ -24,6 +24,8 @@ export class DetMotoristaComponent implements OnInit {
 	colunaTurno: number = 3;
 	isValidCPF: boolean = false;
 	isVisibleBtn : boolean = true;
+	isLoadingBtn: boolean = false;
+	isHideLoadingTela: boolean = true;
 	
 	acao: string = '';
 	status: string = '1';
@@ -72,8 +74,13 @@ export class DetMotoristaComponent implements OnInit {
 				this.isVisibleBtn = false;
 				this.breadcrumb.items[2].label = 'Alterar Motorista/Colaborador';
 				this.filterParamMatricula = `RA_FILIAL LIKE '%${this.filial}%'`;
+				this.isLoadingBtn = true;
+				this.isHideLoadingTela = false;
+
                 break;
             case 'incluir':
+				this.isHideLoadingTela = true;
+				this.isLoadingBtn = false;
                 this.titulo = 'Incluir Motorista/Colaborador';
 				this.isVisibleBtn = true;
 				this.breadcrumb.items[2].label = 'Incluir Motorista/Colaborador';
@@ -99,15 +106,15 @@ export class DetMotoristaComponent implements OnInit {
         this.motoristaForm = this.formBuilder.group({
 			nome: [motorista.nome, Validators.compose([Validators.required])],
 			turno: [motorista.turno, Validators.compose([Validators.required])],
-			status: [motorista.status],
-			codFuncao: [motorista.codFuncao],
+			status: [motorista.status, Validators.compose([Validators.required])],
+			codFuncao: [motorista.codFuncao, Validators.compose([Validators.required])],
 			descFuncao: [motorista.descFuncao],
-			codMatricula: [motorista.codMatricula],
+			codMatricula: [motorista.codMatricula, Validators.compose([Validators.required])],
 			descMatricula: [motorista.descMatricula],
-			codTipoRecurso: [motorista.codTipoRecurso],
+			codTipoRecurso: [motorista.codTipoRecurso, Validators.compose([Validators.required])],
 			descTipoRecurso: [motorista.descTipoRecurso],
 			tipoDocumento: [motorista.tipoDocumento],
-			dataNascimento: [new Date()],
+			dataNascimento: [motorista.dataNascimento,  Validators.compose([Validators.required])],
 			numeroDocumento: [motorista.numeroDocumento],
         });
     }
@@ -183,35 +190,49 @@ export class DetMotoristaComponent implements OnInit {
         this.fwModel.reset();
         this.fwModel.setEndPoint('GTPA008/' + this.pkMotorista)
 		this.fwModel.setVirtualField(true)
-        this.fwModel.get(params).subscribe((data: any) => {
-			let tipoDoc = FindValueByName(data.models[0].fields,'GYG_TPDOC');
-			let turno = FindValueByName(data.models[0].fields,'GYG_TURNO');
+        this.fwModel.get(params).subscribe({
+			next:(data: any) => {
+				let tipoDoc = FindValueByName(data.models[0].fields,'GYG_TPDOC');
+				let turno = FindValueByName(data.models[0].fields,'GYG_TURNO');
+				let status = FindValueByName(data.models[0].fields,'GYG_STATUS');
+				if (status == ''){
+					status = '1';
+				}
+				if(tipoDoc == '1'){
+					documento = FindValueByName(data.models[0].fields,'GYG_RG');
+					this.changeDocumento('1');
+				}else{
+					documento = FindValueByName(data.models[0].fields,'GYG_CPF');
+					if (documento != ''){
+						tipoDoc = '2'//Se tiver vazio, seta como cpf
+						this.changeDocumento('2');
+					}
+				}
 
-			if(tipoDoc == '1'){
-				documento = FindValueByName(data.models[0].fields,'GYG_RG');
-				this.changeDocumento('1');
-			}else{
-				documento = FindValueByName(data.models[0].fields,'GYG_CPF');
-				this.changeDocumento('2');
-			}
-
-			this.motoristaForm.patchValue({
-				nome: FindValueByName(data.models[0].fields,'GYG_NOME'),
-				codFuncao: FindValueByName(data.models[0].fields,'GYG_FUNCOD'),
-				descFuncao: FindValueByName(data.models[0].fields,'GYG_FUNDES'),
-				status: FindValueByName(data.models[0].fields,'GYG_STATUS'),
-				codMatricula: FindValueByName(data.models[0].fields,'GYG_FUNCIO'),
-				descMatricula: FindValueByName(data.models[0].fields,'GYG_NOME'),
-				codTipoRecurso:FindValueByName(data.models[0].fields,'GYG_RECCOD'),
-				descTipoRecurso:FindValueByName(data.models[0].fields,'GYG_DESREC'),
-				turno: turno.split(''),
-				tipoDocumento: tipoDoc,
-				numeroDocumento: documento,
-				codigoMotorista: FindValueByName(data.models[0].fields,'GYG_CODIGO'),
-				dataNascimento: MakeDate(FindValueByName(data.models[0].fields,'GYG_DTNASC'), 'yyyy-mm-dd'),
-			});
-			
-        })
+				this.motoristaForm.patchValue({
+					nome: FindValueByName(data.models[0].fields,'GYG_NOME'),
+					codFuncao: FindValueByName(data.models[0].fields,'GYG_FUNCOD'),
+					descFuncao: FindValueByName(data.models[0].fields,'GYG_FUNDES'),
+					status: status,
+					codMatricula: FindValueByName(data.models[0].fields,'GYG_FUNCIO'),
+					descMatricula: FindValueByName(data.models[0].fields,'GYG_NOME'),
+					codTipoRecurso:FindValueByName(data.models[0].fields,'GYG_RECCOD'),
+					descTipoRecurso:FindValueByName(data.models[0].fields,'GYG_DESREC'),
+					turno: turno.split(''),
+					tipoDocumento: tipoDoc,
+					numeroDocumento: documento,
+					codigoMotorista: FindValueByName(data.models[0].fields,'GYG_CODIGO'),
+					dataNascimento: MakeDate(FindValueByName(data.models[0].fields,'GYG_DTNASC'), 'yyyy-mm-dd'),
+				});
+			},
+			error(err) {
+				this.poNotification(err.errorMessage)
+			},
+			complete: () => {
+				this.isLoadingBtn = false;
+				this.isHideLoadingTela = true;
+			},
+		})
 
     }
 	
@@ -252,11 +273,16 @@ export class DetMotoristaComponent implements OnInit {
 		}
 
     }
-
+	/**
+	 * Salva os dados do motorista
+	 * @param isSaveNew define se salva e cria um novo ou apenas volta a rota
+	 */
 	saveMotorista(isSaveNew: boolean = false) {
 		let tipoDocumento = this.motoristaForm.value.tipoDocumento;
-		let isSubmitable: boolean = this.motoristaForm.valid;
+		let isSubmitable: boolean = true//this.motoristaForm.valid;
 		if (isSubmitable){
+			this.isLoadingBtn = true;
+			this.isHideLoadingTela = false;
 			this.fwModel.reset();
 			this.fwModel.setModelId('GTPA008');
 			this.fwModel.setEndPoint('GTPA008/');
@@ -264,7 +290,7 @@ export class DetMotoristaComponent implements OnInit {
 		
 			this.fwModel.getModel('GYGMASTER').addField('GYG_FUNCIO'); // COD MATRICULA
 			this.fwModel.getModel('GYGMASTER').addField('GYG_NOME'  );   // NOME
-		// this.fwModel.getModel('GYGMASTER').addField('GYG_DTNASC'); // DATA NASCIMENTO
+			this.fwModel.getModel('GYGMASTER').addField('GYG_DTNASC'); // DATA NASCIMENTO
 			this.fwModel.getModel('GYGMASTER').addField('GYG_TPDOC' );   // TIPO DE DOCUMENTO
 			if (tipoDocumento == '1'){
 				this.fwModel.getModel('GYGMASTER').addField('GYG_RG'    );  // NUMERO DOCUMENTO
@@ -272,8 +298,8 @@ export class DetMotoristaComponent implements OnInit {
 				this.fwModel.getModel('GYGMASTER').addField('GYG_CPF'   );  // NUMERO DOCUMENTO
 			}
 			this.fwModel.getModel('GYGMASTER').addField('GYG_RECCOD');  // TIPO DE RECURSO
-			//this.fwModel.getModel('GYGMASTER').addField('GYG_FUNCOD');  // FUNÇÃO
-			//this.fwModel.getModel('GYGMASTER').addField('GYG_TURNO' );  // TURNO
+			this.fwModel.getModel('GYGMASTER').addField('GYG_FUNCOD');  // FUNÇÃO
+			this.fwModel.getModel('GYGMASTER').addField('GYG_TURNO' );  // TURNO
 			this.fwModel.getModel('GYGMASTER').addField('GYG_STATUS');  // STATUS
 
 			this.fwModel.getModel('GYGMASTER').setValue('GYG_FUNCIO', ChangeUndefinedToEmpty(this.motoristaForm.value.codMatricula));
@@ -286,49 +312,52 @@ export class DetMotoristaComponent implements OnInit {
 				this.fwModel.getModel('GYGMASTER').setValue('GYG_CPF'   , this.motoristaForm.value.numeroDocumento.replace(/[.-]/g, ''));
 			}
 			this.fwModel.getModel('GYGMASTER').setValue('GYG_RECCOD', ChangeUndefinedToEmpty(this.motoristaForm.value.codTipoRecurso));
-		// this.fwModel.getModel('GYGMASTER').setValue('GYG_FUNCOD', this.motoristaForm.value.codFuncao);
+			this.fwModel.getModel('GYGMASTER').setValue('GYG_FUNCOD', this.motoristaForm.value.codFuncao);
 			this.fwModel.getModel('GYGMASTER').setValue('GYG_TURNO' , ChangeUndefinedToEmpty(this.motoristaForm.value.turno.join('')));
 			this.fwModel.getModel('GYGMASTER').setValue('GYG_STATUS', ChangeUndefinedToEmpty(this.motoristaForm.value.status));
 
 			if (this.acao == 'incluir') {
 
 				this.fwModel.operation = 3;
-				this.fwModel.post().subscribe((data) => {
-					this.poNotification.success('Motorista cadastrado com sucesso')
-					if(isSaveNew){
-						this.fwModel.reset();
-						this.motoristaForm.reset();
-						this.motoristaForm.patchValue({
-							status: '1'
-						})
-					} else {
-						this.close()
-					}
-
-				},
-					(error) => {
+				this.fwModel.post().subscribe({
+					next: () => {
+						this.poNotification.success('Motorista cadastrado com sucesso')
+						if(isSaveNew){
+							this.fwModel.reset();
+							this.motoristaForm.reset();
+							this.motoristaForm.patchValue({
+								status: '1',
+								nome: ''
+							})
+						} else {
+							this.close()
+						}
+					},
+					error: (error) => {
 						this.poNotification.error(error.error.errorMessage);
-						
 						this.fwModel.reset();
-						
+					},
+					complete: () => {
+						this.isLoadingBtn = false;
+						this.isHideLoadingTela = true;
 					}
-				);
+				});
 
 			} else {
 
 				this.fwModel.operation = 4;
 				this.fwModel.setEndPoint('GTPA008/' + this.pkMotorista)
 
-				this.fwModel.put().subscribe((data) => {
-					this.poNotification.success('Motorista atualizado com sucesso')
-					this.close();
-				},
-					(error) => {
+				this.fwModel.put().subscribe({
+					next:() => {
+						this.poNotification.success('Motorista atualizado com sucesso')
+						this.close();
+					},
+					error:(error) => {
 						this.poNotification.error(error.error.errorMessage);
 						this.fwModel.reset();
 					}
-				);
-
+				});
 			}
 		}else {
 			this.vldDetNotify();
@@ -356,9 +385,7 @@ export class DetMotoristaComponent implements OnInit {
 			});
 
 			this.poNotification.error(
-				//'O campo não foi validado: '+item.iMessage+'. Devido ao {1}!' +
 				'Campos não preenchidos: '+ campos +'. Verifique!'
-				//'Os seguintes campos atingiram o limite de caracteres permitido no formulário: '+item.tpErro+'!',
 			);
 		});
 

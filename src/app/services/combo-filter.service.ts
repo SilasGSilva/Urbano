@@ -165,9 +165,16 @@ export class FuncaoComboService implements PoComboFilter {
 		let httpParams = new HttpParams();
 		
 		let filter: string = '';
+		let filial = this.route.snapshot.params['filial']
+		if (filial != undefined){
+			filter = ` RJ_FILIAL='${atob(filial)}'`;
+		}
+		if (params.value != ''){
+			if(filter != '')
+				filter += "AND "
 
-		if (params.value != '')
-			filter = "RJ_FUNCAO LIKE '%" + params.value + "%' OR RJ_DESC LIKE '%" + params.value + "%'"
+			filter += "(UPPER(RJ_FUNCAO) LIKE UPPER('%" + params.value + "%') OR UPPER(RJ_DESC) LIKE UPPER('%" + params.value + "%'))"
+		}
 
 		httpParams = httpParams.append('FILTER', filter);
 		httpParams = httpParams.append('FIELDEMPTY', true)
@@ -197,10 +204,10 @@ export class FuncaoComboService implements PoComboFilter {
 	getObjectByValue(value: string | number, filterParams?: any): Observable<PoComboOption> {
 
 		let params = new HttpParams();
-		let filial = atob(this.route.snapshot.params['filial'])
+		let filial = this.route.snapshot.params['filial']
 		let filter: string = `RJ_FUNCAO='${value}'`;
 		if (filial != undefined){
-			filter += ` AND RJ_FILIAL='${filial}'`;
+			filter += ` AND RJ_FILIAL='${atob(filial)}'`;
 		}
 		params = params.append('FILTER', filter);
 
