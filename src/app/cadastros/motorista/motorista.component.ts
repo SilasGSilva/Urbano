@@ -13,11 +13,11 @@ import { ActivatedRoute, Router } from '@angular/router';
   providers: [RecursoComboService, MotoristaComboService]
 })
 export class MotoristaComponent implements OnInit {
-	
-	//Declaração de variaveis 
+
+	//Declaração de variaveis
 	pk : string = '';
 	filters: string = ''
-	
+
 	isLoading: boolean = true
 	resetFilters: boolean = false;
 	isShowMoreDisabled: boolean = false;
@@ -26,23 +26,23 @@ export class MotoristaComponent implements OnInit {
 	nPageSize: number = 10;
 	nRegIndex: number = 1;
 	nHeightMonitor: number = window.innerHeight * (window.innerHeight > 850 ? 0.6 : 0.45);
-	
+
 	columns: Array<PoTableColumn> = CollumnsMotoristas;
 	listTurno: Array<PoSelectOption> = ListTurno;
 	listMotoristas: Array<MotoristaModel> = [];
-	
+
 	actions: Array<PoPageAction> = [
 		{ label: 'Incluir', action: () => { this.incluir() } },
 	];
-	
+
 	public breadcrumb: PoBreadcrumb = {
 		items: [{ label: 'Fretamento Urbano', link: '/' }, { label: 'Motoristas/Colaboradores' }]
 	 };
-	 
+
 	@ViewChild('cmbTurno', { static: true }) cmbTurno!: PoComboComponent;
 	@ViewChild('cmbRecurso', { static: true }) cmbRecurso!: PoComboComponent;
-	@ViewChild('cmbMotorista', { static: true }) cmbMotorista!: ComboFilial; 
-	
+	@ViewChild('cmbMotorista', { static: true }) cmbMotorista!: ComboFilial;
+
 	constructor(
 		public poNotification: PoNotificationService,
 		public recursoComboService: RecursoComboService,
@@ -53,7 +53,7 @@ export class MotoristaComponent implements OnInit {
 	  ) {
 		this.setColProperties();
 	  }
-	
+
 	ngOnInit() {
 		this.getMotoristas();
 	}
@@ -88,11 +88,11 @@ export class MotoristaComponent implements OnInit {
 			this.filters += "GYG_RECCOD='" + this.cmbRecurso.selectedOption.value + "'";
 		}
 		if (this.cmbMotorista != undefined){
-			if (this.cmbMotorista['visibleOptions'][0] != undefined){
+			if (this.cmbMotorista.selectedOption != undefined){
 				if (this.filters != ''){
 					this.filters += ' AND '
 				}
-				this.filters += "GYG_CODIGO ='" + this.cmbMotorista['visibleOptions'][0].value + "'";
+				this.filters += "GYG_CODIGO ='" + this.cmbMotorista.selectedOption.value + "'";
 				this.filters += " AND GYG_FILIAL ='" + this.cmbMotorista['visibleOptions'][0].filial + "'";
 			}
 		}
@@ -103,6 +103,9 @@ export class MotoristaComponent implements OnInit {
 			this.filters += " GYG_TURNO LIKE '%" + this.cmbTurno.selectedOption.value + "%'";
 		}
 
+    if(this.filters === ''){
+      this.nRegIndex = 1;
+    }
         this.getMotoristas();
 
     }
@@ -115,7 +118,7 @@ export class MotoristaComponent implements OnInit {
 
         let params = new HttpParams();
 		this.isLoading = true;
-      
+
 		//Se tiver filtros, não aplica a paginação
         if (this.filters != '') {
             params = params.append('FILTER', this.filters);
@@ -126,7 +129,7 @@ export class MotoristaComponent implements OnInit {
 				params = params.append('STARTINDEX', this.nRegIndex.toString() );
 		}
         this.fwModel.setEndPoint('GTPA008/');
-        
+
 		this.fwModel.setVirtualField(true)
 		this.fwModel.get(params).subscribe(() => {
 
@@ -136,7 +139,7 @@ export class MotoristaComponent implements OnInit {
 				let status : string = resource.getModel('GYGMASTER').getValue('GYG_STATUS');
 				let turno: string = resource.getModel('GYGMASTER').getValue('GYG_TURNO');
 				let descTurno : string = ''
-				
+
 				if (turno.includes('1')){
 					descTurno = descTurno != '' ? '/Manhã' : 'Manhã'
 				}
@@ -196,7 +199,7 @@ export class MotoristaComponent implements OnInit {
 		if (this.nNextPage === 4 ) {
 			this.nPageSize = this.fwModel.total;
 		}
-		
+
 		this.isShowMoreDisabled = true;
 		this.getMotoristas();
 	}

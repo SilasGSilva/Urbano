@@ -26,14 +26,14 @@ export class DetMotoristaComponent implements OnInit {
 	isVisibleBtn : boolean = true;
 	isLoadingBtn: boolean = false;
 	isHideLoadingTela: boolean = true;
-	
+
 	acao: string = '';
 	status: string = '1';
 	filial: string = '';
 	mascaraCPF : string = '';
 	titulo: string = '';
 	pkMotorista: string = '';
-	filterParamMatricula: string = '' 
+	filterParamMatricula: string = ''
 
 	listTipoDocumento: Array<PoRadioGroupOption> = ListTipoDocumento;
 	listStatus: Array<PoRadioGroupOption> = ListStatus;
@@ -42,11 +42,11 @@ export class DetMotoristaComponent implements OnInit {
 
 	public breadcrumb: PoBreadcrumb = {
 		items: [
-			{ label: 'Fretamento Urbano', link: '/' }, 
+			{ label: 'Fretamento Urbano', link: '/' },
 			{ label: 'Motoristas/Colaboradores', link: '/motorista' },
 			{ label: '' }]
 	 };
-	
+
 	@ViewChild('comboMatricula', { static: true }) comboMatricula!: ComboFilial;
 	constructor(
 		public recursoComboService: RecursoComboService,
@@ -61,7 +61,7 @@ export class DetMotoristaComponent implements OnInit {
 		){
 			this.createForm();
 		}
-	
+
 	ngOnInit() {
 		//Define se é inclusão ou alteração
 		this.acao = this.route.snapshot.params['acao'];
@@ -119,7 +119,7 @@ export class DetMotoristaComponent implements OnInit {
         });
     }
 	/**
-	 * Ação disparada ao selecionar o tipo de documento 
+	 * Ação disparada ao selecionar o tipo de documento
 	 * @param event - 1 - RG / 2 - CPF
 	 */
 	changeDocumento(event:any){
@@ -135,40 +135,40 @@ export class DetMotoristaComponent implements OnInit {
 
 	/**
 	 * Função responsável pela validação do cpf
-	 * @param cpf 
+	 * @param cpf
 	 * @returns true ou false - Se é valido ou não
 	 */
 	validarCPF(cpf: string): boolean {
 		if (this.isValidCPF && cpf != ''){
 			// Remove caracteres não numéricos
 			cpf = cpf.replace(/\D/g, '');
-		
+
 			// Verifica se o CPF tem 11 dígitos
 			if (cpf.length !== 11) {
 				this.poNotification.error("o CPF é inválido")
 				return false;
 			}
-		
+
 			// Verifica se todos os dígitos são iguais (caso contrário, o CPF é inválido)
 			if (/^(\d)\1+$/.test(cpf)) {
 				this.poNotification.error("o CPF é inválido")
 				return false;
 			}
-		
+
 			// Calcula o primeiro dígito verificador
 			let soma = 0;
 			for (let i = 0; i < 9; i++) {
 				soma += parseInt(cpf.charAt(i)) * (10 - i);
 			}
 			const primeiroDigito = 11 - (soma % 11);
-		
+
 			// Calcula o segundo dígito verificador
 			soma = 0;
 			for (let i = 0; i < 10; i++) {
 				soma += parseInt(cpf.charAt(i)) * (11 - i);
 			}
 			const segundoDigito = 11 - (soma % 11);
-		
+
 			// Verifica se os dígitos verificadores calculados são iguais aos dígitos reais
 			if (primeiroDigito === parseInt(cpf.charAt(9)) && segundoDigito === parseInt(cpf.charAt(10))) {
 				return true;
@@ -235,7 +235,7 @@ export class DetMotoristaComponent implements OnInit {
 		})
 
     }
-	
+
 	/**
 	 * incluirDocumento - Responsavel por abrir modal de inclusão de documento
 	 */
@@ -264,7 +264,7 @@ export class DetMotoristaComponent implements OnInit {
 					if (isNullOrUndefined(this.motoristaForm.value.numeroDocumento) && cpf != ''){
 						this.motoristaForm.patchValue({
 							tipoDocumento: '2',
-							numeroDocumento: cpf 
+							numeroDocumento: cpf
 						})
 						this.changeDocumento('2');
 					}
@@ -293,7 +293,7 @@ export class DetMotoristaComponent implements OnInit {
 			this.fwModel.setModelId('GTPA008');
 			this.fwModel.setEndPoint('GTPA008/');
 			this.fwModel.AddModel('GYGMASTER', 'FIELDS');
-		
+
 			this.fwModel.getModel('GYGMASTER').addField('GYG_FUNCIO'); // COD MATRICULA
 			this.fwModel.getModel('GYGMASTER').addField('GYG_NOME'  );   // NOME
 			this.fwModel.getModel('GYGMASTER').addField('GYG_DTNASC'); // DATA NASCIMENTO
@@ -312,11 +312,13 @@ export class DetMotoristaComponent implements OnInit {
 			this.fwModel.getModel('GYGMASTER').setValue('GYG_NOME'  , ChangeUndefinedToEmpty(this.motoristaForm.value.nome));
 			this.fwModel.getModel('GYGMASTER').setValue('GYG_DTNASC', ChangeUndefinedToEmpty(this.motoristaForm.value.dataNascimento.replace(/-/g, '')));
 			this.fwModel.getModel('GYGMASTER').setValue('GYG_TPDOC' , ChangeUndefinedToEmpty(tipoDocumento));
-			if (tipoDocumento == '1'){
-				this.fwModel.getModel('GYGMASTER').setValue('GYG_RG'    , this.motoristaForm.value.numeroDocumento);
-			} else {
-				this.fwModel.getModel('GYGMASTER').setValue('GYG_CPF'   , this.motoristaForm.value.numeroDocumento.replace(/[.-]/g, ''));
-			}
+      if(tipoDocumento !== null){
+        if (tipoDocumento == '1'){
+          this.fwModel.getModel('GYGMASTER').setValue('GYG_RG'    , this.motoristaForm.value.numeroDocumento);
+        } else {
+          this.fwModel.getModel('GYGMASTER').setValue('GYG_CPF'   , this.motoristaForm.value.numeroDocumento.replace(/[.-]/g, ''));
+        }
+      }
 			this.fwModel.getModel('GYGMASTER').setValue('GYG_RECCOD', ChangeUndefinedToEmpty(this.motoristaForm.value.codTipoRecurso));
 			this.fwModel.getModel('GYGMASTER').setValue('GYG_FUNCOD', this.motoristaForm.value.codFuncao);
 			this.fwModel.getModel('GYGMASTER').setValue('GYG_TURNO' , ChangeUndefinedToEmpty(this.motoristaForm.value.turno.join('')));
