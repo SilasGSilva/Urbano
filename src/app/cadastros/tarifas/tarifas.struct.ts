@@ -5,14 +5,19 @@ import { PoSelectOption, PoTableColumn } from '@po-ui/ng-components';
  */
 export const ColumnsTariffs: Array<PoTableColumn> = [
   { property: 'codTariff', label: 'cod', sortable: false, visible: false },
+  { property: 'labelTariff', label: 'Tarifa' },
   {
-    property: 'descTariff',
-    label: 'Descrição',
-    sortable: false,
-    visible: false,
+    property: 'value',
+    label: 'Valor',
   },
-  { property: 'labelTariff', label: 'Tarifa', sortable: true },
-
+  {
+    property: 'grantingBody',
+    label: 'Órgão Concessor',
+  },
+  {
+    property: 'validity',
+    label: 'Vigência',
+  },
   {
     property: 'otherActions',
     label: ' ',

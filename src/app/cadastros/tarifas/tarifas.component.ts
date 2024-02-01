@@ -5,8 +5,12 @@ import {
   PoDatepickerRange,
   PoPageAction,
   PoTableColumn,
+  PoTableColumnSort,
 } from '@po-ui/ng-components';
-import { localComboService } from 'src/app/services/adaptors/wsurbano-adapter.service';
+import {
+  GrantingBodyComboService,
+  TariffComboService,
+} from 'src/app/services/adaptors/wsurbano-adapter.service';
 import { ColumnsTariffs, TariffsModel } from './tarifas.struct';
 import { HttpParams } from '@angular/common/http';
 import {
@@ -14,6 +18,8 @@ import {
   Resource,
 } from 'src/app/services/models/fw-protheus.model';
 import { UtilsService } from 'src/app/services/functions/util.function';
+import { PoDatepickerBaseComponent } from '@po-ui/ng-components/lib/components/po-field/po-datepicker/po-datepicker-base.component';
+import { PoDatepickerRangeBaseComponent } from '@po-ui/ng-components/lib/components/po-field/po-datepicker-range/po-datepicker-range-base.component';
 
 @Component({
   selector: 'app-tarifas',
@@ -28,23 +34,25 @@ export class TarifasComponent {
   grantingBodyFilterCombo!: PoComboComponent;
 
   @ViewChild('ValidityfilterRange', { static: true })
-  ValidityfilterRange!: PoDatepickerRange;
+  ValidityfilterRange!: PoDatepickerRangeBaseComponent;
 
   constructor(
-    public localComboService: localComboService,
+    public tariffComboService: TariffComboService,
+    public grantingComboService: GrantingBodyComboService,
     private fwModel: FwProtheusModel,
     private _utilsService: UtilsService
-  ) {}
+  ) {
+    this.setColProperties();
+  }
 
   //Declaração de variaveis
   tariffFilter: string = '';
   grantingBodyFilter: string = '';
-  validityFilter: string = '';
-  filters: string = '';
-  filtroLocal: string = '';
-  filtroMuni: string = '';
+  validityStartFilter: string = '';
+  validityEndFilter: string = '';
 
-  isLoading: boolean = true;
+  filters: string = '';
+  isLoading: boolean = false;
   resetFilters: boolean = false;
   isShowMoreDisabled: boolean = false;
 
@@ -70,6 +78,23 @@ export class TarifasComponent {
     items: [{ label: 'Fretamento Urbano', link: '/' }, { label: 'Tarifas' }],
   };
 
+  ngOnInit() {
+    this.getTariffs();
+  }
+
+  setColProperties() {
+    this.columns.forEach((col) => {
+      if (
+        col.property === 'otherActions' &&
+        col.icons &&
+        col.icons.length >= 0
+      ) {
+        col.icons[0].action = this.editTariff.bind(this);
+        col.icons[1].action = this.viewTariff.bind(this);
+      }
+    });
+  }
+
   addTariff() {}
 
   setFilters() {
@@ -80,15 +105,21 @@ export class TarifasComponent {
     this.resetFilters = false;
 
     //filtros
-    if (this.tariffFilterCombo.selectedOption != undefined) {
+    if (
+      this.tariffFilterCombo !== undefined &&
+      this.tariffFilterCombo.selectedOption !== undefined
+    ) {
       if (this.filters != '') {
         this.filters += ' AND ';
       }
       this.filters +=
         " GI1_STATUS = '" + this.tariffFilterCombo.selectedOption.value + "' ";
     }
-    if (this.grantingBodyFilterCombo.selectedOption != undefined) {
-      this.filtroMuni =
+    if (
+      this.grantingBodyFilterCombo !== undefined &&
+      this.grantingBodyFilterCombo.selectedOption !== undefined
+    ) {
+      this.grantingBodyFilter =
         " AND ( UPPER(GI1_COD) LIKE UPPER('" +
         this.grantingBodyFilterCombo.selectedOption.value +
         "') OR " +
@@ -121,7 +152,8 @@ export class TarifasComponent {
         break;
       }
       case 'validity': {
-        this.validityFilter = '';
+        this.ValidityfilterRange.dateRange.start = '';
+        this.ValidityfilterRange.dateRange.end = '';
         break;
       }
     }
@@ -155,11 +187,13 @@ export class TarifasComponent {
           resource.getModel('GI1MASTER').getValue('GI1_COD') +
           ' - ' +
           resource.getModel('GI1MASTER').getValue('GI1_DESCRI');
+
         tariffs.descTariff = resource
           .getModel('GI1MASTER')
           .getValue('GI1_DESCRI');
 
-        tariffs.otherActions = ['editar', 'visualizar'];
+        tariffs.otherActions = ['edit', 'view'];
+
         this.listTariffs = [...this.listTariffs, tariffs];
         this.isLoading = false;
       });
@@ -181,5 +215,38 @@ export class TarifasComponent {
     } else {
       this.isShowMoreDisabled = true;
     }
+  }
+
+  setRangeFilter(event: any) {
+    this.validityStartFilter = event.start;
+    this.validityEndFilter = event.end;
+  }
+
+  sortTable(event: PoTableColumnSort) {
+    const result = [...this.listTariffs];
+
+    result.sort((value, valueToCompare) =>
+      this._utilsService.sort(value, valueToCompare, event)
+    );
+    this.listTariffs = result;
+  }
+
+  actionShowMore() {
+    this.nNextPage++;
+    // se for clicado pela 4a vez carrega o restante dos dados
+    if (this.nNextPage === 4) {
+      this.nPageSize = this.fwModel.total;
+    }
+
+    this.isShowMoreDisabled = true;
+    this.getTariffs();
+  }
+
+  editTariff() {
+    console.log('edit');
+  }
+
+  viewTariff() {
+    console.log('voew');
   }
 }

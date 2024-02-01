@@ -4,17 +4,16 @@
   [p-actions]="actions"
 >
   <!-- Grid-->
-  <!-- Combo de Local -->
+  <!-- Combo de tarifa -->
   <po-combo
     #tariffFilterCombo
     name="tariff"
-    class="po-lg-4 po-pl-0"
+    class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
     p-label="Tarifa"
-    [p-filter-service]="localComboService"
+    [p-filter-service]="tariffComboService"
     [p-filter-params]="tariffFilter"
-    (p-change)="setFilters()"
+    (p-change)="setFilters(); cleanFilter('local')"
     p-clean="true"
-    (p-change)="cleanFilter('local')"
     p-placeholder="Selecionar"
     [p-sort]="true"
   >
@@ -28,18 +27,16 @@
     </ng-template>
   </po-combo>
 
-  <!-- Combo de Município -->
-  <!-- <po-combo
-    #filterMuni
-    name="municipio"
-    class="po-lg-4 po-pl-1"
-    p-label="Município"
-    [p-filter-service]="municipioComboService"
-    [p-filter-params]="filtroMuni"
-    (p-change)="setFilters()"
-    p-placeholder="Selecionar"
+  <po-combo
+    #grantingBodyFilterCombo
+    name="grantingBody"
+    class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
+    p-label="Órgão concessor"
+    [p-filter-service]="grantingComboService"
+    [p-filter-params]="grantingBodyFilter"
+    (p-change)="setFilters(); cleanFilter('local')"
     p-clean="true"
-    (p-change)="cleanFilter('municipio')"
+    p-placeholder="Selecionar"
     [p-sort]="true"
   >
     <ng-template p-combo-option-template let-option>
@@ -47,30 +44,24 @@
         <div class="po-sm-10 po-md-9 po-lg-11">
           <div class="po-font-text-large-bold">{{ option.label }}</div>
           <div class="po-font-text-smaller">Código: {{ option.value }}</div>
-          <div class="po-font-text-smaller">UF: {{ option.desc }}</div>
         </div>
       </div>
     </ng-template>
-  </po-combo> -->
+  </po-combo>
 
-  <!-- Combo de Status -->
-  <!-- <po-combo
-    #cmbStatus
-    name="status"
-    class="po-lg-4 po-pl-1"
-    p-label="Staus"
-    [p-options]="listStatus"
-    p-clean="true"
-    (p-change)="setFilters()"
-    p-placeholder="Selecionar"
-  >
-  </po-combo> -->
+  <po-datepicker-range
+    #ValidityfilterRange
+    name="validity"
+    class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
+    p-label="Vigência"
+    (p-change)="setRangeFilter($event)"
+  ></po-datepicker-range>
 
   <!-- Tabela com itens de localidades -->
-  <!-- <po-table
+  <po-table
     class="po-md-12 po-pl-0 po-pt-2"
-    [p-columns]="itemsColumns"
-    [p-items]="listLocalidade"
+    [p-columns]="columns"
+    [p-items]="listTariffs"
     p-sort="true"
     (p-sort-by)="sortTable($event)"
     p-hide-columns-manager="true"
@@ -83,5 +74,5 @@
     [p-height]="nHeightMonitor"
     [p-loading]="isLoading"
   >
-  </po-table> -->
+  </po-table>
 </po-page-default>
