@@ -215,9 +215,8 @@ export class MotoristaComponent implements OnInit {
 	 * Redireciona para a página de visualização
 	 * @param row linha selecionada
 	 */
-	visualizar() {
-		this.poNotification.warning("Página em construção!")
-		//this.router.navigate([`./${row.pk}`], { relativeTo: this.route });
+	visualizar(item : any) {
+		this.router.navigate(["./viewMotorista", "visualizar", btoa(item.filial), item.pk ], { relativeTo: this.route });
 	}
 	/**
 	 * Redireciona para a página de inclusao

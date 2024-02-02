@@ -10,6 +10,7 @@ import { LocalidadesComponent } from './cadastros/localidades/localidades.compon
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { DetMotoristaComponent } from './cadastros/motorista/det-motorista/det-motorista.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ViewMotoristaComponent } from './cadastros/motorista/view-motorista/view-motorista.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MotoristaComponent,
     LocalidadesComponent,
     NavMenuComponent,
-    DetMotoristaComponent
+    DetMotoristaComponent,
+    ViewMotoristaComponent
   ],
   imports: [
     BrowserModule,
