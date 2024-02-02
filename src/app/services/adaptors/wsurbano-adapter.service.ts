@@ -3,6 +3,8 @@ import { PoComboFilter, PoComboOption } from '@po-ui/ng-components';
 import { Observable, map } from 'rxjs';
 import { ApiService } from '../api.service';
 import { HttpParams } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
+
 /**
  * Todos os combos que apontam para API
  */
@@ -33,12 +35,13 @@ export class EstadoComboStruct implements PoComboOption {
 
 @Injectable({
 	providedIn: 'root'
-  })
+})
 export class MatriculaComboService implements PoComboFilter {
 
-	private	endpoint: string = 'FRETAMENTOURBANO/matricula'	
+	private endpoint: string = 'FRETAMENTOURBANO/matricula'
 
-	constructor(private apiService: ApiService) { }
+	constructor(private apiService: ApiService,
+		private route: ActivatedRoute,) { }
 
 	getFilteredData(params: any, filterParams?: any): Observable<AdaptorReturnStruct[]> {
 
@@ -47,7 +50,7 @@ export class MatriculaComboService implements PoComboFilter {
 		let filter: string = '';
 
 		if (params.value != '')
-			filter = "UPPER(RA_MAT) LIKE '%" + params.value + "%' OR UPPER(RA_CIC) LIKE '%" + params.value + "%'OR UPPER(RA_NOME) LIKE '%" + params.value + "%'"
+			filter = "AND UPPER(RA_MAT) LIKE '%" + params.value + "%' OR UPPER(RA_CIC) LIKE '%" + params.value + "%'OR UPPER(RA_NOME) LIKE '%" + params.value + "%'"
 
 		httpParams = httpParams.append('FILTER', filter);
 		httpParams = httpParams.append('FIELDEMPTY', true)
@@ -85,18 +88,20 @@ export class MatriculaComboService implements PoComboFilter {
 	getObjectByValue(value: string | number, filterParams?: any): Observable<PoComboOption> {
 
 		let params = new HttpParams();
+		let filter: string = `AND RA_MAT='${value}'`;
 
-		let filter: string = `RA_MAT='${value}'`;
-
+		if (filterParams != undefined) {
+			filter += ' AND ' + filterParams
+		}
 		params = params.append('FILTER', filter)
 
 		return this.apiService.get(this.endpoint, params).pipe(map((response: any) => {
 
 			let itemReturn = new AdaptorReturnStruct();
 
-			itemReturn.value = response.matricula
-			itemReturn.label = response.nome
-			itemReturn.cpf = response.cic
+			itemReturn.value = response.Matricula[0].matricula
+			itemReturn.label = response.Matricula[0].nome
+			itemReturn.cpf = response.Matricula[0].cic
 
 			return itemReturn
 
@@ -114,7 +119,7 @@ export class MatriculaComboService implements PoComboFilter {
 })
 export class localComboService implements PoComboFilter {
 
-	private	endpoint: string = 'FRETAMENTOURBANO/local'	
+	private endpoint: string = 'FRETAMENTOURBANO/local'
 
 	constructor(private apiService: ApiService) { }
 
@@ -125,7 +130,7 @@ export class localComboService implements PoComboFilter {
 
 		if (filterParams) {
 			filter = filterParams
-		}		
+		}
 
 		if (params.value != '') {
 			filter = " AND (UPPER(GI1_COD) LIKE UPPER('%" + params.value + "%') OR " +
@@ -137,7 +142,6 @@ export class localComboService implements PoComboFilter {
 		return this.apiService.get(this.endpoint, httpParams).pipe(map((response: any) => {
 
 			const items: FilterComboStruct[] = [];
-			let hasNext = true;
 
 			response.Localidade.forEach((resource: any) => {
 
@@ -149,9 +153,6 @@ export class localComboService implements PoComboFilter {
 
 				items.push(itemReturn)
 
-				if ((params.page * params.pageSize) >= response.total) {
-					hasNext = false;
-				}
 			})
 			return items
 		}))
@@ -190,7 +191,7 @@ export class localComboService implements PoComboFilter {
 })
 export class muniComboService implements PoComboFilter {
 
-	private	endpoint: string = 'FRETAMENTOURBANO/municipio'	
+	private endpoint: string = 'FRETAMENTOURBANO/municipio'
 
 	constructor(private apiService: ApiService) { }
 
@@ -201,7 +202,7 @@ export class muniComboService implements PoComboFilter {
 
 		if (filterParams) {
 			filter = filterParams;
-		}		
+		}
 
 		if (params.value != '')
 			filter = " AND (UPPER(GI1_CDMUNI) LIKE UPPER('%" + params.value + "%') OR " +
@@ -222,6 +223,7 @@ export class muniComboService implements PoComboFilter {
 				itemReturn.desc = resource.uf
 
 				items.push(itemReturn)
+
 			})
 			return items
 		}))
@@ -233,11 +235,11 @@ export class muniComboService implements PoComboFilter {
 		let params = new HttpParams();
 		return this.apiService.get(this.endpoint, params).pipe(map(() => {
 
-			let itemReturn = new FilterComboStruct();
+			let itemReturn = new AdaptorReturnStruct();
 
 			itemReturn.value = ''
 			itemReturn.label = ''
-			itemReturn.desc =  ''
+			itemReturn.cpf = ''
 
 			return itemReturn
 
@@ -247,7 +249,7 @@ export class muniComboService implements PoComboFilter {
 }
 
 /**
- * muniComboService
+ * comboFormService
  * Utilizado no combo de municipio
  */
 @Injectable({
@@ -255,7 +257,7 @@ export class muniComboService implements PoComboFilter {
 })
 export class comboFormService implements PoComboFilter {
 
-	private	endpoint: string = 'FRETAMENTOURBANO/estadoMun';
+	private endpoint: string = 'FRETAMENTOURBANO/estadoMun';
 	private filterUf: string = '';
 
 	constructor(private apiService: ApiService) { }
@@ -265,7 +267,7 @@ export class comboFormService implements PoComboFilter {
 		let httpParams = new HttpParams();
 		let filter: string = '';
 
-		if (typeof filterParams === 'boolean' && true) {			
+		if (typeof filterParams === 'boolean' && true) {
 
 			httpParams = httpParams.set('lUf', filterParams);
 			if (params.value != '') {
@@ -281,16 +283,16 @@ export class comboFormService implements PoComboFilter {
 			}
 
 			if (params.value != '') {
-				if ( filter != '') {
+				if (filter != '') {
 					filter += (
 						" AND (UPPER(CC2_MUN) LIKE UPPER('%" + params.value + "')) "
 					);
-	
+
 				} else {
 					filter = (
 						" AND (UPPER(CC2_MUN) LIKE UPPER('%" + params.value + "')) "
 					);
-				};	
+				};
 			}
 		}
 
@@ -298,7 +300,7 @@ export class comboFormService implements PoComboFilter {
 
 		return this.apiService.get(this.endpoint, httpParams).pipe(map((response: any) => {
 
-			const items: EstadoComboStruct[] = [];			
+			const items: EstadoComboStruct[] = [];
 
 			response.EstadoMun.forEach((resource: any) => {
 
@@ -312,12 +314,12 @@ export class comboFormService implements PoComboFilter {
 					itemReturn.value = resource.codigo
 					itemReturn.label = resource.municipio
 					itemReturn.uf = resource.uf
-				}					
+				}
 				items.push(itemReturn)
 			});
 
 			return items
-						
+
 		}));
 	}
 
@@ -331,7 +333,7 @@ export class comboFormService implements PoComboFilter {
 			filter = `AND(UPPER(CC2_EST) LIKE UPPER('%${value}'))`;
 		} else {
 			filter = `AND(UPPER(CC2_CODMUN) LIKE UPPER('%${value}') ${this.filterUf} `;
-			
+
 		}
 
 		params = params.append('FILTER', filter)
@@ -348,9 +350,9 @@ export class comboFormService implements PoComboFilter {
 				itemReturn.value = response.EstadoMun[0].codigo
 				itemReturn.label = response.EstadoMun[0].municipio
 				itemReturn.uf = response.EstadoMun[0].uf
-			};	
+			};
 
-			return itemReturn		
+			return itemReturn
 
 		}));
 	};

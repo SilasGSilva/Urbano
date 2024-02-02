@@ -15,13 +15,14 @@ export class ApiService {
 
 	/**
 	* header padrão
-   */
+	*/
 	private optionsHeader: HttpHeaders = new HttpHeaders({
 		'Content-Type': 'application/json;text/plain',
 		Authorization: 'Basic YWRtaW46MTIzNA==',
 		// Authorization: MesaGenericService.getRequestAuth(),
 		// Tenantid: MesaGenericService.getTenantIdHeader(),
 	});
+
 	/**
 	 * Metodo get http
 	 * @param endpoint 
@@ -30,13 +31,11 @@ export class ApiService {
 	 */
 	get<T>(endpoint: string, params?: HttpParams): Observable<T> {
 		const url = `${this.apiUrl}${endpoint}`;
-		return this.http
-			.get<T>(url, { params: params, headers: this.optionsHeader })
-			.pipe(
-				catchError((error) => {
-					return this.handleError(error);
-				})
-			);
+		return this.http.get<T>(url, { params }).pipe(
+			catchError(error => {
+				return this.handleError(error);
+			})
+		);
 	}
 	/**
 	 * Metodo post http
@@ -121,6 +120,10 @@ export class ApiService {
 		return listReturn;
 	}
 
+	/**
+	 * Responsável por obter erro do campo do formulário
+	 * @param formControl - Form Control do campo
+	 */
 	getFormError(formControl: FormControl): string {
 		for (const erro in formControl.errors) {
 			if (formControl.errors.hasOwnProperty(erro)) {
@@ -130,6 +133,11 @@ export class ApiService {
 		return '';
 	}
 
+	/**
+	 * Responsável por obter o indice do tipo de menságem que iremos apresentar
+	 * na notificação
+	 * @param formControl - Form Control do campo
+	 */
 	indexMessageErro(formControl: FormControl): number {
 		let iMessage: number = 0;
 
