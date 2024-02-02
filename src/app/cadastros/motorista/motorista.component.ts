@@ -1,22 +1,23 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PoBreadcrumb, PoComboComponent, PoNotificationService, PoPageAction, PoSelectOption, PoTableColumn } from '@po-ui/ng-components';
-import { CollumnsMotoristas, ListTurno, MotoristaModel } from './motorista.struct';
-import { MatriculaComboService, RecursoComboService } from 'src/app/services/combo-filter.service';
+import { CollumnsMotoristas, ComboFilial, ListTurno, MotoristaModel } from './motorista.struct';
+import { MotoristaComboService, RecursoComboService } from 'src/app/services/combo-filter.service';
 import { HttpParams } from '@angular/common/http';
 import { FwProtheusModel, Resource } from 'src/app/services/models/fw-protheus.model';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-motorista',
   templateUrl: './motorista.component.html',
   styleUrls: ['./motorista.component.css'],
-  providers: [RecursoComboService, MatriculaComboService]
+  providers: [RecursoComboService, MotoristaComboService]
 })
 export class MotoristaComponent implements OnInit {
-	
-	//Declaração de variaveis 
+
+	//Declaração de variaveis
 	pk : string = '';
 	filters: string = ''
-	
+
 	isLoading: boolean = true
 	resetFilters: boolean = false;
 	isShowMoreDisabled: boolean = false;
@@ -25,32 +26,34 @@ export class MotoristaComponent implements OnInit {
 	nPageSize: number = 10;
 	nRegIndex: number = 1;
 	nHeightMonitor: number = window.innerHeight * (window.innerHeight > 850 ? 0.6 : 0.45);
-	
+
 	columns: Array<PoTableColumn> = CollumnsMotoristas;
 	listTurno: Array<PoSelectOption> = ListTurno;
 	listMotoristas: Array<MotoristaModel> = [];
-	
+
 	actions: Array<PoPageAction> = [
 		{ label: 'Incluir', action: () => { this.incluir() } },
 	];
-	
+
 	public breadcrumb: PoBreadcrumb = {
 		items: [{ label: 'Fretamento Urbano', link: '/' }, { label: 'Motoristas/Colaboradores' }]
 	 };
-	 
+
 	@ViewChild('cmbTurno', { static: true }) cmbTurno!: PoComboComponent;
 	@ViewChild('cmbRecurso', { static: true }) cmbRecurso!: PoComboComponent;
-	@ViewChild('cmbMotorista', { static: true }) cmbMotorista!: PoComboComponent; 
-	
+	@ViewChild('cmbMotorista', { static: true }) cmbMotorista!: ComboFilial;
+
 	constructor(
 		public poNotification: PoNotificationService,
 		public recursoComboService: RecursoComboService,
-		public matriculaComboService : MatriculaComboService,
+		public motoristaComboService : MotoristaComboService,
+		private route: ActivatedRoute,
+		private router: Router,
 		private fwModel: FwProtheusModel,
 	  ) {
 		this.setColProperties();
 	  }
-	
+
 	ngOnInit() {
 		this.getMotoristas();
 	}
@@ -84,12 +87,14 @@ export class MotoristaComponent implements OnInit {
 			}
 			this.filters += "GYG_RECCOD='" + this.cmbRecurso.selectedOption.value + "'";
 		}
-		if (this.cmbMotorista.selectedOption != undefined){
-			if (this.filters != ''){
-				this.filters += ' AND '
+		if (this.cmbMotorista != undefined){
+			if (this.cmbMotorista.selectedOption != undefined){
+				if (this.filters != ''){
+					this.filters += ' AND '
+				}
+				this.filters += "GYG_CODIGO ='" + this.cmbMotorista.selectedOption.value + "'";
+				this.filters += " AND GYG_FILIAL ='" + this.cmbMotorista['visibleOptions'][0].filial + "'";
 			}
-			this.filters += "(GYG_NOME='" + this.cmbMotorista.selectedOption.label + "'";
-			this.filters += "OR GYG_CODIGO='" + this.cmbMotorista.selectedOption.value + "')";
 		}
 		if (this.cmbTurno.selectedOption != undefined){
 			if (this.filters != ''){
@@ -98,6 +103,9 @@ export class MotoristaComponent implements OnInit {
 			this.filters += " GYG_TURNO LIKE '%" + this.cmbTurno.selectedOption.value + "%'";
 		}
 
+    if(this.filters === ''){
+      this.nRegIndex = 1;
+    }
         this.getMotoristas();
 
     }
@@ -110,7 +118,7 @@ export class MotoristaComponent implements OnInit {
 
         let params = new HttpParams();
 		this.isLoading = true;
-      
+
 		//Se tiver filtros, não aplica a paginação
         if (this.filters != '') {
             params = params.append('FILTER', this.filters);
@@ -121,7 +129,7 @@ export class MotoristaComponent implements OnInit {
 				params = params.append('STARTINDEX', this.nRegIndex.toString() );
 		}
         this.fwModel.setEndPoint('GTPA008/');
-        
+
 		this.fwModel.setVirtualField(true)
 		this.fwModel.get(params).subscribe(() => {
 
@@ -131,7 +139,7 @@ export class MotoristaComponent implements OnInit {
 				let status : string = resource.getModel('GYGMASTER').getValue('GYG_STATUS');
 				let turno: string = resource.getModel('GYGMASTER').getValue('GYG_TURNO');
 				let descTurno : string = ''
-				
+
 				if (turno.includes('1')){
 					descTurno = descTurno != '' ? '/Manhã' : 'Manhã'
 				}
@@ -143,6 +151,7 @@ export class MotoristaComponent implements OnInit {
 				}
 
 				motorista.id = resource.getModel('GYGMASTER').getValue('GYG_CODIGO');
+				motorista.filial = resource.getModel('GYGMASTER').getValue('GYG_FILIAL');
 				motorista.pk = resource.pk;
 				motorista.matricula = resource.getModel('GYGMASTER').getValue('GYG_FUNCIO');
 				motorista.descMotorista = resource.getModel('GYGMASTER').getValue('GYG_NOME');
@@ -190,7 +199,7 @@ export class MotoristaComponent implements OnInit {
 		if (this.nNextPage === 4 ) {
 			this.nPageSize = this.fwModel.total;
 		}
-		
+
 		this.isShowMoreDisabled = true;
 		this.getMotoristas();
 	}
@@ -199,9 +208,8 @@ export class MotoristaComponent implements OnInit {
 	 * Redireciona para a página de edição
 	 * @param row linha selecionada
 	 */
-	editar() {
-		this.poNotification.warning("Página em construção!")
-		//this.router.navigate([`./${row.pk}`], { relativeTo: this.route });
+	editar(item : any) {
+		this.router.navigate(["./detMotorista", "editar", btoa(item.filial), item.pk ], { relativeTo: this.route });
 	}
 	/**
 	 * Redireciona para a página de visualização
@@ -216,8 +224,7 @@ export class MotoristaComponent implements OnInit {
 	 * @param row linha selecionada
 	 */
 	incluir() {
-		this.poNotification.warning("Página em construção!")
-		//this.router.navigate([`./${row.pk}`], { relativeTo: this.route });
+		this.router.navigate(["./detMotorista", "incluir"], { relativeTo: this.route });
 	}
 
 }
