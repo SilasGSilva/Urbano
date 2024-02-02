@@ -1,17 +1,28 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { FormGroup } from '@angular/forms';
 import { VldFormStruct } from './gtpgenerics.struct';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiService {
 	private apiUrl = 'http://localhost:12173/rest/';
 	
 	constructor(private http: HttpClient) {}
+
+    /**
+    * header padrão
+    */
+    private optionsHeader: HttpHeaders = new HttpHeaders({
+        'Content-Type': 'application/json;text/plain',
+        Authorization: 'Basic YWRtaW46MTIzNA==',
+        // Authorization: MesaGenericService.getRequestAuth(),
+        // Tenantid: MesaGenericService.getTenantIdHeader(),
+    });
+
 	/**
 	 * Metodo get http
 	 * @param endpoint 
@@ -141,5 +152,4 @@ export class ApiService {
 
 		return iMessage;
 	}
-
 }

@@ -1,3 +1,6 @@
+import { Injectable } from "@angular/core";
+import { PoTableColumnSort, PoTableColumnSortType } from "@po-ui/ng-components";
+
 /**
  * Função para verificar se é nulo ou indefinido
  * @param value variavel que será verificada
@@ -12,7 +15,7 @@ export function isNullOrUndefined(value: any): boolean {
  * em seus caracteres correspondentes
  * @param encodedString - string codificada como entidade HTML
  */
-export function DecodeHtmlEntities(encodedString : any) {
+export function DecodeHtmlEntities(encodedString: any) {
 	let decodedHtmlEntities: string = encodedString;
 	decodedHtmlEntities = decodedHtmlEntities.replace(/&quot;/gm, '"');
 	decodedHtmlEntities = decodedHtmlEntities.replace(/&amp;/gm, '&');
@@ -129,14 +132,31 @@ export function validacaoCaracteresEsp(campo: string = '') {
 	} else {
 		return false;
 	}
-	
+
+}
+
+@Injectable({
+	providedIn: 'root',
+})
+export class UtilsService {
+	constructor() { }
+
+	public sort(value: any, valueToCompare: any, sort: PoTableColumnSort) {
+		const property = sort.column?.property;
+		const type = sort.type;
+
+		if (value[property!] < valueToCompare[property!]) {
+			return type === PoTableColumnSortType.Ascending ? -1 : 1;
+		}
+		return type === PoTableColumnSortType.Ascending ? 1 : -1;
+	}
 }
 
 /**
-	 * Altera o valor `undefined` para vazio
-	 * @param value - Valor a ser validado
-	 * @returns O valor passado ou vazio `("")`
-	 */
+ * Altera o valor `undefined` para vazio
+* @param value - Valor a ser validado
+* @returns O valor passado ou vazio `("")`
+*/
 export function ChangeUndefinedToEmpty(value: string | undefined): string {
 	if (value === undefined || value === 'undefined' || value === null) {
 		value = '';
@@ -145,16 +165,16 @@ export function ChangeUndefinedToEmpty(value: string | undefined): string {
 }
 
 /** Monta a data no formato mm-dd-yyyy para utilizar como Data
-	 * @param strDate - Recebe a data no formato Protheus (yyyymmdd)
-	 * @param formato - Formato da mascara. No default será considerado o formato ("mm-dd-yyyy"). Padrão do JavaScript.
-	 * @param separador - Separador a ser trocado da mascara, caso seja diferente do que está na mascara
-	 *
-	 * @example Para utiizar a data "20190129" provinda do Protheus a data precisa estar no formato mm-dd-yyyy
-	 * makeDate("20190129")  = 01-29-2019
-	 * makeDate("20190129","dd/mm/yyyy")  = 29/01/2019
-	 * makeDate("20190129",,"_")  = 01_29_2019
-	 *
-	 */
+ * @param strDate - Recebe a data no formato Protheus (yyyymmdd)
+ * @param formato - Formato da mascara. No default será considerado o formato ("mm-dd-yyyy"). Padrão do JavaScript.
+ * @param separador - Separador a ser trocado da mascara, caso seja diferente do que está na mascara
+ *
+ * @example Para utiizar a data "20190129" provinda do Protheus a data precisa estar no formato mm-dd-yyyy
+ * makeDate("20190129")  = 01-29-2019
+ * makeDate("20190129","dd/mm/yyyy")  = 29/01/2019
+ * makeDate("20190129",,"_")  = 01_29_2019
+ *
+ */
 export function MakeDate(strDate: string, formato: string = 'mm-dd-yyyy', separador: string = '-'): string {
 	let dataFinal: string;
 	let strMes: string;
@@ -182,25 +202,25 @@ export function MakeDate(strDate: string, formato: string = 'mm-dd-yyyy', separa
 	}
 
 	return dataFinal;
-}
+};
 
 /**
-	 * Busca dados a partir de um array. Se não encontrar, retorna `undefined`
-	 * @param aDados - Array de dados
-	 * @param cCampo - Campo a ser encontrado
-	 * @example
-	 * ```
-	 * aDados[0].id = "GYG_CODIGO"
-	 * aDados[0].order = 1
-	 * aDados[0].value = "000111"
-	 * aDados[1].id = "GYG_NOME"
-	 * aDados[1].order = 2
-	 * aDados[1].value = "TESTE"
-	 *
-	 * this.findValueByName(aDados, "GYG_CODIGO") // Retorna "000111"
-	 * this.findValueByName(aDados, "GYG_NOME") // Retorna "TESTE"
-	 * ```
-	 */
+ * Busca dados a partir de um array. Se não encontrar, retorna `undefined`
+* @param aDados - Array de dados
+* @param cCampo - Campo a ser encontrado
+* @example
+* ```
+* aDados[0].id = "GYG_CODIGO"
+* aDados[0].order = 1
+* aDados[0].value = "000111"
+* aDados[1].id = "GYG_NOME"
+* aDados[1].order = 2
+* aDados[1].value = "TESTE"
+*
+* this.findValueByName(aDados, "GYG_CODIGO") // Retorna "000111"
+* this.findValueByName(aDados, "GYG_NOME") // Retorna "TESTE"
+* ```
+*/
 export function FindValueByName(aDados: Array<any>, cCampo: string) {
 	const aEncontrado = aDados.find(x => x.id == cCampo);
 
@@ -215,4 +235,3 @@ export function FindValueByName(aDados: Array<any>, cCampo: string) {
 		return '';
 	}
 }
-

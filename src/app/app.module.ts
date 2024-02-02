@@ -6,6 +6,7 @@ import { PoModule } from '@po-ui/ng-components';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { MotoristaComponent } from './cadastros/motorista/motorista.component';
+import { LocalidadesComponent } from './cadastros/localidades/localidades.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { DetMotoristaComponent } from './cadastros/motorista/det-motorista/det-motorista.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -14,6 +15,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   declarations: [
     AppComponent,
     MotoristaComponent,
+    LocalidadesComponent,
     NavMenuComponent,
     DetMotoristaComponent
   ],
