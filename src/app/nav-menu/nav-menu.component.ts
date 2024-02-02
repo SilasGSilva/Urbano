@@ -26,7 +26,8 @@ export class NavMenuComponent {
 		subItems: [
 			{ label: 
 				'Motorista/Colaboradores', action: this.navigate.bind(this, '/motorista'), },
-			{ label: 'Localidades', action: () => {this.teste('2') }}
+			{ label: 
+				'Localidades', action: this.navigate.bind(this, '/localidades'), },
 		]
 	}
   ];
