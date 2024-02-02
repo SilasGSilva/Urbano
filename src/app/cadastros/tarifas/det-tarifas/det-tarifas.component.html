@@ -1,0 +1,116 @@
+<po-page-default [p-title]="title" [p-breadcrumb]="breadcrumb">
+  <p *ngIf="!editView" class="po-font-text-large text-color-gray">
+    Preencha as informações da tarifa:
+  </p>
+  <p *ngIf="editView" class="po-font-text-large text-color-gray">
+    Edite as informações da tarifa:
+  </p>
+  <form [formGroup]="tarifaForm" class="po-row po-pl-0">
+    <div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2">
+      <po-input
+        formControlName="codigo"
+        class="po-lg-4"
+        name="codigo"
+        p-label="Código*"
+        [p-show-required]="true"
+        p-placeholder="000004"
+      >
+      </po-input>
+
+      <po-input
+        formControlName="codigo"
+        class="po-lg-8"
+        name="descricao"
+        p-label="Descrição*"
+        [p-show-required]="true"
+        p-placeholder="Descrição da tarifa"
+      >
+      </po-input>
+    </div>
+    <div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2">
+      <po-input
+        formControlName="valor"
+        class="po-xl-4 po-lg-4 po-md-6 po-sm-12"
+        name="valor"
+        p-label="Valor*"
+        [p-show-required]="true"
+        p-placeholder="5,20"
+      >
+      </po-input>
+      <po-lookup
+        class="po-xl-4 po-lg-4 po-md-6 po-sm-12"
+        formControlName="orgaoConcessor"
+        p-label="Órgão Concessor*"
+        name="orgaoConcessor"
+        [p-filter-service]="poLookUpTarifas"
+        [p-filter-params]="filterParamCodigo"
+      ></po-lookup>
+
+      <po-datepicker
+        formControlName="vigencia"
+        class="po-xl-4 po-lg-4 po-md-6 po-sm-12"
+        name="vigencia"
+        p-label="Vigência*"
+      >
+      </po-datepicker>
+    </div>
+    <!-- <div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2">
+      <po-datepicker
+        formControlName="dataNascimento"
+        class="po-lg-4"
+        name="dataNascimento"
+        p-label="Data de nascimento"
+        p-placeholder="Digite"
+      >
+      </po-datepicker>
+      <po-radio-group
+        formControlName="tipoDocumento"
+        class="po-lg-2"
+        name="tipoDocumento"
+        p-label="Tipo de documento"
+        [p-options]="listTipoDocumento"
+        (p-change)="changeDocumento($event)"
+        [p-optional]="true"
+      >
+      </po-radio-group>
+      <po-input
+        formControlName="numeroDocumento"
+        class="po-lg-6"
+        name="numeroDocumento"
+        p-label="Nº do documento"
+        p-placeholder="Digite"
+        [p-mask]="mascaraCPF"
+        p-mask-format-model="true"
+        (p-change)="validarCPF($event)"
+        p-disabled="{{ isDisableTipoDoc }}"
+        [p-optional]="true"
+      >
+      </po-input>
+    </div> -->
+    <po-divider class="po-lg-12" p-label="Dados do funcionário:"> </po-divider>
+  </form>
+  <!-- <div class="po-row po-mt-4" style="justify-content: flex-end">
+    <div class="po-pull-right">
+      <po-button p-label="Cancelar" (p-click)="close()" p-kind="tertiary">
+      </po-button>
+      <po-button
+        *ngIf="isVisibleBtn"
+        class="po-ml-1"
+        p-label="Salvar e incluir novo"
+        (p-click)="saveMotorista(true)"
+        p-kind="secondary"
+        [p-loading]="isLoadingBtn"
+      >
+      </po-button>
+      <po-button
+        class="po-ml-1"
+        p-label="Salvar"
+        (p-click)="saveMotorista()"
+        p-kind="primary"
+        [p-loading]="isLoadingBtn"
+      >
+      </po-button>
+    </div>
+  </div> -->
+  <po-loading-overlay [hidden]="!isShowLoading"></po-loading-overlay>
+</po-page-default>

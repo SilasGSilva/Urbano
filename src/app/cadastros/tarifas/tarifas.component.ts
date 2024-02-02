@@ -2,14 +2,13 @@ import { Component, ViewChild } from '@angular/core';
 import {
   PoBreadcrumb,
   PoComboComponent,
-  PoDatepickerRange,
   PoPageAction,
   PoTableColumn,
   PoTableColumnSort,
 } from '@po-ui/ng-components';
 import {
-  GrantingBodyComboService,
-  TariffComboService,
+  OrgaoConcessorComboService,
+  TarifaComboService,
 } from 'src/app/services/adaptors/wsurbano-adapter.service';
 import { ColumnsTariffs, TariffsModel } from './tarifas.struct';
 import { HttpParams } from '@angular/common/http';
@@ -18,8 +17,8 @@ import {
   Resource,
 } from 'src/app/services/models/fw-protheus.model';
 import { UtilsService } from 'src/app/services/functions/util.function';
-import { PoDatepickerBaseComponent } from '@po-ui/ng-components/lib/components/po-field/po-datepicker/po-datepicker-base.component';
 import { PoDatepickerRangeBaseComponent } from '@po-ui/ng-components/lib/components/po-field/po-datepicker-range/po-datepicker-range-base.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tarifas',
@@ -27,27 +26,28 @@ import { PoDatepickerRangeBaseComponent } from '@po-ui/ng-components/lib/compone
   styleUrls: ['./tarifas.component.css'],
 })
 export class TarifasComponent {
-  @ViewChild('tariffFilterCombo', { static: true })
-  tariffFilterCombo!: PoComboComponent;
+  @ViewChild('tarifaFilterCombo', { static: true })
+  tarifaFilterCombo!: PoComboComponent;
 
-  @ViewChild('grantingBodyFilterCombo', { static: true })
-  grantingBodyFilterCombo!: PoComboComponent;
+  @ViewChild('orgaoConcessorFilterCombo', { static: true })
+  orgaoConcessorFilterCombo!: PoComboComponent;
 
-  @ViewChild('ValidityfilterRange', { static: true })
-  ValidityfilterRange!: PoDatepickerRangeBaseComponent;
+  @ViewChild('vigenciafilterRange', { static: true })
+  vigenciafilterRange!: PoDatepickerRangeBaseComponent;
 
   constructor(
-    public tariffComboService: TariffComboService,
-    public grantingComboService: GrantingBodyComboService,
-    private fwModel: FwProtheusModel,
-    private _utilsService: UtilsService
+    public tarifaComboService: TarifaComboService,
+    public orgaoConcessorComboService: OrgaoConcessorComboService,
+    private _fwModel: FwProtheusModel,
+    private _utilsService: UtilsService,
+    private _router: Router
   ) {
     this.setColProperties();
   }
 
   //Declaração de variaveis
-  tariffFilter: string = '';
-  grantingBodyFilter: string = '';
+  tarifaFilter: string = '';
+  orgaoConcessorFilter: string = '';
   validityStartFilter: string = '';
   validityEndFilter: string = '';
 
@@ -63,13 +63,13 @@ export class TarifasComponent {
     window.innerHeight * (window.innerHeight > 850 ? 0.6 : 0.45);
 
   columns: Array<PoTableColumn> = ColumnsTariffs;
-  listTariffs: Array<TariffsModel> = [];
+  listTarifas: Array<TariffsModel> = [];
 
   actions: Array<PoPageAction> = [
     {
       label: 'Incluir',
       action: () => {
-        this.addTariff();
+        this.addTarifas();
       },
     },
   ];
@@ -79,7 +79,7 @@ export class TarifasComponent {
   };
 
   ngOnInit() {
-    this.getTariffs();
+    this.getTarifas();
   }
 
   setColProperties() {
@@ -95,10 +95,12 @@ export class TarifasComponent {
     });
   }
 
-  addTariff() {}
+  addTarifas() {
+    this._router.navigate(['tarifas/detTarifas/incluir'])
+  }
 
   setFilters() {
-    this.listTariffs = [];
+    this.listTarifas = [];
 
     this.filters = '';
     this.isShowMoreDisabled = false;
@@ -106,60 +108,60 @@ export class TarifasComponent {
 
     //filtros
     if (
-      this.tariffFilterCombo !== undefined &&
-      this.tariffFilterCombo.selectedOption !== undefined
+      this.tarifaFilterCombo !== undefined &&
+      this.tarifaFilterCombo.selectedOption !== undefined
     ) {
       if (this.filters != '') {
         this.filters += ' AND ';
       }
       this.filters +=
-        " GI1_STATUS = '" + this.tariffFilterCombo.selectedOption.value + "' ";
+        " GI1_STATUS = '" + this.tarifaFilterCombo.selectedOption.value + "' ";
     }
     if (
-      this.grantingBodyFilterCombo !== undefined &&
-      this.grantingBodyFilterCombo.selectedOption !== undefined
+      this.orgaoConcessorFilterCombo !== undefined &&
+      this.orgaoConcessorFilterCombo.selectedOption !== undefined
     ) {
-      this.grantingBodyFilter =
+      this.orgaoConcessorFilter =
         " AND ( UPPER(GI1_COD) LIKE UPPER('" +
-        this.grantingBodyFilterCombo.selectedOption.value +
+        this.orgaoConcessorFilterCombo.selectedOption.value +
         "') OR " +
         " UPPER(GI1_DESCRI) LIKE UPPER('" +
-        this.grantingBodyFilterCombo.selectedOption.label +
+        this.orgaoConcessorFilterCombo.selectedOption.label +
         "') )";
       if (this.filters != '') {
         this.filters += ' AND ';
       }
       this.filters +=
         " ( UPPER(GI1_COD) LIKE UPPER('" +
-        this.grantingBodyFilterCombo.selectedOption.value +
+        this.orgaoConcessorFilterCombo.selectedOption.value +
         "') OR " +
         " UPPER(GI1_DESCRI) LIKE UPPER('" +
-        this.grantingBodyFilterCombo.selectedOption.value +
+        this.orgaoConcessorFilterCombo.selectedOption.value +
         "') )";
     }
 
-    this.getTariffs();
+    this.getTarifas();
   }
 
   cleanFilter(filter: string = '') {
     switch (filter) {
-      case 'tariff': {
-        this.tariffFilter = '';
+      case 'tarifa': {
+        this.tarifaFilter = '';
         break;
       }
-      case 'grantingBody': {
-        this.grantingBodyFilter = '';
+      case 'orgaoConcessor': {
+        this.orgaoConcessorFilter = '';
         break;
       }
-      case 'validity': {
-        this.ValidityfilterRange.dateRange.start = '';
-        this.ValidityfilterRange.dateRange.end = '';
+      case 'vigencia': {
+        this.vigenciafilterRange.dateRange.start = '';
+        this.vigenciafilterRange.dateRange.end = '';
         break;
       }
     }
   }
 
-  getTariffs() {
+  getTarifas() {
     let params = new HttpParams();
     this.isLoading = true;
 
@@ -172,11 +174,11 @@ export class TarifasComponent {
       if (this.nRegIndex.toString() != '')
         params = params.append('STARTINDEX', this.nRegIndex.toString());
     }
-    this.fwModel.setEndPoint('GTPA001/');
+    this._fwModel.setEndPoint('GTPA001/');
 
-    this.fwModel.setVirtualField(true);
-    this.fwModel.get(params).subscribe(() => {
-      this.fwModel.resources.forEach((resource: Resource) => {
+    this._fwModel.setVirtualField(true);
+    this._fwModel.get(params).subscribe(() => {
+      this._fwModel.resources.forEach((resource: Resource) => {
         let tariffs = new TariffsModel();
         let status: string = resource
           .getModel('GI1MASTER')
@@ -194,11 +196,11 @@ export class TarifasComponent {
 
         tariffs.otherActions = ['edit', 'view'];
 
-        this.listTariffs = [...this.listTariffs, tariffs];
+        this.listTarifas = [...this.listTarifas, tariffs];
         this.isLoading = false;
       });
 
-      this.setShowMore(this.fwModel.total);
+      this.setShowMore(this._fwModel.total);
     });
   }
 
@@ -223,23 +225,23 @@ export class TarifasComponent {
   }
 
   sortTable(event: PoTableColumnSort) {
-    const result = [...this.listTariffs];
+    const result = [...this.listTarifas];
 
     result.sort((value, valueToCompare) =>
       this._utilsService.sort(value, valueToCompare, event)
     );
-    this.listTariffs = result;
+    this.listTarifas = result;
   }
 
   actionShowMore() {
     this.nNextPage++;
     // se for clicado pela 4a vez carrega o restante dos dados
     if (this.nNextPage === 4) {
-      this.nPageSize = this.fwModel.total;
+      this.nPageSize = this._fwModel.total;
     }
 
     this.isShowMoreDisabled = true;
-    this.getTariffs();
+    this.getTarifas();
   }
 
   editTariff() {

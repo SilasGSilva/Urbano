@@ -6,13 +6,13 @@
   <!-- Grid-->
   <!-- Combo de tarifa -->
   <po-combo
-    #tariffFilterCombo
-    name="tariff"
+    #tarifaFilterCombo
+    name="tarifa"
     class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
     p-label="Tarifa"
-    [p-filter-service]="tariffComboService"
-    [p-filter-params]="tariffFilter"
-    (p-change)="setFilters(); cleanFilter('local')"
+    [p-filter-service]="tarifaComboService"
+    [p-filter-params]="tarifaFilter"
+    (p-change)="setFilters(); cleanFilter('tarifa')"
     p-clean="true"
     p-placeholder="Selecionar"
     [p-sort]="true"
@@ -28,13 +28,13 @@
   </po-combo>
 
   <po-combo
-    #grantingBodyFilterCombo
-    name="grantingBody"
+    #orgaoConcessorFilterCombo
+    name="orgaoConcessor"
     class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
     p-label="Órgão concessor"
-    [p-filter-service]="grantingComboService"
-    [p-filter-params]="grantingBodyFilter"
-    (p-change)="setFilters(); cleanFilter('local')"
+    [p-filter-service]="orgaoConcessorComboService"
+    [p-filter-params]="orgaoConcessorFilter"
+    (p-change)="setFilters(); cleanFilter('orgaoConcessor')"
     p-clean="true"
     p-placeholder="Selecionar"
     [p-sort]="true"
@@ -50,8 +50,8 @@
   </po-combo>
 
   <po-datepicker-range
-    #ValidityfilterRange
-    name="validity"
+    #vigenciafilterRange
+    name="vigencia"
     class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
     p-label="Vigência"
     (p-change)="setRangeFilter($event)"
@@ -61,7 +61,7 @@
   <po-table
     class="po-md-12 po-pl-0 po-pt-2"
     [p-columns]="columns"
-    [p-items]="listTariffs"
+    [p-items]="listTarifas"
     p-sort="true"
     (p-sort-by)="sortTable($event)"
     p-hide-columns-manager="true"

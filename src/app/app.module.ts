@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PoModule } from '@po-ui/ng-components';
@@ -10,6 +10,7 @@ import { MotoristaComponent } from './cadastros/motorista/motorista.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { LocalidadesComponent } from './cadastros/localidades/localidades.component';
 import { TarifasComponent } from './cadastros/tarifas/tarifas.component';
+import { DetTarifasComponent } from './cadastros/tarifas/det-tarifas/det-tarifas.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { TarifasComponent } from './cadastros/tarifas/tarifas.component';
     LocalidadesComponent,
     NavMenuComponent,
     TarifasComponent,
+    DetTarifasComponent,
   ],
   imports: [
     BrowserModule,
@@ -26,6 +28,7 @@ import { TarifasComponent } from './cadastros/tarifas/tarifas.component';
     HttpClientModule,
     RouterModule.forRoot([]),
     FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -11,11 +11,11 @@ export const ColumnsTariffs: Array<PoTableColumn> = [
     label: 'Valor',
   },
   {
-    property: 'grantingBody',
+    property: 'orgaoConcessor',
     label: 'Órgão Concessor',
   },
   {
-    property: 'validity',
+    property: 'vigencia',
     label: 'Vigência',
   },
   {
@@ -47,8 +47,8 @@ export class TariffsModel {
   codTariff: string = '';
   descTariff: string = '';
   labelTariff: string = '';
-  grantingBody?: string = '';
-  validity?: string = '';
+  orgaoConcessor?: string = '';
+  vigencia?: string = '';
   otherActions?: Array<string>;
   index?: number;
 }
