@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PoDialogService, PoMenuItem } from '@po-ui/ng-components';
+import { PoMenuItem } from '@po-ui/ng-components';
 import { AppComponent } from '../app.component';
 import { Router } from '@angular/router';
 
@@ -10,7 +10,6 @@ import { Router } from '@angular/router';
 })
 export class NavMenuComponent {
 	constructor(
-		private poDialog: PoDialogService,
 		private router: Router,
 		public appComponent: AppComponent,
 
