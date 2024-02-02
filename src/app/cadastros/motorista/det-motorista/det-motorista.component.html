@@ -1,0 +1,190 @@
+<po-page-default
+	[p-title] = "titulo"
+	[p-breadcrumb]="breadcrumb">
+	<po-loading-overlay
+		[p-screen-lock]="true"
+		[hidden]="isHideLoadingTela"
+		p-text="Carregando motorista"
+	>
+	</po-loading-overlay>
+	<form [formGroup]="motoristaForm" class="po-row po-pl-0">
+		<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2 ">
+			<po-combo
+				#comboMatricula
+				formControlName="codMatricula"
+				class="po-lg-4 form-group"
+				name="matricula"
+				p-label="Matrícula"
+				[p-filter-service]="matriculaComboService"
+				[p-filter-params]="filterParamMatricula"
+				(p-change)="setFilters($event)"
+				p-clean="true"
+				p-placeholder="Selecione"
+			>
+				<ng-template p-combo-option-template let-option>
+					<div class="po-row">
+						<div class="po-sm-10 po-md-9 po-lg-11">
+						<div class="po-font-text-large-bold">{{ option.label }}</div>
+						<div class="po-font-text-smaller">Código: {{ option.value }}</div>
+						<div class="po-font-text-smaller">CPF: {{ option.cpf }}</div>
+						</div>
+					</div>
+				</ng-template>
+			</po-combo>
+			<po-input
+				formControlName="nome"
+				class="po-lg-8"
+				name="nome" 
+				p-label="Nome*"
+				[p-show-required]="true"
+				p-placeholder="Digite"> 
+			</po-input>
+		</div>
+		<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2">
+			<po-datepicker
+				formControlName="dataNascimento"
+				class="po-lg-4"
+				name="dataNascimento" 
+				p-label="Data de nascimento"
+				p-placeholder="Digite"
+				> 
+			</po-datepicker>
+			<po-radio-group
+				formControlName="tipoDocumento"
+				class="po-lg-2"
+				name="tipoDocumento"
+				p-label="Tipo de documento"
+				[p-options]="listTipoDocumento"
+				(p-change)="changeDocumento($event)"
+				[p-optional]="true"
+			>
+			</po-radio-group>
+			<po-input
+				formControlName="numeroDocumento"
+				class="po-lg-6"
+				name="numeroDocumento" 
+				p-label="Nº do documento"
+				p-placeholder="Digite"
+				[p-mask]="mascaraCPF"
+				p-mask-format-model="true"
+				(p-change)="validarCPF($event)"
+				p-disabled="{{isDisableTipoDoc}}"
+				[p-optional]="true"> 
+			</po-input>
+		</div>
+		<po-divider
+				class="po-lg-12"
+				p-label="Dados do funcionário:" >
+		</po-divider>
+		<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2">
+			
+			
+			<po-tabs>
+				<!-- Dados gerais -->
+				<po-tab p-label="Dados gerais" [p-active]="true">
+					<div class="po-row po-mt-2">
+						<!-- Tipo de recurso [p-options]="[{ value: 'Option 1' }, { value: 'Option 2' }]"-->
+						<po-combo
+							formControlName="codTipoRecurso"	
+							class="po-lg-6"
+							name="tipoRecurso" 
+							p-label="Tipo de recurso" 
+							[p-filter-service]="recursoComboService"
+							p-placeholder="Selecione"
+							p-clean="true"
+						> 
+							<ng-template p-combo-option-template let-option>
+								<div class="po-row">
+									<div class="po-sm-10 po-md-9 po-lg-11">
+									<div class="po-font-text-large-bold">{{ option.label }}</div>
+									<div class="po-font-text-smaller">Código: {{ option.value }}</div>
+									</div>
+								</div>
+							</ng-template>
+						</po-combo>
+
+						<!-- Função -->
+						<po-combo
+							formControlName="codFuncao"
+							class="po-md-6 po-lg-6"
+							p-label="Função"
+							[p-filter-service]="funcaoComboService"
+							[p-filter-params]="filterParamMatricula"
+							p-clean="true"
+							p-placeholder="Selecione"
+						>
+							>
+							<ng-template p-combo-option-template let-option>
+							<div class="po-row">
+								<div class="po-sm-10 po-md-9 po-lg-11">
+								<div class="po-font-text-large-bold">{{ option.label }}</div>
+								<div class="po-font-text-smaller">Código: {{ option.value }}</div>
+								</div>
+							</div>
+							</ng-template>
+						</po-combo>
+					</div>
+					<div class="po-row po-mt-2">
+						<!-- Turno -->
+						<po-checkbox-group
+							#checkTurno
+							formControlName="turno"
+							class="po-md-6"
+							name="turno"
+							p-label="Turno"
+							[p-columns]="colunaTurno"
+							[p-options]="listTurno"
+							>
+						</po-checkbox-group>
+
+						<po-radio-group
+							formControlName="status"
+							class="po-lg-2"
+							name="status"
+							p-label="Status"
+							[p-options]="listStatus"
+							[p-required]="true"
+						>
+						</po-radio-group>
+					</div>
+
+				</po-tab>
+				<!-- Documentos -->
+				<po-tab p-label="Documentos">
+					<div class="row po-pl-0 po-mt-2 po-md-12">
+						<po-button 
+							p-label="Incluir documento"
+							p-kind="tertiary"
+							p-icon="po-icon po-icon-plus"
+							(p-click)="incluirDocumento()"></po-button>
+					</div>
+				</po-tab>
+			</po-tabs>
+			
+		</div>
+	</form>
+	<div class="po-row po-mt-4 " style="justify-content: flex-end">
+		<div class="po-pull-right">
+			<po-button 
+				p-label="Cancelar" 
+				(p-click)="close()" 
+				p-kind="tertiary"> 
+			</po-button>
+			<po-button 
+				*ngIf="isVisibleBtn"  
+				class="po-ml-1" 
+				p-label="Salvar e incluir novo" 
+				(p-click)="saveMotorista(true)"
+				p-kind="secondary"
+				[p-loading]="isLoadingBtn"> 
+			</po-button>
+			<po-button 
+				class="po-ml-1" 
+				p-label="Salvar" 
+				(p-click)="saveMotorista()"
+				p-kind="primary"
+				[p-loading]="isLoadingBtn"> 
+			</po-button>
+		</div>
+	</div>
+</po-page-default>

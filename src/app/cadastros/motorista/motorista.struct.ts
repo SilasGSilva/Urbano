@@ -1,4 +1,4 @@
-import { PoComboComponent, PoSelectOption, PoTableColumn } from "@po-ui/ng-components";
+import { PoComboOption, PoSelectOption, PoTableColumn } from "@po-ui/ng-components";
 
 /**
  * Definição da coluna de motoristas
@@ -56,6 +56,7 @@ export class MotoristaModel {
 
     id: string = '';
     pk?: string;
+	filial:string = '';
 	matricula?: string;
 	descMotorista: string = '';
 	codRecurso: string = '';
@@ -64,4 +65,10 @@ export class MotoristaModel {
     status: string = '1';
 	outrasAcoes?: Array<string>;
 	index?: number;
+}
+
+export interface ComboFilial extends PoComboOption {
+	[x: string]: any;
+	selectedOption: any;
+	filial?: string;
 }
