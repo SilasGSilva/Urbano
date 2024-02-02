@@ -1,0 +1,161 @@
+<po-page-default
+    [p-title]= "titulo"
+    [p-breadcrumb]="breadcrumb">
+
+    <po-loading-overlay
+		[p-screen-lock]="true"
+		[hidden]="isHideLoadingTela"
+		p-text="Carregando Localidade"
+	>
+    </po-loading-overlay>
+
+    <form [formGroup]="localidadesForm" class="po-row po-pl-0">
+
+        <div class="po-xl-12 ">           
+
+            <po-input
+                class="po-lg-9"
+                name="descricao"
+                p-label="Descrição da Localidade"
+                p-placeholder="Digite"
+                formControlName="descricao"
+                p-required="true"
+                p-clean="true"
+                [p-show-required]="true"
+            >
+            </po-input>
+
+            <po-input
+                class="po-lg-3"
+                name="cep"
+                p-label="CEP"
+                p-placeholder="Digite"
+                formControlName="cep"
+                p-mask="99999-999"
+                p-clean="true"
+                (p-change)="changeValidCEP($event)"
+            >
+            </po-input>
+        </div>   
+
+        <div class="po-xl-12 ">
+
+            <po-input
+                class="po-lg-9"
+                name="endereco"
+                p-label="Endereço"
+                formControlName="endereco"
+                p-placeholder="Digite"
+                p-clean="true"
+            >
+            </po-input>
+
+            <po-input
+                class="po-lg-3"
+                name="bairro"
+                p-label="Bairro"
+                p-placeholder="Digite"
+                formControlName="bairro"
+                p-clean="true"
+            >
+            </po-input>
+        </div>
+        
+        <div class="po-xl-12 ">
+
+            <po-combo
+                class="po-lg-2"
+                name="estado"
+                p-label="UF"
+                p-placeholder="Selecione"
+                formControlName="estado"
+                #comboUf
+                p-clean="true"
+                (p-change)="setFilters($event)"
+                [p-disabled-init-filter]=false
+                [p-filter-service]="comboFormService"
+                [p-filter-params]="isUf"
+            >
+            </po-combo>
+
+            <po-combo
+                class="po-lg-4 form-group"
+                name="municipio"
+                p-label="Município"
+                p-placeholder="Selecione"
+                formControlName="municipio"
+                #comboMunicipio
+                [p-disabled]="isDisableMunicipio"
+                [p-filter-service]="comboFormService"
+                [p-filter-params]="estado"
+                [p-debounce-time]="500"
+				[p-disabled-init-filter]="false"
+            >
+                <ng-template p-combo-option-template let-option>
+                    <div class="po-row">
+                        <div class="po-sm-10 po-md-9 po-lg-11">
+                        <div class="po-font-text-large-bold">{{ option.label }}</div>
+                        <div class="po-font-text-smaller">Código: {{ option.uf }}</div>
+                        <div class="po-font-text-smaller">UF: {{ option.value }}</div>
+                        </div>
+                    </div>
+                </ng-template>
+            </po-combo>
+
+        </div>
+        <div class="po-xl-12">
+            
+            <po-checkbox-group
+                class="po-lg-4 form-group"
+                name="tipoLocalidade"
+                p-label="Tipo de localidade"
+                formControlName="tipoLocalidade"
+                [p-options]="listTipo"
+            >
+            </po-checkbox-group>       
+
+            <po-radio-group
+                class="po-lg-3"
+                name="status"
+                p-label="Status"
+                formControlName="status"
+                [p-options]="listStatus"
+                [p-required]="true"
+                [p-show-required]="true"
+            >
+            </po-radio-group>
+
+        </div>
+    </form>
+
+    <div class="po-row po-mt-4 " style="justify-content: flex-end">
+		<div class="po-pull-right">
+
+			<po-button 
+				p-label="Cancelar" 
+				(p-click)="onClickCancel()"
+                [p-danger]="true"
+            >
+			</po-button>
+
+			<po-button 
+                class="po-ml-1" 
+				p-label="Salvar e incluir novo" 
+				p-kind="secondary"
+				*ngIf="isVisibleBtn"  
+				(p-click)="saveLocalidade(true)"
+            > 
+			</po-button>
+
+			<po-button 
+				class="po-ml-1" 
+				p-label="Salvar" 
+				(p-click)="saveLocalidade()" 
+				p-kind="primary"
+                [p-loading]="isLoadingBtn"
+            > 
+			</po-button>
+
+		</div>
+	</div>    
+</po-page-default>

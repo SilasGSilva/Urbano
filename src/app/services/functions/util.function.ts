@@ -150,3 +150,47 @@ export function validacaoCaracteresEsp(campo: string = '') {
 	  return type === PoTableColumnSortType.Ascending ? 1 : -1;
 	}
 }
+
+/**
+ * Busca dados a partir de um array. Se não encontrar, retorna `undefined`
+ * @param aDados - Array de dados
+ * @param cCampo - Campo a ser encontrado
+ * @example
+ * ```
+ * aDados[0].id = "GYG_CODIGO"
+ * aDados[0].order = 1
+ * aDados[0].value = "000111"
+ * aDados[1].id = "GYG_NOME"
+ * aDados[1].order = 2
+ * aDados[1].value = "TESTE"
+ *
+ * this.findValueByName(aDados, "GYG_CODIGO") // Retorna "000111"
+ * this.findValueByName(aDados, "GYG_NOME") // Retorna "TESTE"
+ * ```
+ */
+
+export function FindValueByName(aDados: Array<any>, cCampo: string) {
+	const aEncontrado = aDados.find(x => x.id == cCampo);
+
+	if (
+		!isNullOrUndefined(aEncontrado) &&
+		typeof aEncontrado.value === 'string'
+	) {
+		return typeof aEncontrado.value == 'string'
+			? DecodeHtmlEntities(aEncontrado.value)
+			: aEncontrado.value;
+	} else {
+		return '';
+	}
+}
+/**
+ * Altera o valor `undefined` para vazio
+ * @param value - Valor a ser validado
+ * @returns O valor passado ou vazio `("")`
+ */
+export function ChangeUndefinedToEmpty(value: string | undefined): string {
+	if (value === undefined || value === 'undefined' || value === null) {
+		value = '';
+	}
+	return value;
+}

@@ -30,7 +30,7 @@ export class FwProtheusModel {
 
     public setVirtualField(value: boolean): void {
         this.virtualField = value;
-    }  
+    } 
      
     public AddModel(id: string, modeltype: string): void {
         const newModel = new Model();
@@ -169,7 +169,7 @@ export class FwProtheusModel {
         
         let body = {
             id: this.modelId,
-            operation: this.operation = 1,
+            operation: this.operation,
             models: this.models,
             endpoint : this.endpoint
         };
@@ -208,8 +208,9 @@ export class FwProtheusModel {
 
     }
 
-    public getModel(modelId: string): Model | undefined {
-
+    public getModel(modelId: string): Model {
+        let model: Model | undefined;
+        model = this.models.find(model => model.id === modelId) || new Model();
         if (this.resources != undefined) {
             for (const resource of this.resources) {
                 const model = resource.models.find(model => model.id === modelId);
@@ -217,19 +218,17 @@ export class FwProtheusModel {
                     return model;
                 }
             }
-            return undefined; // Modelo não encontrado
+            return model; // Modelo não encontrado
         } else {
 
             if (this.models.find(model => model.id === modelId) == undefined)
                 this.AddModel(modelId, 'FIELDS');
 
-            const model = this.models.find(model => model.id === modelId);
+            const model = this.models.find(model => model.id === modelId)|| new Model();
 
-            if (model) {
-                return model;
-            } else {
-                return undefined;
-            }
+           
+            return model;
+            
         }
     }
 }
