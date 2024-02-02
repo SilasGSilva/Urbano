@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { MotoristaComponent } from './cadastros/motorista/motorista.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { LocalidadesComponent } from './cadastros/localidades/localidades.component';
+import { DetMotoristaComponent } from './cadastros/motorista/det-motorista/det-motorista.component';
 import { DetLocalidadesComponent } from './cadastros/localidades/det-localidades/det-localidades.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -18,6 +19,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MotoristaComponent,
     LocalidadesComponent,
     NavMenuComponent,
+    DetMotoristaComponent,
     DetLocalidadesComponent
   ],
   imports: [
