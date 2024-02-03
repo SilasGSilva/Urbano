@@ -177,19 +177,12 @@ export function ChangeUndefinedToEmpty(value: string | undefined): string {
  */
 export function MakeDate(strDate: string, formato: string = 'mm-dd-yyyy', separador: string = '-'): string {
 	let dataFinal: string;
-	let strMes: string;
+	let strMes: string = '';
 
 	if (!isNullOrUndefined(strDate)) {
 		const dia: string = strDate.substring(6, 8);
 		const mes: string = strDate.substring(4, 6);
-		const ano: string = strDate.substring(0, 4);
-
-		if (formato.indexOf('MMMM') > -1) {
-			strMes = this.getStrMonth(mes);
-			formato = formato.replace('MMMM', 'MM');
-		} else if (formato.indexOf('MM') > -1) {
-			strMes = this.getStrMonth(mes, true);
-		}
+		const ano: string = strDate.substring(0, 4);;
 
 		dataFinal = formato
 			.replace(/dd/g, dia)

@@ -18,7 +18,7 @@ import { ApiService } from 'src/app/services/api.service';
   providers: [RecursoComboService, FuncaoComboService, MatriculaComboService]
 })
 export class DetMotoristaComponent implements OnInit {
-	motoristaForm: FormGroup;
+	motoristaForm!: FormGroup;
 
 	isDisableTipoDoc: boolean = true;
 	colunaTurno: number = 3;
@@ -226,7 +226,7 @@ export class DetMotoristaComponent implements OnInit {
 				});
 			},
 			error(err) {
-				this.poNotification(err.errorMessage)
+				// this.poNotification(err.errorMessage)
 			},
 			complete: () => {
 				this.isLoadingBtn = false;

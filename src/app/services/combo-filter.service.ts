@@ -90,7 +90,7 @@ export class MotoristaComboService implements ComboFilial {
 	selectedOption: any;
 	filial?: string;
 	label?: string;
-	value: string | number;
+	value!: string | number;
 
 	getFilteredData(params: any): Observable<PoComboMotoristaStruct[]> {
 
