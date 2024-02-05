@@ -132,12 +132,16 @@ export class LocalidadesComponent implements OnInit {
 	/**
 	 * @name getLocalidades
 	 * @description Busca dados para o grid de localidades
+	 * @param showMore indica se a função foi chamada via botão show more
 	 */
-    getLocalidades() {
+    getLocalidades(showMore?: boolean) {
 
 		let params = new HttpParams();
 		this.isLoading = true;
-		this.listLocalidade = [];
+		
+		if (!showMore) {
+			this.listLocalidade = [];
+		} 
       
 		//Caso haja filtro, não realizar paginação
         if (this.filters != '') {

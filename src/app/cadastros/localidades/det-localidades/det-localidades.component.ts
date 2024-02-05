@@ -180,8 +180,14 @@ export class DetLocalidadesComponent implements OnInit {
             this.fwModel.getModel('GI1MASTER').setValue('GI1_BAIRRO', ChangeUndefinedToEmpty(this.localidadesForm.value.bairro.toUpperCase()));
             this.fwModel.getModel('GI1MASTER').setValue('GI1_UF', ChangeUndefinedToEmpty(this.localidadesForm.value.estado.toUpperCase()));
             this.fwModel.getModel('GI1MASTER').setValue('GI1_CDMUNI', ChangeUndefinedToEmpty(this.localidadesForm.value.municipio.toUpperCase()));
-            this.fwModel.getModel('GI1MASTER').setValue('GI1_TPLOC', ChangeUndefinedToEmpty(this.localidadesForm.value.tipoLocalidade.join('').toUpperCase()));
-            this.fwModel.getModel('GI1MASTER').setValue('GI1_STATUS', ChangeUndefinedToEmpty(this.localidadesForm.value.status.toUpperCase()));
+            
+            if (this.localidadesForm.value.tipoLocalidade) {
+                this.fwModel.getModel('GI1MASTER').setValue('GI1_TPLOC', ChangeUndefinedToEmpty(this.localidadesForm.value.tipoLocalidade.join('')));
+            } else {
+                this.fwModel.getModel('GI1MASTER').setValue('GI1_TPLOC', '');
+            }
+            
+            this.fwModel.getModel('GI1MASTER').setValue('GI1_STATUS', ChangeUndefinedToEmpty(this.localidadesForm.value.status));
     
             if (this.acao == 'incluir') {
                 this.fwModel.operation = 3;

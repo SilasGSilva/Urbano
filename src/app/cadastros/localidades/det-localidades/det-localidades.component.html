@@ -142,6 +142,7 @@
                 class="po-ml-1" 
 				p-label="Salvar e incluir novo" 
 				p-kind="secondary"
+                [p-loading]="isLoadingBtn"
 				*ngIf="isVisibleBtn"  
 				(p-click)="saveLocalidade(true)"
             > 
