@@ -1,12 +1,11 @@
 <po-page-default [p-title]="title" [p-breadcrumb]="breadcrumb">
-  <p *ngIf="!editView" class="po-font-text-large text-color-gray">
-    Preencha as informações da tarifa:
-  </p>
-  <p *ngIf="editView" class="po-font-text-large text-color-gray">
-    Edite as informações da tarifa:
+  <p class="po-font-text-large text-color-gray">
+    {{ subtitle }}
   </p>
   <form [formGroup]="tarifaForm" class="po-row po-pl-0">
-    <div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2">
+    <div
+      class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2 po-mt-1"
+    >
       <po-input
         formControlName="codigo"
         class="po-lg-4"
@@ -18,7 +17,7 @@
       </po-input>
 
       <po-input
-        formControlName="codigo"
+        formControlName="descricao"
         class="po-lg-8"
         name="descricao"
         p-label="Descrição*"
@@ -28,7 +27,7 @@
       </po-input>
     </div>
     <div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2">
-      <po-input
+      <po-number
         formControlName="valor"
         class="po-xl-4 po-lg-4 po-md-6 po-sm-12"
         name="valor"
@@ -36,81 +35,83 @@
         [p-show-required]="true"
         p-placeholder="5,20"
       >
-      </po-input>
+      </po-number>
       <po-lookup
         class="po-xl-4 po-lg-4 po-md-6 po-sm-12"
         formControlName="orgaoConcessor"
         p-label="Órgão Concessor*"
         name="orgaoConcessor"
-        [p-filter-service]="poLookUpTarifas"
-        [p-filter-params]="filterParamCodigo"
+        p-field-label="nickname"
+        p-field-value="id"
+        [p-columns]="columns"
+        [p-filter-service]="poLookUpOrgaoConcessor"
+        [p-filter-params]="filterParamOrgaoConcessor"
+        [p-hide-columns-manager]="true"
       ></po-lookup>
 
-      <po-datepicker
+      <po-datepicker-range
+        #vigenciafilterRange
         formControlName="vigencia"
         class="po-xl-4 po-lg-4 po-md-6 po-sm-12"
         name="vigencia"
         p-label="Vigência*"
+        (p-change)="setRangeFilter($event)"
       >
-      </po-datepicker>
+      </po-datepicker-range>
     </div>
-    <!-- <div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2">
-      <po-datepicker
-        formControlName="dataNascimento"
-        class="po-lg-4"
-        name="dataNascimento"
-        p-label="Data de nascimento"
-        p-placeholder="Digite"
-      >
-      </po-datepicker>
-      <po-radio-group
-        formControlName="tipoDocumento"
-        class="po-lg-2"
-        name="tipoDocumento"
-        p-label="Tipo de documento"
-        [p-options]="listTipoDocumento"
-        (p-change)="changeDocumento($event)"
-        [p-optional]="true"
-      >
-      </po-radio-group>
-      <po-input
-        formControlName="numeroDocumento"
-        class="po-lg-6"
-        name="numeroDocumento"
-        p-label="Nº do documento"
-        p-placeholder="Digite"
-        [p-mask]="mascaraCPF"
-        p-mask-format-model="true"
-        (p-change)="validarCPF($event)"
-        p-disabled="{{ isDisableTipoDoc }}"
-        [p-optional]="true"
-      >
-      </po-input>
-    </div> -->
-    <po-divider class="po-lg-12" p-label="Dados do funcionário:"> </po-divider>
+    <div class="po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2">
+      <po-lookup
+        class="po-xl-12 po-lg-12 po-md-12 po-sm-12"
+        formControlName="formasDePagamento"
+        p-label="Formas de pagamento*"
+        name="formasDePagamento"
+        p-field-label="nickname"
+        p-field-value="id"
+        [p-columns]="columns"
+        [p-filter-service]="poLookUpFormasDePagamento"
+        [p-filter-params]="filterParamFormasDePagamento"
+        [p-hide-columns-manager]="true"
+        [p-multiple]="true"
+      ></po-lookup>
+    </div>
   </form>
-  <!-- <div class="po-row po-mt-4" style="justify-content: flex-end">
+  <div class="po-row po-mt-4" style="justify-content: flex-end">
     <div class="po-pull-right">
-      <po-button p-label="Cancelar" (p-click)="close()" p-kind="tertiary">
+      <po-button
+        p-label="Cancelar"
+        p-kind="tertiary"
+        (p-click)="modalCancel.open()"
+      >
       </po-button>
       <po-button
         *ngIf="isVisibleBtn"
         class="po-ml-1"
         p-label="Salvar e incluir novo"
-        (p-click)="saveMotorista(true)"
+        (p-click)="saveTarifa(true)"
         p-kind="secondary"
-        [p-loading]="isLoadingBtn"
+        [p-disabled]="!tarifaForm.valid"
       >
       </po-button>
       <po-button
         class="po-ml-1"
         p-label="Salvar"
-        (p-click)="saveMotorista()"
+        (p-click)="saveTarifa(false)"
         p-kind="primary"
-        [p-loading]="isLoadingBtn"
+        [p-disabled]="!tarifaForm.valid"
       >
       </po-button>
     </div>
-  </div> -->
-  <po-loading-overlay [hidden]="!isShowLoading"></po-loading-overlay>
+  </div>
 </po-page-default>
+
+<po-modal
+  #modalCancel
+  p-title="Cancelar"
+  [p-primary-action]="confirmCancel"
+  [p-secondary-action]="exitCancel"
+  [p-hide-close]="true"
+>
+  Deseja realmente sair? Irá perder todos os dados não salvos</po-modal
+>
+
+<po-loading-overlay [hidden]="!isShowLoading"></po-loading-overlay>

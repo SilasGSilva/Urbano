@@ -48,8 +48,8 @@ export class TarifasComponent {
   //Declaração de variaveis
   tarifaFilter: string = '';
   orgaoConcessorFilter: string = '';
-  validityStartFilter: string = '';
-  validityEndFilter: string = '';
+  vigenciaStartFilter: string = '';
+  vigenciaEndFilter: string = '';
 
   filters: string = '';
   isLoading: boolean = false;
@@ -96,7 +96,7 @@ export class TarifasComponent {
   }
 
   addTarifas() {
-    this._router.navigate(['tarifas/detTarifas/incluir'])
+    this._router.navigate(['tarifas/detTarifas/incluir']);
   }
 
   setFilters() {
@@ -180,9 +180,7 @@ export class TarifasComponent {
     this._fwModel.get(params).subscribe(() => {
       this._fwModel.resources.forEach((resource: Resource) => {
         let tariffs = new TariffsModel();
-        let status: string = resource
-          .getModel('GI1MASTER')
-          .getValue('GI1_STATUS');
+        tariffs.pk = resource.pk;
 
         tariffs.codTariff = resource.getModel('GI1MASTER').getValue('GI1_COD');
         tariffs.labelTariff =
@@ -220,8 +218,8 @@ export class TarifasComponent {
   }
 
   setRangeFilter(event: any) {
-    this.validityStartFilter = event.start;
-    this.validityEndFilter = event.end;
+    this.vigenciaStartFilter = event.start;
+    this.vigenciaEndFilter = event.end;
   }
 
   sortTable(event: PoTableColumnSort) {
@@ -244,11 +242,16 @@ export class TarifasComponent {
     this.getTarifas();
   }
 
-  editTariff() {
-    console.log('edit');
+  editTariff(event: any) {
+    this._router.navigate([
+      'tarifas/detTarifas',
+      'editar',
+      btoa(event.pk),
+      event.pk,
+    ]);
   }
 
   viewTariff() {
-    console.log('voew');
+    console.log('view');
   }
 }

@@ -44,6 +44,7 @@ export const ColumnsTariffs: Array<PoTableColumn> = [
  * Dados dos itens das tarifas
  */
 export class TariffsModel {
+  pk: string = '';
   codTariff: string = '';
   descTariff: string = '';
   labelTariff: string = '';

@@ -8,7 +8,7 @@ import {
 } from '@po-ui/ng-components';
 import { Observable, map, of } from 'rxjs';
 import { ApiService } from '../api.service';
-import { HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 /**
  * Todos os combos que apontam para API
  */
@@ -443,85 +443,19 @@ export class OrgaoConcessorComboService implements PoComboFilter {
 @Injectable({
   providedIn: 'root',
 })
-export class PoLookUpTarifas implements PoLookupFilter {
-  private endpoint: string = 'FRETAMENTOURBANO/local';
+export class poLookUpOrgaoConcessor implements PoLookupFilter {
+  // private endpoint: string = 'FRETAMENTOURBANO/local';
+  private endpoint: string = 'https://po-sample-api.onrender.com/v1/heroes';
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private _http: HttpClient) {}
 
-  getFilteredData(
-    params: any,
-    filterParams?: any
-  ): Observable<TarifaComboStruct[]> {
-    let httpParams = new HttpParams();
-    let filter: string = '';
-
-    if (filterParams) {
-      filter = filterParams;
-    }
-
-    if (params.value != '') {
-      filter =
-        " AND (UPPER(GI1_COD) LIKE UPPER('%" +
-        params.value +
-        "%') OR " +
-        " UPPER(GI1_DESCRI) LIKE UPPER('%" +
-        params.value +
-        "%') ) ";
-    }
-
-    httpParams = httpParams.append('filter', filter);
-
-    return this.apiService.get(this.endpoint, httpParams).pipe(
-      map((response: any) => {
-        const items: FilterComboStruct[] = [];
-        let hasNext = true;
-
-        response.Localidade.forEach((resource: any) => {
-          let itemReturn: FilterComboStruct = new FilterComboStruct();
-
-          itemReturn.value = resource.codLocal;
-          itemReturn.label = resource.descLocal;
-          itemReturn.desc = resource.codMuni;
-
-          items.push(itemReturn);
-
-          if (params.page * params.pageSize >= response.total) {
-            hasNext = false;
-          }
-        });
-        return items;
-      })
-    );
-  }
-
-  getObjectByValue(
-    value: string | Array<any>,
-    filterParams?: any
-  ): Observable<PoComboOption> {
-    let params = new HttpParams();
-
-    let filter: string = ``;
-
-    params = params.append('FILTER', filter);
-
-    return this.apiService.get(this.endpoint, params).pipe(
-      map((response: any) => {
-        let itemReturn = new FilterComboStruct();
-
-        itemReturn.value = response.codLocal;
-        itemReturn.label = response.descLocal;
-        itemReturn.desc = response.codMuni;
-
-        return itemReturn;
-      })
-    );
+  getObjectByValue(value: any): Observable<any> {
+    return this.apiService.get(this.endpoint, value);
   }
 
   getFilteredItems(
     filteredParams: PoLookupFilteredItemsParams
-  ): Observable<PoLookupResponseApi> {
-    const items: OrgaoConcessorPoLookUpService[] = [];
-
+  ): Observable<any> {
     const { filterParams, advancedFilters, ...restFilteredItemsParams } =
       filteredParams;
     const params = {
@@ -530,29 +464,35 @@ export class PoLookUpTarifas implements PoLookupFilter {
       ...advancedFilters,
     };
 
-    // this.apiService.get(this.endpoint, params).subscribe({
-    //   next: (data: any) => {
-    //     const items: any[] = [];
-    //     let hasNext: boolean = false;
+    return this._http.get(this.endpoint, params);
+  }
+}
 
-    //     data.Localidade.forEach((resource: any) => {
-    //       let itemReturn: FilterComboStruct = new FilterComboStruct();
 
-    //       itemReturn.value = resource.codLocal;
-    //       itemReturn.label = resource.descLocal;
-    //       itemReturn.desc = resource.codMuni;
+@Injectable({
+  providedIn: 'root',
+})
+export class poLookUpFormasDePagamento implements PoLookupFilter {
+  // private endpoint: string = 'FRETAMENTOURBANO/local';
+  private endpoint: string = 'https://po-sample-api.onrender.com/v1/heroes';
 
-    //       items.push(itemReturn);
+  constructor(private apiService: ApiService, private _http: HttpClient) {}
 
-    //       if (params.page * params.pageSize >= data.total) {
-    //         hasNext = false;
-    //       }
-    //     });
-    //   },
-    //   error: (error) => {},
-    //   complete() {},
-    // });
-    // return items;
-    return this.apiService.get(this.endpoint, params);
+  getObjectByValue(value: any): Observable<any> {
+    return this.apiService.get(this.endpoint, value);
+  }
+
+  getFilteredItems(
+    filteredParams: PoLookupFilteredItemsParams
+  ): Observable<any> {
+    const { filterParams, advancedFilters, ...restFilteredItemsParams } =
+      filteredParams;
+    const params = {
+      ...restFilteredItemsParams,
+      ...filterParams,
+      ...advancedFilters,
+    };
+
+    return this._http.get(this.endpoint, params);
   }
 }
