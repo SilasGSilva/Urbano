@@ -8,18 +8,18 @@ import { localComboService, muniComboService } from 'src/app/services/adaptors/w
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-localidades',
-  templateUrl: './localidades.component.html',
-  styleUrls: ['./localidades.component.css'],
-  providers: []
+	selector: 'app-localidades',
+	templateUrl: './localidades.component.html',
+	styleUrls: ['./localidades.component.css'],
+	providers: []
 })
 export class LocalidadesComponent implements OnInit {
-	
+
 	//Declaração de variaveis 
 	filters: string = '';
 	filtroLocal: string = '';
 	filtroMuni: string = '';
-	
+
 	isLoading: boolean = true
 	isShowMoreDisabled: boolean = false;
 
@@ -27,35 +27,35 @@ export class LocalidadesComponent implements OnInit {
 	nPageSize: number = 10;
 	nRegIndex: number = 1;
 	nHeightMonitor: number = window.innerHeight * (window.innerHeight > 850 ? 0.6 : 0.45);
-	
+
 	itemsColumns: Array<PoTableColumn> = CollumnsLocalidade;
 	listStatus: Array<PoSelectOption> = ListStatus;
 	listLocalidade: Array<LocalidadesModel> = [];
-	
+
 	actions: Array<PoPageAction> = [
 		{ label: 'Incluir', action: () => { this.incluir() } },
 	];
-	
+
 	public breadcrumb: PoBreadcrumb = {
 		items: [{ label: 'Fretamento Urbano', link: '/' }, { label: 'Localidades' }]
 	};
-	 
+
 	@ViewChild('filterLocal', { static: true }) filterLocal!: PoComboComponent;
 	@ViewChild('filterMuni', { static: true }) filterMuni!: PoComboComponent;
 	@ViewChild('cmbStatus', { static: true }) cmbStatus!: PoComboComponent;
-	
+
 	constructor(
 		public poNotification: PoNotificationService,
 		public localComboService: localComboService,
-		public municipioComboService : muniComboService,
+		public municipioComboService: muniComboService,
 		private route: ActivatedRoute,
 		private router: Router,
 		private fwModel: FwProtheusModel,
 		private _utilsService: UtilsService
-	  ) {
+	) {
 		this.setColProperties();
-	  }
-	
+	}
+
 	ngOnInit() {
 		this.getLocalidades();
 	}
@@ -91,76 +91,76 @@ export class LocalidadesComponent implements OnInit {
 				if (this.filters != '') {
 					this.filters += " AND "
 				}
-				this.filters += ( " GI1_STATUS = '" + this.cmbStatus.selectedOption.value + "' ")
-	
+				this.filters += (" GI1_STATUS = '" + this.cmbStatus.selectedOption.value + "' ")
+
 			}
 			if (this.filterLocal.selectedOption != undefined) {
 				this.filtroMuni = (
 					" AND ( UPPER(GI1_COD) LIKE UPPER('" + this.filterLocal.selectedOption.value + "') OR " +
 					" UPPER(GI1_DESCRI) LIKE UPPER('" + this.filterLocal.selectedOption.label + "') )"
 				)
-				if (this.filters != ''){
+				if (this.filters != '') {
 					this.filters += ' AND '
 				}
 				this.filters += (
 					" ( UPPER(GI1_COD) LIKE UPPER('" + this.filterLocal.selectedOption.value + "') OR " +
 					" UPPER(GI1_DESCRI) LIKE UPPER('" + this.filterLocal.selectedOption.value + "') )"
 				);
-							 
+
 			}
-			
+
 			if (this.filterMuni.selectedOption != undefined) {
-				this.filtroLocal = ( 
+				this.filtroLocal = (
 					" AND ( UPPER(GI1_CDMUNI) LIKE UPPER('" + this.filterMuni.selectedOption.value + "') OR " +
 					" UPPER(GI1_DSMUNI) LIKE UPPER('" + this.filterMuni.selectedOption.label + "') )"
 				);
-	
-				if (this.filters != ''){
+
+				if (this.filters != '') {
 					this.filters += ' AND '
 				}
 				this.filters += (
 					" ( UPPER(GI1_CDMUNI) LIKE UPPER('" + this.filterMuni.selectedOption.value + "') OR " +
 					" UPPER(GI1_DSMUNI) LIKE UPPER('" + this.filterMuni.selectedOption.value + "') )"
-				);           
+				);
 			}
-	
-			this.getLocalidades();
-		}	
 
-    }
+			this.getLocalidades();
+		}
+
+	}
 
 	/**
 	 * @name getLocalidades
 	 * @description Busca dados para o grid de localidades
 	 * @param showMore indica se a função foi chamada via botão show more
 	 */
-    getLocalidades(showMore?: boolean) {
+	getLocalidades(showMore?: boolean) {
 
 		let params = new HttpParams();
 		this.isLoading = true;
-		
+
 		if (!showMore) {
 			this.listLocalidade = [];
-		} 
-      
-		//Caso haja filtro, não realizar paginação
-        if (this.filters != '') {
-            params = params.append('FILTER', this.filters);
-        } else {
-			if (this.nPageSize.toString() != '')
-				params = params.append('COUNT',this.nPageSize.toString());
-			if (this.nRegIndex.toString() != '')
-				params = params.append('STARTINDEX', this.nRegIndex.toString() );
 		}
-        this.fwModel.setEndPoint('GTPA001/');
-        
+
+		//Caso haja filtro, não realizar paginação
+		if (this.filters != '') {
+			params = params.append('FILTER', this.filters);
+		} else {
+			if (this.nPageSize.toString() != '')
+				params = params.append('COUNT', this.nPageSize.toString());
+			if (this.nRegIndex.toString() != '')
+				params = params.append('STARTINDEX', this.nRegIndex.toString());
+		}
+		this.fwModel.setEndPoint('GTPA001/');
+
 		this.fwModel.setVirtualField(true)
 		this.fwModel.get(params).subscribe(() => {
 
 			this.fwModel.resources.forEach((resource: Resource) => {
 
 				let localidade = new LocalidadesModel;
-				let status : string = resource.getModel('GI1MASTER').getValue('GI1_STATUS');
+				let status: string = resource.getModel('GI1MASTER').getValue('GI1_STATUS');
 
 				localidade.pk = resource.pk;
 				localidade.local = resource.getModel('GI1MASTER').getValue('GI1_COD') + ' - ' + resource.getModel('GI1MASTER').getValue('GI1_DESCRI');
@@ -169,12 +169,12 @@ export class LocalidadesComponent implements OnInit {
 				localidade.outrasAcoes = ['editar', 'visualizar'];
 				this.listLocalidade = [...this.listLocalidade, localidade];
 				this.isLoading = false;
-            })
+			})
 
 			this.setShowMore(this.fwModel.total);
-        })
+		})
 
-    }
+	}
 	/**
 	 * Incrementa o index de paginação da tela e
 	 * Seta se o botão de carregar mais continua habilitado ou não
@@ -203,9 +203,9 @@ export class LocalidadesComponent implements OnInit {
 	actionShowMore() {
 		this.nNextPage++;
 		// se for clicado pela 4a vez carrega o restante dos dados
-		if (this.nNextPage === 4 ) {
+		if (this.nNextPage === 4) {
 			this.nPageSize = this.fwModel.total;
-		}		
+		}
 		this.isShowMoreDisabled = true;
 		this.getLocalidades();
 	}
@@ -215,15 +215,14 @@ export class LocalidadesComponent implements OnInit {
 	 * @param row linha selecionada
 	 */
 	editar(item: any) {
-		this.router.navigate(["./detLocalidades", "editar", item.pk ], { relativeTo: this.route });
+		this.router.navigate(["./detLocalidades", "editar", item.pk], { relativeTo: this.route });
 	}
 	/**
 	 * Redireciona para a página de visualização
 	 * @param row linha selecionada
 	 */
-	visualizar() {
-		this.poNotification.warning("Página em construção!")
-		//this.router.navigate(["./detLocalidades", "visualizar"], { relativeTo: this.route });
+	visualizar(item: any) {
+		this.router.navigate(["./viewLocalidades", "visualizar", item.pk], { relativeTo: this.route });
 	}
 	/**
 	 * Redireciona para a página de inclusao
@@ -239,9 +238,9 @@ export class LocalidadesComponent implements OnInit {
 	 */
 	sortTable(event: PoTableColumnSort) {
 		const result = [...this.listLocalidade];
-	
+
 		result.sort((value, valueToCompare) =>
-		  this._utilsService.sort(value, valueToCompare, event)
+			this._utilsService.sort(value, valueToCompare, event)
 		);
 		this.listLocalidade = result;
 	}

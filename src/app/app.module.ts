@@ -12,6 +12,7 @@ import { DetMotoristaComponent } from './cadastros/motorista/det-motorista/det-m
 import { DetLocalidadesComponent } from './cadastros/localidades/det-localidades/det-localidades.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ViewMotoristaComponent } from './cadastros/motorista/view-motorista/view-motorista.component';
+import { ViewLocalidadesComponent } from './cadastros/localidades/view-localidades/view-localidades.component';
 
 @NgModule({
 	declarations: [
@@ -21,7 +22,8 @@ import { ViewMotoristaComponent } from './cadastros/motorista/view-motorista/vie
 		NavMenuComponent,
 		DetMotoristaComponent,
 		DetLocalidadesComponent,
-		ViewMotoristaComponent
+		ViewMotoristaComponent,
+		ViewLocalidadesComponent
 	],
 	imports: [
 		BrowserModule,
