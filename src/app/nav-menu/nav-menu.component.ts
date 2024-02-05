@@ -30,7 +30,10 @@ export class NavMenuComponent {
 					label:
 						'Localidades', action: this.navigate.bind(this, '/localidades'),
 				},
-				{ label: 'Formas de pagamento' },
+				{
+					label: 'Formas de pagamento',
+					action: this.navigate.bind(this, '/formas-de-pagamento'),
+				},
 				{ label: 'Pedágio' },
 				{ label: 'Tarifas' },
 				{ label: 'Linhas' },
@@ -53,21 +56,6 @@ export class NavMenuComponent {
 			shortLabel: 'Financeiro',
 			icon: 'po-icon po-icon-finance',
 			subItems: []
-		}
-				{
-					label: 'Motorista/Colaboradores',
-					action: this.navigate.bind(this, '/motorista'),
-				},
-				{
-					label: 'Localidades',
-					action: this.navigate.bind(this, '/localidades'),
-				},
-				{
-					label: 'Formas de pagamento',
-					action: this.navigate.bind(this, '/formas-de-pagamento'),
-				},
-			],
-		},
 		}
 	];
 
