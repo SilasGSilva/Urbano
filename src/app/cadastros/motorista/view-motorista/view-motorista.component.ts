@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { PoBreadcrumb, PoDynamicViewField, PoPageAction } from '@po-ui/ng-components';
+import { PoBreadcrumb, PoDynamicViewField, PoNotificationService, PoPageAction } from '@po-ui/ng-components';
 import { ColunaDados } from './view-motorista.struct';
 import { HttpParams } from '@angular/common/http';
 import { FwProtheusModel } from 'src/app/services/models/fw-protheus.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FindValueByName, MakeDate, isNullOrUndefined } from 'src/app/services/functions/util.function';
+import { FindValueByName, MakeDate } from 'src/app/services/functions/util.function';
 
 @Component({
   selector: 'app-view-motorista',
@@ -32,6 +32,7 @@ export class ViewMotoristaComponent {
 		private fwModel: FwProtheusModel,
 		private route: ActivatedRoute,
 		private router: Router,
+		public poNotification: PoNotificationService,
 		){
 		this.pkMotorista = this.route.snapshot.params['id'];
 		this.filialMotorista = this.route.snapshot.params['filial'];
@@ -95,8 +96,8 @@ export class ViewMotoristaComponent {
 					status
 				 }
 			},
-			error(err) {
-				this.poNotification(err.errorMessage);
+			error: (err) => {
+				this.poNotification.error(err.errorMessage);
 				this.close();
 			},
 			complete: () => {

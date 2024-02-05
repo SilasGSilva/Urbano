@@ -225,8 +225,8 @@ export class DetMotoristaComponent implements OnInit {
 					dataNascimento: MakeDate(FindValueByName(data.models[0].fields,'GYG_DTNASC'), 'yyyy-mm-dd'),
 				});
 			},
-			error(err) {
-				this.poNotification(err.errorMessage)
+			error: (err) => {
+				this.poNotification.error(err.errorMessage)
 			},
 			complete: () => {
 				this.isLoadingBtn = false;
