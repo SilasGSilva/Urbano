@@ -12,9 +12,9 @@
 		p-label="Local"
 		[p-filter-service]="localComboService"
 		[p-filter-params]="filtroLocal"
-		(p-change)="setFilters()"
+		(p-change)="setFilters($event)"
 		p-clean="true"
-		(p-change)="cleanFilter('local')"
+		
 		p-placeholder="Selecionar"
 		[p-sort]="true"
 	>
@@ -36,10 +36,9 @@
 		p-label="Município"
 		[p-filter-service]="municipioComboService"
 		[p-filter-params]="filtroMuni"
-		(p-change)="setFilters()"
+		(p-change)="setFilters($event)"
 		p-placeholder="Selecionar"
 		p-clean="true"
-		(p-change)="cleanFilter('municipio')"
 		[p-sort]="true"
 	>
 		<ng-template p-combo-option-template let-option>
@@ -61,7 +60,7 @@
 		p-label="Staus" 
 		[p-options]="listStatus"
 		p-clean="true"
-		(p-change)="setFilters()"
+		(p-change)="setFilters($event)"
 		p-placeholder="Selecionar"
 	> </po-combo>
 	

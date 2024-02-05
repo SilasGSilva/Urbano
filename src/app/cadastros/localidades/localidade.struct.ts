@@ -43,6 +43,7 @@ export const ListStatus: Array<PoSelectOption> = [
 	{ value: '1', label: 'Ativo' }, 
 	{ value: '2', label: 'Inativo' }, 
 ]
+
 /**
  * Dados dos itens de localidades
  */
@@ -50,7 +51,7 @@ export class LocalidadesModel {
     push() {
         throw new Error('Method not implemented.');
     }
-
+	pk?: string;
 	local: string = '';
 	municipio: string = '';
     status: string = '';

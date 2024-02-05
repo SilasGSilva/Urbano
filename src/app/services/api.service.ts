@@ -2,26 +2,26 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { VldFormStruct } from './gtpgenerics.struct';
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 export class ApiService {
 	private apiUrl = 'http://localhost:12173/rest/';
-	
-	constructor(private http: HttpClient) {}
 
-    /**
-    * header padrão
-    */
-    private optionsHeader: HttpHeaders = new HttpHeaders({
-        'Content-Type': 'application/json;text/plain',
-        Authorization: 'Basic YWRtaW46MTIzNA==',
-        // Authorization: MesaGenericService.getRequestAuth(),
-        // Tenantid: MesaGenericService.getTenantIdHeader(),
-    });
+	constructor(private http: HttpClient) { }
+
+	/**
+	* header padrão
+	*/
+	private optionsHeader: HttpHeaders = new HttpHeaders({
+		'Content-Type': 'application/json;text/plain',
+		Authorization: 'Basic YWRtaW46MTIzNA==',
+		// Authorization: MesaGenericService.getRequestAuth(),
+		// Tenantid: MesaGenericService.getTenantIdHeader(),
+	});
 
 	/**
 	 * Metodo get http
@@ -32,9 +32,9 @@ export class ApiService {
 	get<T>(endpoint: string, params?: HttpParams): Observable<T> {
 		const url = `${this.apiUrl}${endpoint}`;
 		return this.http.get<T>(url, { params }).pipe(
-		catchError(error => {
-			return this.handleError(error);
-		})
+			catchError(error => {
+				return this.handleError(error);
+			})
 		);
 	}
 	/**
@@ -46,9 +46,9 @@ export class ApiService {
 	post<T>(endpoint: string, data: any): Observable<T> {
 		const url = `${this.apiUrl}/${endpoint}`;
 		return this.http.post<T>(url, data).pipe(
-		catchError(error => {
-			return this.handleError(error);
-		})
+			catchError(error => {
+				return this.handleError(error);
+			})
 		);
 	}
 	/**
@@ -60,9 +60,9 @@ export class ApiService {
 	put<T>(endpoint: string, data: any): Observable<T> {
 		const url = `${this.apiUrl}/${endpoint}`;
 		return this.http.put<T>(url, data).pipe(
-		catchError(error => {
-			return this.handleError(error);
-		})
+			catchError(error => {
+				return this.handleError(error);
+			})
 		);
 	}
 	/**
@@ -74,9 +74,9 @@ export class ApiService {
 		const url = `${this.apiUrl}/${endpoint}`;
 		return this.http.delete<T>(url).pipe(
 
-		catchError(error => {
-			return this.handleError(error);
-		})
+			catchError(error => {
+				return this.handleError(error);
+			})
 		);
 	}
 
@@ -89,25 +89,23 @@ export class ApiService {
 	 * Responsável por realizar validação de Formulário
 	 * @param form - Estrutura do Formulário
 	 */
-	validateForm(form: FormGroup) {
+	validateForm(form: FormGroup): Array<VldFormStruct> {
 		const formControls = form.controls;
 		const listReturn: Array<VldFormStruct> = [];
 
 		for (const campo in formControls) {
-			if (
-				Object.prototype.hasOwnProperty.call(formControls, campo) &&
-				formControls[campo].status === 'INVALID'
-			) {
-				const iMessage: number = this.indexMessageErro(formControls[campo]);
+			if (formControls.hasOwnProperty(campo) && formControls[campo].status === 'INVALID') {
+				const iMessage: number = this.indexMessageErro(formControls[campo] as FormControl);
 				let tpError: string = '';
 
 				if (iMessage === 0) {
-					tpError = this.getFormError(formControls[campo]);
+					tpError = this.getFormError(formControls[campo] as FormControl);
 				}
 
 				const index: number = listReturn.findIndex(
 					x => x.iMessage === iMessage && x.tpErro === tpError
 				);
+
 				if (index > -1) {
 					listReturn[index].field.push(campo.toString());
 				} else {
@@ -119,7 +117,6 @@ export class ApiService {
 				}
 			}
 		}
-
 		return listReturn;
 	}
 
@@ -127,9 +124,9 @@ export class ApiService {
 	 * Responsável por obter erro do campo do formulário
 	 * @param formControl - Form Control do campo
 	 */
-	getFormError(formControl) {
+	getFormError(formControl: FormControl): string {
 		for (const erro in formControl.errors) {
-			if (Object.prototype.hasOwnProperty.call(formControl.errors, erro)) {
+			if (formControl.errors.hasOwnProperty(erro)) {
 				return erro.toString();
 			}
 		}
@@ -141,12 +138,12 @@ export class ApiService {
 	 * na notificação
 	 * @param formControl - Form Control do campo
 	 */
-	indexMessageErro(formControl) {
+	indexMessageErro(formControl: FormControl): number {
 		let iMessage: number = 0;
 
-		if (formControl.errors.hasOwnProperty('required')) {
+		if (formControl.errors?.hasOwnProperty('required')) {
 			iMessage = 1;
-		} else if (formControl.errors.hasOwnProperty('maxlength')) {
+		} else if (formControl.errors?.hasOwnProperty('maxlength')) {
 			iMessage = 2;
 		}
 

@@ -184,13 +184,6 @@ export function MakeDate(strDate: string, formato: string = 'mm-dd-yyyy', separa
 		const mes: string = strDate.substring(4, 6);
 		const ano: string = strDate.substring(0, 4);
 
-		if (formato.indexOf('MMMM') > -1) {
-			strMes = this.getStrMonth(mes);
-			formato = formato.replace('MMMM', 'MM');
-		} else if (formato.indexOf('MM') > -1) {
-			strMes = this.getStrMonth(mes, true);
-		}
-
 		dataFinal = formato
 			.replace(/dd/g, dia)
 			.replace(/MM/g, strMes)

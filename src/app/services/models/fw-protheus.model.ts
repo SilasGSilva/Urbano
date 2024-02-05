@@ -169,7 +169,7 @@ export class FwProtheusModel {
         
         let body = {
             id: this.modelId,
-            operation: this.operation = 1,
+            operation: this.operation,
             models: this.models,
             endpoint : this.endpoint
         };

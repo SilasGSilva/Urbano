@@ -158,7 +158,7 @@ export class FuncaoComboService implements PoComboFilter {
 	constructor(private apiService: ApiService,
 		private route: ActivatedRoute,) { }
 
-	getFilteredData(params: any, filterParams?: any): Observable<PoComboOption[]> {
+	getFilteredData(params: any): Observable<PoComboOption[]> {
 
 		let httpParams = new HttpParams();
 
@@ -198,7 +198,7 @@ export class FuncaoComboService implements PoComboFilter {
 		}))
 	}
 
-	getObjectByValue(value: string | number, filterParams?: any): Observable<PoComboOption> {
+	getObjectByValue(value: string | number): Observable<PoComboOption> {
 
 		let params = new HttpParams();
 		let filial = this.route.snapshot.params['filial']
