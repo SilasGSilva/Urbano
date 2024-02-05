@@ -1,0 +1,10 @@
+.container-inputs {
+  margin-top: 1rem;
+}
+
+.container-buttons {
+  display: flex;
+  gap: 1.25rem;
+  justify-content: end;
+  padding: 0;
+}
