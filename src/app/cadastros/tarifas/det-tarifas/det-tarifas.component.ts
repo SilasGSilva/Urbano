@@ -35,7 +35,7 @@ export class DetTarifasComponent {
   public isVisibleBtn: boolean = false;
 
   public action: string = '';
-  public id: string = '';
+  public pk: string = '';
   public description: string = '';
   public filial: string = '';
   public title: string = '';
@@ -55,10 +55,13 @@ export class DetTarifasComponent {
     public poLookUpFormasDePagamento: poLookUpFormasDePagamento,
     private _fwModel: FwProtheusModel,
     private _poNotification: PoNotificationService
-  ) {}
+  ) {
+    this.action = this._activedRoute.snapshot.params['acao'];
+    this.pk = this._activedRoute.snapshot.params['pk'];
+  }
 
   public columns: PoLookupColumn[] = [
-    { property: 'id', label: 'Código' },
+    { property: 'pk', label: 'Código' },
     { property: 'nickname', label: 'Município' },
     { property: 'name', label: 'Local' },
   ];
@@ -101,9 +104,6 @@ export class DetTarifasComponent {
   };
 
   ngOnInit() {
-    this.action = this._activedRoute.snapshot.params['acao'];
-    this.id = this._activedRoute.snapshot.params['id'];
-
     switch (this.action) {
       case 'editar':
         this.filial = atob(this._activedRoute.snapshot.params['filial']);
@@ -126,7 +126,7 @@ export class DetTarifasComponent {
     //Criando o formulario
     this.createForm();
 
-    if (this.id != undefined) {
+    if (this.pk != undefined) {
       //Edição, faz a carga dos valores
       this.getTarifa();
     } else {
@@ -155,10 +155,10 @@ export class DetTarifasComponent {
     });
   }
 
-  async getTarifa() {
+  getTarifa() {
     let params = new HttpParams();
     this._fwModel.reset();
-    this._fwModel.setEndPoint('GTPA001/' + this.id);
+    this._fwModel.setEndPoint('GTPA001/' + this.pk);
     this._fwModel.setVirtualField(true);
     this._fwModel.get(params).subscribe({
       next: (data: any) => {
@@ -228,7 +228,7 @@ export class DetTarifasComponent {
             formasDePagamento: '',
           });
         }
-        this._poNotification.success('Tarifa criada com sucesso!')
+        this._poNotification.success('Tarifa criada com sucesso!');
       }, 1000);
     } else {
       //editar tarifa
@@ -245,7 +245,7 @@ export class DetTarifasComponent {
         this.modalCancel.close();
         this.changeLoading();
         this._router.navigate(['tarifas']);
-        this._poNotification.success('Tarifa alterada com sucesso!')
+        this._poNotification.success('Tarifa alterada com sucesso!');
       }, 1000);
     }
   }

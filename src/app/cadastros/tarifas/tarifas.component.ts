@@ -251,7 +251,7 @@ export class TarifasComponent {
     ]);
   }
 
-  viewTariff() {
-    console.log('view');
+  viewTariff(event: any) {
+    this._router.navigate(['tarifas/viewTarifas', btoa(event.pk), event.pk]);
   }
 }
