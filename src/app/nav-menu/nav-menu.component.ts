@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PoMenuItem } from '@po-ui/ng-components';
+import { PoDialogService, PoMenuItem } from '@po-ui/ng-components';
 import { AppComponent } from '../app.component';
 import { Router } from '@angular/router';
 
