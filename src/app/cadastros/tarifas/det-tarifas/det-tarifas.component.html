@@ -95,12 +95,28 @@
       <po-button
         class="po-ml-1"
         p-label="Salvar"
-        (p-click)="saveTarifa(false)"
+        (p-click)="editView ? modalConfirmation.open() : saveTarifa(false)"
         p-kind="primary"
         [p-disabled]="!tarifaForm.valid"
       >
       </po-button>
     </div>
+  </div>
+
+  <p
+    *ngIf="editView"
+    class="po-font-text-large text-color-gray po-mt-4 po-mb-2"
+  >
+    Histórico de vigências
+  </p>
+  <div *ngIf="editView">
+    <po-table
+      [p-columns]="columnsTable"
+      [p-items]="itemsTable"
+      [p-hide-columns-manager]="true"
+      [p-sort]="true"
+      [p-height]="nHeightMonitor"
+    ></po-table>
   </div>
 </po-page-default>
 
@@ -113,5 +129,24 @@
 >
   Deseja realmente sair? Irá perder todos os dados não salvos</po-modal
 >
+
+<po-modal #modalConfirmation p-title="Histórico de gravação">
+  Deseja gerar histórico de gravação dessa alteração?
+  <po-modal-footer>
+    <po-button
+      p-label="Cancelar"
+      (p-click)="modalConfirmation.close()"
+      p-kind="tertiary"
+    >
+    </po-button>
+    <po-button p-label="Não gerar" (p-click)="saveTarifa(false, false)">
+    </po-button>
+    <po-button
+      p-label="Gerar histórico"
+      p-kind="primary"
+      (p-click)="saveTarifa(false, true)"
+    >
+    </po-button> </po-modal-footer
+></po-modal>
 
 <po-loading-overlay [hidden]="!isShowLoading"></po-loading-overlay>

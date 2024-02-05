@@ -23,8 +23,8 @@ export class ViewTarifasComponent {
   public filial: string = '';
   public title: string = '';
   public columnsDynamicView: Array<PoDynamicViewField> =
-    this.structTarrif.ColumnsDynamicView;
-  public columnsTable: Array<any> = this.structTarrif.getColumnsTable();
+    this._structTariff.ColumnsDynamicView;
+  public columnsTable: Array<any> = this._structTariff.getColumnsTable();
 
   public itemsDynamicView: any = {};
   public itemsTable: Array<any> = [];
@@ -34,7 +34,7 @@ export class ViewTarifasComponent {
     private _router: Router,
     private _fwModel: FwProtheusModel,
     private _poNotification: PoNotificationService,
-    private structTarrif: TariffStruct
+    private _structTariff: TariffStruct
   ) {
     this.pk = this._activedRoute.snapshot.params['pk'];
     this.filial = this._activedRoute.snapshot.params['filial'];
@@ -43,6 +43,7 @@ export class ViewTarifasComponent {
   actions: Array<PoPageAction> = [
     {
       label: 'Editar',
+
       action: () => {
         this._router.navigate([
           'tarifas/detTarifas',
@@ -109,7 +110,7 @@ export class ViewTarifasComponent {
   }
 
   getTarifaTable() {
-    this.itemsTable = this.structTarrif.getItemsTable();
+    this.itemsTable = this._structTariff.getItemsTable();
   }
 
   edit() {}

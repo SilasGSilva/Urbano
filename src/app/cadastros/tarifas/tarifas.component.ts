@@ -60,7 +60,7 @@ export class TarifasComponent {
   nPageSize: number = 10;
   nRegIndex: number = 1;
   nHeightMonitor: number =
-    window.innerHeight * (window.innerHeight > 850 ? 0.6 : 0.45);
+    window.innerHeight * (window.innerHeight > 850 ? 0.6 : 0.6);
 
   columns: Array<PoTableColumn> = ColumnsTariffs;
   listTarifas: Array<TariffsModel> = [];

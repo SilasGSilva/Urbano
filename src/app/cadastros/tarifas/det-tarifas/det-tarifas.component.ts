@@ -6,10 +6,9 @@ import {
   PoLookupColumn,
   PoModalAction,
   PoModalComponent,
-  PoNotification,
   PoNotificationService,
 } from '@po-ui/ng-components';
-import { TarifaForm } from './det-tarifas.struct';
+import { TarifaForm, TariffStruct } from './det-tarifas.struct';
 import {
   poLookUpOrgaoConcessor,
   poLookUpFormasDePagamento,
@@ -22,11 +21,14 @@ import { FindValueByName } from 'src/app/services/functions/util.function';
   selector: 'app-det-tarifas',
   templateUrl: './det-tarifas.component.html',
   styleUrls: ['./det-tarifas.component.css'],
-  providers: [poLookUpOrgaoConcessor, poLookUpFormasDePagamento],
+  providers: [poLookUpOrgaoConcessor, poLookUpFormasDePagamento, TariffStruct],
 })
 export class DetTarifasComponent {
   @ViewChild('modalCancel', { static: false })
   modalCancel!: PoModalComponent;
+
+  @ViewChild('modalConfirmation', { static: false })
+  modalConfirmation!: PoModalComponent;
 
   tarifaForm!: FormGroup;
 
@@ -47,6 +49,8 @@ export class DetTarifasComponent {
   public filterParamOrgaoConcessor: string = '';
   public filterParamFormasDePagamento: string = '';
 
+  nHeightMonitor: number = window.innerHeight * 0.5;
+
   constructor(
     private _activedRoute: ActivatedRoute,
     private _router: Router,
@@ -54,12 +58,15 @@ export class DetTarifasComponent {
     public poLookUpOrgaoConcessor: poLookUpOrgaoConcessor,
     public poLookUpFormasDePagamento: poLookUpFormasDePagamento,
     private _fwModel: FwProtheusModel,
-    private _poNotification: PoNotificationService
+    private _poNotification: PoNotificationService,
+    private _structTariff: TariffStruct
   ) {
     this.action = this._activedRoute.snapshot.params['acao'];
     this.pk = this._activedRoute.snapshot.params['pk'];
   }
 
+  public columnsTable: Array<any> = this._structTariff.getColumnsTable();
+  public itemsTable: Array<any> = [];
   public columns: PoLookupColumn[] = [
     { property: 'pk', label: 'Código' },
     { property: 'nickname', label: 'Município' },
@@ -106,13 +113,14 @@ export class DetTarifasComponent {
   ngOnInit() {
     switch (this.action) {
       case 'editar':
+        this.editView = true;
         this.filial = atob(this._activedRoute.snapshot.params['filial']);
         this.title = 'Editar tarifa';
         this.subtitle = 'Edite as informações da tarifa:';
-        this.isVisibleBtn = false;
         this.filterParamOrgaoConcessor = `FILIAL LIKE '%${this.filial}%'`;
         this.filterParamFormasDePagamento = `FILIAL LIKE '%${this.filial}%'`;
         this.getTarifa();
+        this.getTarifaTable();
 
         break;
       case 'incluir':
@@ -197,16 +205,17 @@ export class DetTarifasComponent {
    * uma tarifa escolhida e navegar de volta pro browse
    * @param stay: boolean - indica se irá ficar na tela atual ou retornará ao
    * browser
+   * @param generateHistory: boolean - indica se ao alterar, irá gerar histórico
+   * sim ou não
    * @author   Serviços | Levy Santos
    * @since    2024
    * @version  v1
    *******************************************************************************/
-  saveTarifa(stay: boolean) {
+  saveTarifa(stay: boolean, generateHistory?: boolean) {
     if (!this.editView) {
       //nova tarifa
       this.changeLoading();
       setTimeout(() => {
-        this.modalCancel.close();
         this.changeLoading();
         if (!stay) {
           this.tarifaForm.patchValue({
@@ -232,6 +241,22 @@ export class DetTarifasComponent {
       }, 1000);
     } else {
       //editar tarifa
+      if (generateHistory) {
+        this.changeLoading();
+        setTimeout(() => {
+          this.tarifaForm.patchValue({
+            codigo: '',
+            descricao: '',
+            valor: '',
+            orgaoConcessor: '',
+            vigencia: '',
+            formasDePagamento: '',
+          });
+          this.changeLoading();
+          this._router.navigate(['tarifas']);
+          this._poNotification.success('Tarifa alterada com sucesso!');
+        }, 1000);
+      }
       this.changeLoading();
       setTimeout(() => {
         this.tarifaForm.patchValue({
@@ -242,7 +267,6 @@ export class DetTarifasComponent {
           vigencia: '',
           formasDePagamento: '',
         });
-        this.modalCancel.close();
         this.changeLoading();
         this._router.navigate(['tarifas']);
         this._poNotification.success('Tarifa alterada com sucesso!');
@@ -264,5 +288,9 @@ export class DetTarifasComponent {
     } else {
       this.isShowLoading = true;
     }
+  }
+
+  getTarifaTable() {
+    this.itemsTable = this._structTariff.getItemsTable();
   }
 }
