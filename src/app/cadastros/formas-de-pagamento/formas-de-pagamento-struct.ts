@@ -1,6 +1,4 @@
 import {
-  PoComboComponent,
-  PoSelectOption,
   PoTableColumn,
 } from '@po-ui/ng-components';
 
@@ -44,9 +42,16 @@ export const PaymentMethodColumns: Array<PoTableColumn> = [
  * @version  v1
  *******************************************************************************/
 export class PaymentMethodModel {
+  id: string = '';
   codPayment: string = '';
   descPayment: string = '';
   labelPayment: string = '';
   otherActions?: Array<string>;
   index?: number;
+}
+
+export interface FormaPagForm {
+	codigo: string;
+	descricao: string;
+
 }
