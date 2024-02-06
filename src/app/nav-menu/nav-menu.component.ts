@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PoDialogService, PoMenuItem } from '@po-ui/ng-components';
+import { PoMenuItem } from '@po-ui/ng-components';
 import { AppComponent } from '../app.component';
 import { Router } from '@angular/router';
 
@@ -11,8 +11,7 @@ import { Router } from '@angular/router';
 export class NavMenuComponent {
   constructor(
     private _router: Router,
-    public appComponent: AppComponent,
-    private poDialog: PoDialogService,
+    public appComponent: AppComponent
   ) {}
 
   public readonly logoTotvs: string = '/assets/icon-totvs.svg';
@@ -61,10 +60,15 @@ export class NavMenuComponent {
       subItems: [],
     },
   ];
-  /**
-   * M�todo respons�vel pelo redirecionamento da rota conforme a a��o selecionada
-   * @param newRoute string contendo a url que ser� redirecionada
-   */
+
+  /*******************************************************************************
+   * @name navigate
+   * @description função chamada para navegar pra tela escolhida no menu
+   * @param newRoute: string - nome da rota qual será navigada
+   * @author   Serviços | Breno Curtolo
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   navigate(newRoute: string) {
     this._router.navigate([newRoute]);
   }
