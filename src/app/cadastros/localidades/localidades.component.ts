@@ -134,15 +134,11 @@ export class LocalidadesComponent implements OnInit {
 	 * @description Busca dados para o grid de localidades
 	 * @param showMore indica se a função foi chamada via botão show more
 	 */
-    getLocalidades(showMore?: boolean) {
+    getLocalidades() {
 
 		let params = new HttpParams();
 		this.isLoading = true;
 		
-		if (!showMore) {
-			this.listLocalidade = [];
-		} 
-      
 		//Caso haja filtro, não realizar paginação
         if (this.filters != '') {
             params = params.append('FILTER', this.filters);
@@ -183,7 +179,7 @@ export class LocalidadesComponent implements OnInit {
 	setShowMore(total: number) {
 		this.isLoading = false;
 		if (this.nRegIndex === 1) {
-			this.nRegIndex = this.nPageSize;
+			this.nRegIndex = this.nPageSize + 1;
 		} else {
 			this.nRegIndex += this.nPageSize;
 		}

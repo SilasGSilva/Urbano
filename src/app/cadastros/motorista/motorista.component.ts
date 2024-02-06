@@ -118,7 +118,7 @@ export class MotoristaComponent implements OnInit {
 
         let params = new HttpParams();
 		this.isLoading = true;
-
+		
 		//Se tiver filtros, não aplica a paginação
         if (this.filters != '') {
             params = params.append('FILTER', this.filters);
@@ -177,7 +177,7 @@ export class MotoristaComponent implements OnInit {
 	setShowMore(total: number) {
 		this.isLoading = false;
 		if (this.nRegIndex === 1) {
-			this.nRegIndex = this.nPageSize;
+			this.nRegIndex = this.nPageSize + 1;
 		} else {
 			this.nRegIndex += this.nPageSize;
 		}

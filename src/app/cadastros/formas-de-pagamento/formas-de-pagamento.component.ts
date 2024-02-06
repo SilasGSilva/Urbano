@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import {
   PoBreadcrumb,
-  PoNotificationService,
   PoPageAction,
   PoTableColumn,
   PoTableColumnSort,
@@ -24,14 +23,6 @@ import {
   styleUrls: ['./formas-de-pagamento.component.css'],
 })
 export class FormasDePagamentoComponent {
-  constructor(
-    private poNotification: PoNotificationService,
-    private _router: Router,
-    private _utilsService: UtilsService,
-    private fwModel: FwProtheusModel
-  ) {
-    this.setColProperties();
-  }
 
   columns: Array<PoTableColumn> = PaymentMethodColumns;
   listPagamento: Array<PaymentMethodModel> = [];
@@ -53,14 +44,20 @@ export class FormasDePagamentoComponent {
       },
     },
   ];
-
+  
   public breadcrumb: PoBreadcrumb = {
     items: [
       { label: 'Fretamento Urbano', link: '/' },
       { label: 'Formas de pagamento' },
     ],
   };
-
+  constructor(
+    private _router: Router,
+    private _utilsService: UtilsService,
+    private fwModel: FwProtheusModel
+  ) {
+    this.setColProperties();
+  }
   ngOnInit() {
     this.getFormaPagamento();
   }
@@ -98,16 +95,21 @@ export class FormasDePagamentoComponent {
     this.listPagamento = result;
   }
 
+  	/*******************************************************************************
+	 * @name getFormaPagamento
+	 * @description Responsavel por trazer os dados da forma de pagamento e listar os dados
+	 * @author   Serviços | Breno Gomes
+	 * @since    2024
+	 * @version  v2
+	 *******************************************************************************/
 	getFormaPagamento() {
 		let params = new HttpParams();
 		this.isTableLoading = true;
-
-		//Caso haja filtro, não realizar paginação
-
+		
 		if (this.nPageSize.toString() != '')
-		params = params.append('COUNT', this.nPageSize.toString());
+			params = params.append('COUNT', this.nPageSize.toString());
 		if (this.nRegIndex.toString() != '')
-		params = params.append('STARTINDEX', this.nRegIndex.toString());
+			params = params.append('STARTINDEX', this.nRegIndex.toString());
 
 		this.fwModel.setEndPoint('GTPU001/');
 
@@ -130,21 +132,27 @@ export class FormasDePagamentoComponent {
 				.getModel('H6RMASTER')
 				.getValue('H6R_DESCRI');
 
-				paymentMethod.otherActions = ['editar'];
+        		paymentMethod.otherActions = ['editar'];
 				this.listPagamento = [...this.listPagamento, paymentMethod];
 				this.isTableLoading = false;
 			});
+			console.log(this.listPagamento)
 			this.setShowMore(this.fwModel.total);
 		});
 	}
-	/**
-	 * setShowMore - Responsavel pelo controle do carregar mais
+	
+	/*******************************************************************************
+	 * @name setShowMore
+	 * @description Responsavel pelo controle do carregar mais
 	 * @param total numero total de cadastro de forma de pagamento
-	 */
+	 * @author   Serviços | Levy Santos
+	 * @since    2024
+	 * @version  v1
+	 *******************************************************************************/
 	setShowMore(total: number) {
 		this.isTableLoading = false;
 		if (this.nRegIndex === 1) {
-			this.nRegIndex = this.nPageSize;
+			this.nRegIndex = this.nPageSize + 1;
 		} else {
 			this.nRegIndex += this.nPageSize;
 		}
@@ -155,7 +163,15 @@ export class FormasDePagamentoComponent {
 			this.isShowMoreDisabled = true;
 		}
   }
-
+   /*******************************************************************************
+   * @name actionShowMore
+   * @description Função responsável por abrir a tela de edição da linha
+   * selecionada
+   * @param row Linha qual foi clicada
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   actionShowMore() {
     this.nNextPage++;
     // se for clicado pela 4a vez carrega o restante dos dados
