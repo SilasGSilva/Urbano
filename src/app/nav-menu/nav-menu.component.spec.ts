@@ -8,7 +8,7 @@ describe('NavMenuComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [NavMenuComponent]
+      declarations: [NavMenuComponent],
     });
     fixture = TestBed.createComponent(NavMenuComponent);
     component = fixture.componentInstance;

@@ -7,17 +7,17 @@ import { ActivatedRoute } from '@angular/router';
 import { ComboFilial } from '../cadastros/motorista/motorista.struct';
 
 /**
- * Filtros utilizando o FWMODEL 
+ * Filtros utilizando o FWMODEL
  */
 export class PoComboStruct implements PoComboOption {
-	label: string = '';
-	value: string = '';
+  label: string = '';
+  value: string = '';
 }
 export class PoComboMotoristaStruct implements PoComboOption {
-	label: string = '';
-	value: string = '';
-	matricula?: string = ''
-	filial: string = ''
+  label: string = '';
+  value: string = '';
+  matricula?: string = '';
+  filial: string = '';
 }
 /**
  * RecursoComboService
@@ -25,55 +25,66 @@ export class PoComboMotoristaStruct implements PoComboOption {
  */
 @Injectable()
 export class RecursoComboService implements PoComboFilter {
+  private endpoint: string = 'fwmodel/GTPA010';
 
-	private endpoint: string = 'fwmodel/GTPA010'
+  constructor(private apiService: ApiService) {}
 
-	constructor(private apiService: ApiService) { }
+  getFilteredData(params: any): Observable<PoComboOption[]> {
+    let httpParams = new HttpParams();
+    let filter: string = '';
 
-	getFilteredData(params: any): Observable<PoComboOption[]> {
+    if (params.value != '') {
+      filter =
+        "UPPER(GYK_CODIGO) LIKE UPPER('%" +
+        params.value +
+        "%') OR UPPER(GYK_DESCRI) LIKE UPPER('%" +
+        params.value +
+        "%') ";
+    }
+    httpParams = httpParams.append('FILTER', filter);
 
-		let httpParams = new HttpParams();
-		let filter: string = '';
+    return this.apiService.get(this.endpoint, httpParams).pipe(
+      map((response: any) => {
+        const items: PoComboStruct[] = [];
 
-		if (params.value != '') {
-			filter = "UPPER(GYK_CODIGO) LIKE UPPER('%" + params.value + "%') OR UPPER(GYK_DESCRI) LIKE UPPER('%" + params.value + "%') "
-		}
-		httpParams = httpParams.append('FILTER', filter);
+        response.resources.forEach((resource: any) => {
+          let itemReturn: PoComboStruct = new PoComboStruct();
 
-		return this.apiService.get(this.endpoint, httpParams).pipe(map((response: any) => {
+          itemReturn.value = resource.models[0].fields.find(
+            (field: any) => field.id == 'GYK_CODIGO'
+          ).value;
+          itemReturn.label = resource.models[0].fields.find(
+            (field: any) => field.id == 'GYK_DESCRI'
+          ).value;
 
-			const items: PoComboStruct[] = [];
+          items.push(itemReturn);
+        });
+        return items;
+      })
+    );
+  }
 
-			response.resources.forEach((resource: any) => {
+  getObjectByValue(value: string | number): Observable<PoComboOption> {
+    let params = new HttpParams();
+    let filter: string = `GYK_CODIGO='${value}'`;
 
-				let itemReturn: PoComboStruct = new PoComboStruct();
+    params = params.append('FILTER', filter);
 
-				itemReturn.value = resource.models[0].fields.find((field: any) => field.id == 'GYK_CODIGO').value;
-				itemReturn.label = resource.models[0].fields.find((field: any) => field.id == 'GYK_DESCRI').value;
+    return this.apiService.get(this.endpoint, params).pipe(
+      map((response: any) => {
+        let itemReturn = new PoComboStruct();
 
-				items.push(itemReturn)
-			})
-			return items
-		}))
-	}
+        itemReturn.value = response.resources[0].models[0].fields.find(
+          (field: any) => field.id == 'GYK_CODIGO'
+        ).value;
+        itemReturn.label = response.resources[0].models[0].fields.find(
+          (field: any) => field.id == 'GYK_DESCRI'
+        ).value;
 
-	getObjectByValue(value: string | number): Observable<PoComboOption> {
-
-		let params = new HttpParams();
-		let filter: string = `GYK_CODIGO='${value}'`;
-
-		params = params.append('FILTER', filter)
-
-		return this.apiService.get(this.endpoint, params).pipe(map((response: any) => {
-
-			let itemReturn = new PoComboStruct();
-
-			itemReturn.value = response.resources[0].models[0].fields.find((field: any) => field.id == 'GYK_CODIGO').value;
-			itemReturn.label = response.resources[0].models[0].fields.find((field: any) => field.id == 'GYK_DESCRI').value;
-
-			return itemReturn
-		}))
-	}
+        return itemReturn;
+      })
+    );
+  }
 }
 
 /**
@@ -82,69 +93,85 @@ export class RecursoComboService implements PoComboFilter {
  */
 @Injectable()
 export class MotoristaComboService implements ComboFilial {
+  private endpoint: string = 'fwmodel/GTPA008';
 
-	private endpoint: string = 'fwmodel/GTPA008'
+  constructor(private apiService: ApiService) {}
+  [x: string]: any;
+  selectedOption: any;
+  filial?: string;
+  label?: string;
+  value: string | number;
 
-	constructor(private apiService: ApiService) { }
-	[x: string]: any;
-	selectedOption: any;
-	filial?: string;
-	label?: string;
-	value: string | number;
+  getFilteredData(params: any): Observable<PoComboMotoristaStruct[]> {
+    let httpParams = new HttpParams();
+    let filter: string = '';
+    filter = "GYG_CODIGO != ''";
+    if (params.value != '') {
+      filter +=
+        " AND UPPER(GYG_CODIGO) LIKE UPPER('%" +
+        params.value +
+        "%') OR UPPER(GYG_FUNCIO) LIKE UPPER('%" +
+        params.value +
+        "%') OR UPPER(GYG_NOME) LIKE UPPER('%" +
+        params.value +
+        "%')";
+    }
+    httpParams = httpParams.append('FILTER', filter);
+    httpParams = httpParams.append('FIELDVIRTUAL', true);
 
-	getFilteredData(params: any): Observable<PoComboMotoristaStruct[]> {
+    return this.apiService.get(this.endpoint, httpParams).pipe(
+      map((response: any) => {
+        const items: PoComboMotoristaStruct[] = [];
 
-		let httpParams = new HttpParams();
-		let filter: string = '';
-		filter = "GYG_CODIGO != ''"
-		if (params.value != '') {
-			filter += " AND UPPER(GYG_CODIGO) LIKE UPPER('%" + params.value + "%') OR UPPER(GYG_FUNCIO) LIKE UPPER('%" + params.value +
-				"%') OR UPPER(GYG_NOME) LIKE UPPER('%" + params.value + "%')"
-		}
-		httpParams = httpParams.append('FILTER', filter);
-		httpParams = httpParams.append('FIELDVIRTUAL', true);
+        response.resources.forEach((resource: any) => {
+          let itemReturn: PoComboMotoristaStruct = new PoComboMotoristaStruct();
+          let codMatricula = resource.models[0].fields.find(
+            (field: any) => field.id == 'GYG_FUNCIO'
+          );
 
+          itemReturn.value = resource.models[0].fields.find(
+            (field: any) => field.id == 'GYG_CODIGO'
+          ).value;
+          itemReturn.label = resource.models[0].fields.find(
+            (field: any) => field.id == 'GYG_NOME'
+          ).value;
+          itemReturn.matricula =
+            codMatricula != undefined ? codMatricula.value : '';
+          itemReturn.filial = resource.models[0].fields.find(
+            (field: any) => field.id == 'GYG_FILIAL'
+          ).value;
 
-		return this.apiService.get(this.endpoint, httpParams).pipe(map((response: any) => {
+          items.push(itemReturn);
+        });
+        return items;
+      })
+    );
+  }
 
-			const items: PoComboMotoristaStruct[] = [];
+  getObjectByValue(value: string | number): Observable<PoComboOption> {
+    let params = new HttpParams();
+    let filter: string = `GYG_CODIGO='${value}'`;
 
-			response.resources.forEach((resource: any) => {
+    params = params.append('FILTER', filter);
 
-				let itemReturn: PoComboMotoristaStruct = new PoComboMotoristaStruct();
-				let codMatricula = resource.models[0].fields.find((field: any) => field.id == 'GYG_FUNCIO')
+    return this.apiService.get(this.endpoint, params).pipe(
+      map((response: any) => {
+        let itemReturn = new PoComboMotoristaStruct();
 
-				itemReturn.value = resource.models[0].fields.find((field: any) => field.id == 'GYG_CODIGO').value;
-				itemReturn.label = resource.models[0].fields.find((field: any) => field.id == 'GYG_NOME').value;
-				itemReturn.matricula = codMatricula != undefined ? codMatricula.value : '';
-				itemReturn.filial = resource.models[0].fields.find((field: any) => field.id == 'GYG_FILIAL').value;
+        itemReturn.value = response.models[0].fields.find(
+          (field: any) => field.id == 'GYG_CODIGO'
+        ).value;
+        itemReturn.label = response.models[0].fields.find(
+          (field: any) => field.id == 'GYG_NOME'
+        ).value;
+        itemReturn.matricula = response.models[0].fields.find(
+          (field: any) => field.id == 'GYG_FUNCIO'
+        ).value;
 
-
-				items.push(itemReturn)
-
-			})
-			return items
-		}))
-	}
-
-	getObjectByValue(value: string | number): Observable<PoComboOption> {
-
-		let params = new HttpParams();
-		let filter: string = `GYG_CODIGO='${value}'`;
-
-		params = params.append('FILTER', filter)
-
-		return this.apiService.get(this.endpoint, params).pipe(map((response: any) => {
-
-			let itemReturn = new PoComboMotoristaStruct();
-
-			itemReturn.value = response.models[0].fields.find((field: any) => field.id == 'GYG_CODIGO').value;
-			itemReturn.label = response.models[0].fields.find((field: any) => field.id == 'GYG_NOME').value;
-			itemReturn.matricula = response.models[0].fields.find((field: any) => field.id == 'GYG_FUNCIO').value;
-
-			return itemReturn
-		}))
-	}
+        return itemReturn;
+      })
+    );
+  }
 }
 /**
  * FuncaoComboService
@@ -152,71 +179,80 @@ export class MotoristaComboService implements ComboFilial {
  */
 @Injectable()
 export class FuncaoComboService implements PoComboFilter {
+  private endpoint: string = 'fwmodel/GPEA030';
 
-	private endpoint: string = 'fwmodel/GPEA030'
+  constructor(
+    private apiService: ApiService,
+    private route: ActivatedRoute
+  ) {}
 
-	constructor(private apiService: ApiService,
-		private route: ActivatedRoute,) { }
+  getFilteredData(params: any): Observable<PoComboOption[]> {
+    let httpParams = new HttpParams();
 
-	getFilteredData(params: any): Observable<PoComboOption[]> {
+    let filter: string = '';
+    let filial = this.route.snapshot.params['filial'];
+    if (filial != undefined) {
+      filter = ` RJ_FILIAL='${atob(filial)}'`;
+    }
+    if (params.value != '') {
+      if (filter != '') filter += 'AND ';
 
-		let httpParams = new HttpParams();
+      filter +=
+        "(UPPER(RJ_FUNCAO) LIKE UPPER('%" +
+        params.value +
+        "%') OR UPPER(RJ_DESC) LIKE UPPER('%" +
+        params.value +
+        "%'))";
+    }
 
-		let filter: string = '';
-		let filial = this.route.snapshot.params['filial']
-		if (filial != undefined) {
-			filter = ` RJ_FILIAL='${atob(filial)}'`;
-		}
-		if (params.value != '') {
-			if (filter != '')
-				filter += "AND "
+    httpParams = httpParams.append('FILTER', filter);
+    httpParams = httpParams.append('FIELDEMPTY', true);
+    httpParams = httpParams.append('FIELDVIRTUAL', true);
 
-			filter += "(UPPER(RJ_FUNCAO) LIKE UPPER('%" + params.value + "%') OR UPPER(RJ_DESC) LIKE UPPER('%" + params.value + "%'))"
-		}
+    return this.apiService.get(this.endpoint, httpParams).pipe(
+      map((response: any) => {
+        const items: PoComboStruct[] = [];
 
-		httpParams = httpParams.append('FILTER', filter);
-		httpParams = httpParams.append('FIELDEMPTY', true)
-		httpParams = httpParams.append('FIELDVIRTUAL', true)
+        response.resources.forEach((resource: any) => {
+          let itemReturn: PoComboStruct = new PoComboStruct();
 
-		return this.apiService.get(this.endpoint, httpParams).pipe(map((response: any) => {
+          itemReturn.value = resource.models[0].fields.find(
+            (field: any) => field.id == 'RJ_FUNCAO'
+          ).value;
+          itemReturn.label = resource.models[0].fields.find(
+            (field: any) => field.id == 'RJ_DESC'
+          ).value;
 
-			const items: PoComboStruct[] = [];
+          items.push(itemReturn);
+        });
 
-			response.resources.forEach((resource: any) => {
+        return items;
+      })
+    );
+  }
 
-				let itemReturn: PoComboStruct = new PoComboStruct();
+  getObjectByValue(value: string | number): Observable<PoComboOption> {
+    let params = new HttpParams();
+    let filial = this.route.snapshot.params['filial'];
+    let filter: string = `RJ_FUNCAO='${value}'`;
+    if (filial != undefined) {
+      filter += ` AND RJ_FILIAL='${atob(filial)}'`;
+    }
+    params = params.append('FILTER', filter);
 
-				itemReturn.value = resource.models[0].fields.find((field: any) => field.id == 'RJ_FUNCAO').value;
-				itemReturn.label = resource.models[0].fields.find((field: any) => field.id == 'RJ_DESC').value;
+    return this.apiService.get(this.endpoint, params).pipe(
+      map((response: any) => {
+        let itemReturn = new PoComboStruct();
 
-				items.push(itemReturn)
+        itemReturn.value = response.resources[0].models[0].fields.find(
+          (field: any) => field.id == 'RJ_FUNCAO'
+        ).value;
+        itemReturn.label = response.resources[0].models[0].fields.find(
+          (field: any) => field.id == 'RJ_DESC'
+        ).value;
 
-			})
-
-			return items
-
-		}))
-	}
-
-	getObjectByValue(value: string | number): Observable<PoComboOption> {
-
-		let params = new HttpParams();
-		let filial = this.route.snapshot.params['filial']
-		let filter: string = `RJ_FUNCAO='${value}'`;
-		if (filial != undefined) {
-			filter += ` AND RJ_FILIAL='${atob(filial)}'`;
-		}
-		params = params.append('FILTER', filter);
-
-		return this.apiService.get(this.endpoint, params).pipe(map((response: any) => {
-
-			let itemReturn = new PoComboStruct();
-
-			itemReturn.value = response.resources[0].models[0].fields.find((field: any) => field.id == 'RJ_FUNCAO').value;
-			itemReturn.label = response.resources[0].models[0].fields.find((field: any) => field.id == 'RJ_DESC').value;
-
-			return itemReturn
-
-		}))
-	}
+        return itemReturn;
+      })
+    );
+  }
 }

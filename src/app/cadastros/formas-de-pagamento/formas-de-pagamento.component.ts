@@ -39,8 +39,7 @@ export class FormasDePagamentoComponent {
   nNextPage: number = 1;
   nPageSize: number = 10;
   nRegIndex: number = 1;
-  nHeightMonitor: number =
-    window.innerHeight * 0.7;
+  nHeightMonitor: number = window.innerHeight * 0.7;
 
   isTableLoading: boolean = false;
   isShowMoreDisabled: boolean = false;
@@ -66,7 +65,7 @@ export class FormasDePagamentoComponent {
   }
 
   setColProperties() {
-    this.columns.forEach((col) => {
+    this.columns.forEach(col => {
       if (
         col.property === 'otherActions' &&
         col.icons &&
@@ -82,7 +81,10 @@ export class FormasDePagamentoComponent {
    * @param row linha selecionada
    */
   incluir() {
-    this._router.navigate([`formas-de-pagamento/det-forma-pagamento`, 'incluir']);
+    this._router.navigate([
+      `formas-de-pagamento/det-forma-pagamento`,
+      'incluir',
+    ]);
   }
 
   /**
@@ -98,62 +100,62 @@ export class FormasDePagamentoComponent {
     this.listPagamento = result;
   }
 
-	getFormaPagamento() {
-		let params = new HttpParams();
-		this.isTableLoading = true;
+  getFormaPagamento() {
+    let params = new HttpParams();
+    this.isTableLoading = true;
 
-		//Caso haja filtro, não realizar paginação
+    //Caso haja filtro, não realizar paginação
 
-		if (this.nPageSize.toString() != '')
-		params = params.append('COUNT', this.nPageSize.toString());
-		if (this.nRegIndex.toString() != '')
-		params = params.append('STARTINDEX', this.nRegIndex.toString());
+    if (this.nPageSize.toString() != '')
+      params = params.append('COUNT', this.nPageSize.toString());
+    if (this.nRegIndex.toString() != '')
+      params = params.append('STARTINDEX', this.nRegIndex.toString());
 
-		this.fwModel.setEndPoint('GTPU001/');
+    this.fwModel.setEndPoint('GTPU001/');
 
-		this.fwModel.setVirtualField(true);
-		this.fwModel.get(params).subscribe(() => {
-			this.fwModel.resources.forEach((resource: Resource) => {
-				let paymentMethod = new PaymentMethodModel();
-			
-				paymentMethod.id = resource.pk;
-				paymentMethod.codPayment = resource
-				.getModel('H6RMASTER')
-				.getValue('H6R_CODIGO');
+    this.fwModel.setVirtualField(true);
+    this.fwModel.get(params).subscribe(() => {
+      this.fwModel.resources.forEach((resource: Resource) => {
+        let paymentMethod = new PaymentMethodModel();
 
-				paymentMethod.labelPayment =
-				resource.getModel('H6RMASTER').getValue('H6R_CODIGO') +
-				' - ' +
-				resource.getModel('H6RMASTER').getValue('H6R_DESCRI');
+        paymentMethod.id = resource.pk;
+        paymentMethod.codPayment = resource
+          .getModel('H6RMASTER')
+          .getValue('H6R_CODIGO');
 
-				paymentMethod.descPayment = resource
-				.getModel('H6RMASTER')
-				.getValue('H6R_DESCRI');
+        paymentMethod.labelPayment =
+          resource.getModel('H6RMASTER').getValue('H6R_CODIGO') +
+          ' - ' +
+          resource.getModel('H6RMASTER').getValue('H6R_DESCRI');
 
-				paymentMethod.otherActions = ['editar'];
-				this.listPagamento = [...this.listPagamento, paymentMethod];
-				this.isTableLoading = false;
-			});
-			this.setShowMore(this.fwModel.total);
-		});
-	}
-	/**
-	 * setShowMore - Responsavel pelo controle do carregar mais
-	 * @param total numero total de cadastro de forma de pagamento
-	 */
-	setShowMore(total: number) {
-		this.isTableLoading = false;
-		if (this.nRegIndex === 1) {
-			this.nRegIndex = this.nPageSize;
-		} else {
-			this.nRegIndex += this.nPageSize;
-		}
+        paymentMethod.descPayment = resource
+          .getModel('H6RMASTER')
+          .getValue('H6R_DESCRI');
 
-		if (this.nRegIndex <= total) {
-			this.isShowMoreDisabled = false;
-		} else {
-			this.isShowMoreDisabled = true;
-		}
+        paymentMethod.otherActions = ['editar'];
+        this.listPagamento = [...this.listPagamento, paymentMethod];
+        this.isTableLoading = false;
+      });
+      this.setShowMore(this.fwModel.total);
+    });
+  }
+  /**
+   * setShowMore - Responsavel pelo controle do carregar mais
+   * @param total numero total de cadastro de forma de pagamento
+   */
+  setShowMore(total: number) {
+    this.isTableLoading = false;
+    if (this.nRegIndex === 1) {
+      this.nRegIndex = this.nPageSize;
+    } else {
+      this.nRegIndex += this.nPageSize;
+    }
+
+    if (this.nRegIndex <= total) {
+      this.isShowMoreDisabled = false;
+    } else {
+      this.isShowMoreDisabled = true;
+    }
   }
 
   actionShowMore() {
@@ -177,7 +179,10 @@ export class FormasDePagamentoComponent {
    * @version  v1
    *******************************************************************************/
   editRow(row: any) {
-
-    this._router.navigate([`formas-de-pagamento/det-forma-pagamento`,"editar", row.id]);
+    this._router.navigate([
+      `formas-de-pagamento/det-forma-pagamento`,
+      'editar',
+      row.id,
+    ]);
   }
 }

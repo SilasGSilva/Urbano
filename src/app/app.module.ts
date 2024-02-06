@@ -16,27 +16,27 @@ import { FormasDePagamentoComponent } from './cadastros/formas-de-pagamento/form
 import { DetFormaPagamentoComponent } from './cadastros/formas-de-pagamento/det-forma-pagamento/det-forma-pagamento.component';
 
 @NgModule({
-	declarations: [
-		AppComponent,
-		MotoristaComponent,
-		LocalidadesComponent,
-		NavMenuComponent,
-		DetMotoristaComponent,
-		DetLocalidadesComponent,
-		ViewMotoristaComponent,
+  declarations: [
+    AppComponent,
+    MotoristaComponent,
+    LocalidadesComponent,
+    NavMenuComponent,
+    DetMotoristaComponent,
+    DetLocalidadesComponent,
+    ViewMotoristaComponent,
     FormasDePagamentoComponent,
-    DetFormaPagamentoComponent
-	],
-	imports: [
-		BrowserModule,
-		AppRoutingModule,
-		PoModule,
-		HttpClientModule,
-		RouterModule.forRoot([]),
-		FormsModule,
-		ReactiveFormsModule,
-	],
-	providers: [],
+    DetFormaPagamentoComponent,
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    PoModule,
+    HttpClientModule,
+    RouterModule.forRoot([]),
+    FormsModule,
+    ReactiveFormsModule,
+  ],
+  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

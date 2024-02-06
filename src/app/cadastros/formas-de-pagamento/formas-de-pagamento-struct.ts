@@ -1,6 +1,4 @@
-import {
-  PoTableColumn,
-} from '@po-ui/ng-components';
+import { PoTableColumn } from '@po-ui/ng-components';
 
 /*******************************************************************************
  * @name PaymentMethodColumns
@@ -51,7 +49,6 @@ export class PaymentMethodModel {
 }
 
 export interface FormaPagForm {
-	codigo: string;
-	descricao: string;
-
+  codigo: string;
+  descricao: string;
 }

@@ -1,5 +1,5 @@
 export interface VldFormStruct {
-	field: Array<string>;
-	iMessage: number;
-	tpErro: string;
+  field: Array<string>;
+  iMessage: number;
+  tpErro: string;
 }

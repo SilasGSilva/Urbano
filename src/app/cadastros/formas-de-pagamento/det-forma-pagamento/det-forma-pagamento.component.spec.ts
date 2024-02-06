@@ -8,7 +8,7 @@ describe('DetFormaPagamentoComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [DetFormaPagamentoComponent]
+      declarations: [DetFormaPagamentoComponent],
     });
     fixture = TestBed.createComponent(DetFormaPagamentoComponent);
     component = fixture.componentInstance;
