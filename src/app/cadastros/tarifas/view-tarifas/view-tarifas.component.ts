@@ -18,10 +18,13 @@ import { TariffStruct } from './view-tarifas.struct';
   providers: [TariffStruct],
 })
 export class ViewTarifasComponent {
+  public isShowLoading: boolean = false;
+
   public action: string = '';
   public pk: string = '';
   public filial: string = '';
   public title: string = '';
+
   public columnsDynamicView: Array<PoDynamicViewField> =
     this._structTariff.ColumnsDynamicView;
   public columnsTable: Array<any> = this._structTariff.getColumnsTable();
@@ -89,6 +92,7 @@ export class ViewTarifasComponent {
    * @version  v1
    *******************************************************************************/
   getTarifaDynamicView() {
+    this.changeLoading();
     let params = new HttpParams();
     this._fwModel.reset();
     this._fwModel.setEndPoint('GTPA001/' + this.pk);
@@ -119,7 +123,9 @@ export class ViewTarifasComponent {
       error: (err: any) => {
         this._poNotification.error(err.errorMessage);
       },
-      complete: () => {},
+      complete: () => {
+        this.changeLoading();
+      },
     });
   }
 
@@ -132,6 +138,24 @@ export class ViewTarifasComponent {
    * @version  v1
    *******************************************************************************/
   getTarifaTable() {
+    this.changeLoading();
     this.itemsTable = this._structTariff.getItemsTable();
+    this.changeLoading();
+  }
+
+  /*******************************************************************************
+   * @name changeLoading
+   * @description Função responsável por trocar o valor da flag isShowLoading,
+   * para mostrar ou esconder o loading na tela
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
+  changeLoading() {
+    if (this.isShowLoading) {
+      this.isShowLoading = false;
+    } else {
+      this.isShowLoading = true;
+    }
   }
 }

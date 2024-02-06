@@ -57,6 +57,7 @@ export class TarifasComponent {
   isShowMoreDisabled: boolean = false;
 
   nNextPage: number = 1;
+  nTotal: number = 0;
   nPageSize: number = 10;
   nRegIndex: number = 1;
   nHeightMonitor: number =
@@ -146,7 +147,7 @@ export class TarifasComponent {
         this.filters += ' AND ';
       }
       this.filters +=
-        " GI1_STATUS = '" + this.tarifaFilterCombo.selectedOption.value + "' ";
+        " GI1_COD = '" + this.tarifaFilterCombo.selectedOption.value + "' ";
     }
     if (
       this.orgaoConcessorFilterCombo !== undefined &&
@@ -218,7 +219,11 @@ export class TarifasComponent {
       if (this.nPageSize.toString() != '')
         params = params.append('COUNT', this.nPageSize.toString());
       if (this.nRegIndex.toString() != '')
-        params = params.append('STARTINDEX', this.nRegIndex.toString());
+        if (this.nTotal !== 0 && this.nRegIndex > this.nTotal) {
+          params = params.append('STARTINDEX', 1);
+        } else {
+          params = params.append('STARTINDEX', this.nRegIndex.toString());
+        }
     }
     this._fwModel.setEndPoint('GTPA001/');
 
@@ -244,12 +249,13 @@ export class TarifasComponent {
         this.isLoading = false;
       });
 
+      this.nTotal = this._fwModel.total;
       this.setShowMore(this._fwModel.total);
     });
   }
 
   /*******************************************************************************
-   * @name setRangeFilter
+   * @name setShowMore
    * @description função responsável por verificar  se habilita ou não o botão
    * de carregar mais dados
    * @param total: number - contador com o valor total de registros

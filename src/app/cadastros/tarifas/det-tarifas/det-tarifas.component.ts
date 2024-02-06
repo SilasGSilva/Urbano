@@ -180,6 +180,7 @@ export class DetTarifasComponent {
    * @version  v1
    *******************************************************************************/
   getTarifa() {
+    this.changeLoading();
     let params = new HttpParams();
     this._fwModel.reset();
     this._fwModel.setEndPoint('GTPA001/' + this.pk);
@@ -206,7 +207,9 @@ export class DetTarifasComponent {
       error: (err: any) => {
         this._poNotification.error(err.errorMessage);
       },
-      complete: () => {},
+      complete: () => {
+        this.changeLoading();
+      },
     });
   }
 
@@ -278,23 +281,26 @@ export class DetTarifasComponent {
           });
           this.changeLoading();
           this._router.navigate(['tarifas']);
+          this._poNotification.success(
+            'Tarifa alterada e histórico gerado com sucesso!'
+          );
+        }, 1000);
+      } else {
+        this.changeLoading();
+        setTimeout(() => {
+          this.tarifaForm.patchValue({
+            codigo: '',
+            descricao: '',
+            valor: '',
+            orgaoConcessor: '',
+            vigencia: '',
+            formasDePagamento: '',
+          });
+          this.changeLoading();
+          this._router.navigate(['tarifas']);
           this._poNotification.success('Tarifa alterada com sucesso!');
         }, 1000);
       }
-      this.changeLoading();
-      setTimeout(() => {
-        this.tarifaForm.patchValue({
-          codigo: '',
-          descricao: '',
-          valor: '',
-          orgaoConcessor: '',
-          vigencia: '',
-          formasDePagamento: '',
-        });
-        this.changeLoading();
-        this._router.navigate(['tarifas']);
-        this._poNotification.success('Tarifa alterada com sucesso!');
-      }, 1000);
     }
   }
 
@@ -323,6 +329,8 @@ export class DetTarifasComponent {
    * @version  v1
    *******************************************************************************/
   getTarifaTable() {
+    this.changeLoading();
     this.itemsTable = this._structTariff.getItemsTable();
+    this.changeLoading();
   }
 }
