@@ -65,6 +65,13 @@ export class TarifasComponent {
   columns: Array<PoTableColumn> = ColumnsTariffs;
   listTarifas: Array<TariffsModel> = [];
 
+  /*******************************************************************************
+   * @name actions
+   * @description Ações no menu superior direito da tela, botão de incluir
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   actions: Array<PoPageAction> = [
     {
       label: 'Incluir',
@@ -82,6 +89,14 @@ export class TarifasComponent {
     this.getTarifas();
   }
 
+  /*******************************************************************************
+   * @name setColProperties
+   * @description função responsável por setar as funções aos dois botões de ação
+   * da tabela
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   setColProperties() {
     this.columns.forEach((col) => {
       if (
@@ -95,10 +110,26 @@ export class TarifasComponent {
     });
   }
 
+  /*******************************************************************************
+   * @name addTarifas
+   * @description função responsável por redirecionar para tela de incluir uma
+   * tarifa, chamada ao clicar no botão 'incluir' no canto superior direito da tela
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   addTarifas() {
     this._router.navigate(['tarifas/detTarifas/incluir']);
   }
 
+  /*******************************************************************************
+   * @name setFilters
+   * @description função chamada ao alterar o valor dos campos po-combo para
+   *  filtrar o conteúdo baseado no filtro escolhido
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   setFilters() {
     this.listTarifas = [];
 
@@ -143,7 +174,15 @@ export class TarifasComponent {
     this.getTarifas();
   }
 
-  cleanFilter(filter: string = '') {
+  /*******************************************************************************
+   * @name clearFilter
+   * @description função chamada ao alterar o valor dos campos po-combo
+   * @param filer: string - nome do filtro clicado para saber qual limpar
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
+  clearFilter(filter: string = '') {
     switch (filter) {
       case 'tarifa': {
         this.tarifaFilter = '';
@@ -161,6 +200,13 @@ export class TarifasComponent {
     }
   }
 
+  /*******************************************************************************
+   * @name getTarifas
+   * @description função responsável por buscar as tarifas e carregar a lista
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   getTarifas() {
     let params = new HttpParams();
     this.isLoading = true;
@@ -202,6 +248,15 @@ export class TarifasComponent {
     });
   }
 
+  /*******************************************************************************
+   * @name setRangeFilter
+   * @description função responsável por verificar  se habilita ou não o botão
+   * de carregar mais dados
+   * @param total: number - contador com o valor total de registros
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   setShowMore(total: number) {
     this.isLoading = false;
     if (this.nRegIndex === 1) {
@@ -217,11 +272,27 @@ export class TarifasComponent {
     }
   }
 
+  /*******************************************************************************
+   * @name setRangeFilter
+   * @description função chamada ao alterar o valor do campo vigência
+   * @param event: any - objeto do datepicker range com o start e end
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   setRangeFilter(event: any) {
     this.vigenciaStartFilter = event.start;
     this.vigenciaEndFilter = event.end;
   }
 
+  /*******************************************************************************
+   * @name sortTable
+   * @description Função chamada ao ordenar uma coluna na tabela, chama a
+   * função de ordenação no utils
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   sortTable(event: PoTableColumnSort) {
     const result = [...this.listTarifas];
 
@@ -231,6 +302,14 @@ export class TarifasComponent {
     this.listTarifas = result;
   }
 
+  /*******************************************************************************
+   * @name actionShowMore
+   * @description Função responsável permitir a carga dos dados ao clicar em
+   * 'Carregar mais dados' na tabela e desabilitar ou habilitar o botão
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   actionShowMore() {
     this.nNextPage++;
     // se for clicado pela 4a vez carrega o restante dos dados
@@ -242,6 +321,14 @@ export class TarifasComponent {
     this.getTarifas();
   }
 
+  /*******************************************************************************
+   * @name editTariff
+   * @description Função responsável por ir para tela de edição quando o
+   * ícone de 'lápis' é clicado na tabela
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   editTariff(event: any) {
     this._router.navigate([
       'tarifas/detTarifas',
@@ -251,6 +338,14 @@ export class TarifasComponent {
     ]);
   }
 
+  /*******************************************************************************
+   * @name viewTariff
+   * @description Função responsável por ir para tela de visualização quando o
+   * ícone de 'olho' é clicado na tabela
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   viewTariff(event: any) {
     this._router.navigate(['tarifas/viewTarifas', btoa(event.pk), event.pk]);
   }

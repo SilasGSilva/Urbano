@@ -145,6 +145,14 @@ export class DetTarifasComponent {
     }
   }
 
+  /*******************************************************************************
+   * @name createForm
+   * @description Função responsável por criar e inicializar o formulário para
+   * criação ou edição das tarifas
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   createForm(): any {
     const tarifa: TarifaForm = {} as TarifaForm;
     this.tarifaForm = this._formBuilder.group({
@@ -163,6 +171,14 @@ export class DetTarifasComponent {
     });
   }
 
+  /*******************************************************************************
+   * @name getTarifa
+   * @description Funççao responsável por buscar os dados da tarifa quando for
+   * editar uma tarifa
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   getTarifa() {
     let params = new HttpParams();
     this._fwModel.reset();
@@ -194,6 +210,14 @@ export class DetTarifasComponent {
     });
   }
 
+  /*******************************************************************************
+   * @name setRangeFilter
+   * @description função chamada ao alterar o valor do campo vigência
+   * @param event: any - objeto do datepicker range com o start e end
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   setRangeFilter(event: any) {
     this.vigenciaStartFilter = event.start;
     this.vigenciaEndFilter = event.end;
@@ -290,6 +314,14 @@ export class DetTarifasComponent {
     }
   }
 
+  /*******************************************************************************
+   * @name getTarifaTable
+   * @description Função responsável por buscar os itens da tabela de histórico
+   * de vigências
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   getTarifaTable() {
     this.itemsTable = this._structTariff.getItemsTable();
   }

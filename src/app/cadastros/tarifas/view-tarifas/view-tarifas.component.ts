@@ -40,10 +40,16 @@ export class ViewTarifasComponent {
     this.filial = this._activedRoute.snapshot.params['filial'];
   }
 
+  /*******************************************************************************
+   * @name actions
+   * @description Ações no menu superior direito da tela, botão de editar e fechar
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   actions: Array<PoPageAction> = [
     {
       label: 'Editar',
-
       action: () => {
         this._router.navigate([
           'tarifas/detTarifas',
@@ -74,6 +80,14 @@ export class ViewTarifasComponent {
     this.getTarifaTable();
   }
 
+  /*******************************************************************************
+   * @name getTarifaDynamicView
+   * @description Função responsável por buscar os dados e carregar na tela
+   * preenchendo os campos para visualização
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   getTarifaDynamicView() {
     let params = new HttpParams();
     this._fwModel.reset();
@@ -109,11 +123,15 @@ export class ViewTarifasComponent {
     });
   }
 
+  /*******************************************************************************
+   * @name getTarifaTable
+   * @description Ação responsável por buscar os itens da tabela de histórico
+   * de vigências
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   getTarifaTable() {
     this.itemsTable = this._structTariff.getItemsTable();
   }
-
-  edit() {}
-
-  close() {}
 }
