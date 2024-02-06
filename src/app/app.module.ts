@@ -46,4 +46,4 @@ import { ViewTarifasComponent } from './cadastros/tarifas/view-tarifas/view-tari
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -22,6 +22,7 @@ import {
   selector: 'app-formas-de-pagamento',
   templateUrl: './formas-de-pagamento.component.html',
   styleUrls: ['./formas-de-pagamento.component.css'],
+  providers: [UtilsService],
 })
 export class FormasDePagamentoComponent {
   constructor(

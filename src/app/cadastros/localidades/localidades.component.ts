@@ -29,7 +29,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   selector: 'app-localidades',
   templateUrl: './localidades.component.html',
   styleUrls: ['./localidades.component.css'],
-  providers: [],
+  providers: [UtilsService],
 })
 export class LocalidadesComponent implements OnInit {
   //Declaração de variaveis

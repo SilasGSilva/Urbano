@@ -51,30 +51,26 @@ export class OrgaoConcessorPoLookUpService implements PoComboOption {
   desc: string = '';
 }
 
-
 @Injectable({
   providedIn: 'root',
 })
 export class MatriculaComboService implements PoComboFilter {
-
   private endpoint: string = 'FRETAMENTOURBANO/matricula';
 
   constructor(
     private apiService: ApiService,
     private route: ActivatedRoute
-  ) { }
+  ) {}
 
   getFilteredData(
     params: any,
     filterParams?: any
   ): Observable<AdaptorReturnStruct[]> {
-
     let httpParams = new HttpParams();
 
     let filter: string = '';
 
     if (params.value != '')
-
       filter =
         "AND UPPER(RA_MAT) LIKE '%" +
         params.value +
@@ -157,7 +153,7 @@ export class MatriculaComboService implements PoComboFilter {
 export class localComboService implements PoComboFilter {
   private endpoint: string = 'FRETAMENTOURBANO/local';
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   getFilteredData(
     params: any,
@@ -231,7 +227,7 @@ export class localComboService implements PoComboFilter {
 export class muniComboService implements PoComboFilter {
   private endpoint: string = 'FRETAMENTOURBANO/municipio';
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   getFilteredData(
     params: any,
@@ -301,7 +297,7 @@ export class comboFormService implements PoComboFilter {
   private endpoint: string = 'FRETAMENTOURBANO/estadoMun';
   private filterUf: string = '';
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   getFilteredData(
     params: any,
@@ -396,17 +392,6 @@ export class comboFormService implements PoComboFilter {
 
   setFilterUf(value: string) {
     this.filterUf = value;
-    return this.apiService.get(this.endpoint, params).pipe(
-      map((response: any) => {
-        let itemReturn = new AdaptorReturnStruct();
-
-        itemReturn.value = '';
-        itemReturn.label = '';
-        itemReturn.cpf = '';
-
-        return itemReturn;
-      })
-    );
   }
 }
 
@@ -416,7 +401,7 @@ export class comboFormService implements PoComboFilter {
 export class TarifaComboService implements PoComboFilter {
   private endpoint: string = 'FRETAMENTOURBANO/local';
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   getFilteredData(
     params: any,
@@ -502,7 +487,7 @@ export class TarifaComboService implements PoComboFilter {
 export class OrgaoConcessorComboService implements PoComboFilter {
   private endpoint: string = 'FRETAMENTOURBANO/local';
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   getFilteredData(
     params: any,
@@ -581,7 +566,10 @@ export class poLookUpOrgaoConcessor implements PoLookupFilter {
   // private endpoint: string = 'FRETAMENTOURBANO/local';
   private endpoint: string = 'https://po-sample-api.onrender.com/v1/heroes';
 
-  constructor(private apiService: ApiService, private _http: HttpClient) { }
+  constructor(
+    private apiService: ApiService,
+    private _http: HttpClient
+  ) {}
 
   getObjectByValue(value: any): Observable<any> {
     return this.apiService.get(this.endpoint, value);
@@ -602,7 +590,6 @@ export class poLookUpOrgaoConcessor implements PoLookupFilter {
   }
 }
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -610,7 +597,10 @@ export class poLookUpFormasDePagamento implements PoLookupFilter {
   // private endpoint: string = 'FRETAMENTOURBANO/local';
   private endpoint: string = 'https://po-sample-api.onrender.com/v1/heroes';
 
-  constructor(private apiService: ApiService, private _http: HttpClient) { }
+  constructor(
+    private apiService: ApiService,
+    private _http: HttpClient
+  ) {}
 
   getObjectByValue(value: any): Observable<any> {
     return this.apiService.get(this.endpoint, value);

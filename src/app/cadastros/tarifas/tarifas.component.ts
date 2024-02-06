@@ -25,6 +25,7 @@ import { Router } from '@angular/router';
   templateUrl: './tarifas.component.html',
   styleUrls: ['./tarifas.component.css'],
 })
+
 export class TarifasComponent {
   @ViewChild('tarifaFilterCombo', { static: true })
   tarifaFilterCombo!: PoComboComponent;
@@ -99,7 +100,7 @@ export class TarifasComponent {
    * @version  v1
    *******************************************************************************/
   setColProperties() {
-    this.columns.forEach((col) => {
+    this.columns.forEach(col => {
       if (
         col.property === 'otherActions' &&
         col.icons &&
