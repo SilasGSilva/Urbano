@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PoMenuItem } from '@po-ui/ng-components';
+import { PoDialogService, PoMenuItem } from '@po-ui/ng-components';
 import { AppComponent } from '../app.component';
 import { Router } from '@angular/router';
 
@@ -11,7 +11,8 @@ import { Router } from '@angular/router';
 export class NavMenuComponent {
   constructor(
     private _router: Router,
-    public appComponent: AppComponent
+    public appComponent: AppComponent,
+    private poDialog: PoDialogService,
   ) {}
 
   public readonly logoTotvs: string = '/assets/icon-totvs.svg';
@@ -34,10 +35,13 @@ export class NavMenuComponent {
           label: 'Formas de pagamento',
           action: this.navigate.bind(this, '/formas-de-pagamento'),
         },
-        { label: 'Ped√°gio' },
-        { label: 'Tarifas' },
+        { label: 'Ped·gio' },
+        {
+          label: 'Tarifas',
+          action: this.navigate.bind(this, '/tarifas'),
+        },
         { label: 'Linhas' },
-        { label: 'Se√ß√µes' },
+        { label: 'SeÁıes' },
         { label: 'Validadores' },
         { label: 'Roleta' },
         { label: 'Frota' },
@@ -57,10 +61,9 @@ export class NavMenuComponent {
       subItems: [],
     },
   ];
-
   /**
-   * M√©todo responsavel pelo redirecionamento da rota conforme a a√ß√£o selecionada
-   * @param newRoute string contendo a url que ser√° redirecionada
+   * MÈtodo respons·vel pelo redirecionamento da rota conforme a aÁ„o selecionada
+   * @param newRoute string contendo a url que ser· redirecionada
    */
   navigate(newRoute: string) {
     this._router.navigate([newRoute]);

@@ -7,6 +7,9 @@ import { DetLocalidadesComponent } from './cadastros/localidades/det-localidades
 import { ViewMotoristaComponent } from './cadastros/motorista/view-motorista/view-motorista.component';
 import { FormasDePagamentoComponent } from './cadastros/formas-de-pagamento/formas-de-pagamento.component';
 import { DetFormaPagamentoComponent } from './cadastros/formas-de-pagamento/det-forma-pagamento/det-forma-pagamento.component';
+import { TarifasComponent } from './cadastros/tarifas/tarifas.component';
+import { DetTarifasComponent } from './cadastros/tarifas/det-tarifas/det-tarifas.component';
+import { ViewTarifasComponent } from './cadastros/tarifas/view-tarifas/view-tarifas.component';
 
 const routes: Routes = [
   {
@@ -42,6 +45,13 @@ const routes: Routes = [
     path: 'formas-de-pagamento/det-forma-pagamento/:acao/:id',
     component: DetFormaPagamentoComponent,
   },
+  { path: 'tarifas', component: TarifasComponent },
+  {
+    path: 'tarifas/detTarifas/:acao/:filial/:pk',
+    component: DetTarifasComponent,
+  },
+  { path: 'tarifas/detTarifas/:acao', component: DetTarifasComponent },
+  { path: 'tarifas/viewTarifas/:filial/:pk', component: ViewTarifasComponent },
 ];
 
 @NgModule({
