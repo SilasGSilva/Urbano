@@ -86,41 +86,6 @@ export class ApiService {
 	}
 
 	/**
-	 * Responsável por realizar validação de Formulário
-	 * @param form - Estrutura do Formulário
-	 */
-	validateForm(form: FormGroup): Array<VldFormStruct> {
-		const formControls = form.controls;
-		const listReturn: Array<VldFormStruct> = [];
-
-		for (const campo in formControls) {
-			if (formControls.hasOwnProperty(campo) && formControls[campo].status === 'INVALID') {
-				const iMessage: number = this.indexMessageErro(formControls[campo] as FormControl);
-				let tpError: string = '';
-
-				if (iMessage === 0) {
-					tpError = this.getFormError(formControls[campo] as FormControl);
-				}
-
-				const index: number = listReturn.findIndex(
-					x => x.iMessage === iMessage && x.tpErro === tpError
-				);
-
-				if (index > -1) {
-					listReturn[index].field.push(campo.toString());
-				} else {
-					const infValidated: VldFormStruct = {} as VldFormStruct;
-					infValidated.iMessage = iMessage;
-					infValidated.tpErro = tpError;
-					infValidated.field = [campo.toString()];
-					listReturn.push(infValidated);
-				}
-			}
-		}
-		return listReturn;
-	}
-
-	/**
 	 * Responsável por obter erro do campo do formulário
 	 * @param formControl - Form Control do campo
 	 */
@@ -131,22 +96,5 @@ export class ApiService {
 			}
 		}
 		return '';
-	}
-
-	/**
-	 * Responsável por obter o indice do tipo de menságem que iremos apresentar
-	 * na notificação
-	 * @param formControl - Form Control do campo
-	 */
-	indexMessageErro(formControl: FormControl): number {
-		let iMessage: number = 0;
-
-		if (formControl.errors?.hasOwnProperty('required')) {
-			iMessage = 1;
-		} else if (formControl.errors?.hasOwnProperty('maxlength')) {
-			iMessage = 2;
-		}
-
-		return iMessage;
 	}
 }

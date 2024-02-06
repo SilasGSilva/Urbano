@@ -7,9 +7,11 @@ import {
 	PoModalComponent,
 	PoNotificationService,
 } from '@po-ui/ng-components';
-import { FwProtheusModel, Resource } from 'src/app/services/models/fw-protheus.model';
-import { FormaPagForm, PaymentMethodModel } from '../formas-de-pagamento-struct';
+import { FwProtheusModel } from 'src/app/services/models/fw-protheus.model';
+import { FormaPagForm } from '../formas-de-pagamento-struct';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChangeUndefinedToEmpty, FindValueByName } from 'src/app/services/functions/util.function';
+import { ValidaNotificacao } from 'src/app/services/functions/validateForm';
 
 @Component({
 	selector: 'app-det-forma-pagamento',
@@ -62,7 +64,7 @@ export class DetFormaPagamentoComponent implements OnInit {
 				this.isVisibleBtn = false;
 				this.isLoadingBtn = true;
 				this.isShowLoading = false;
-
+				this.editView = true;
                 break;
             case 'incluir':
 				this.isShowLoading = true;
@@ -80,9 +82,13 @@ export class DetFormaPagamentoComponent implements OnInit {
 		}
 	}
 
-	/**
-	 * createForm - Inicializa o formulário
-	 */
+	/*******************************************************************************
+	 * @name createForm
+	 * @description Inicializa o formulário
+	 * @author	    Serviços | Breno Gomes
+	 * @since		2024
+	 * @version     v1
+	 *******************************************************************************/
 	createForm(): any {
 		const formaPagamento: FormaPagForm = {} as FormaPagForm;
         this.formaPagForm = this.formBuilder.group({
@@ -138,8 +144,11 @@ export class DetFormaPagamentoComponent implements OnInit {
 			this.fwModel.setEndPoint('GTPU001/');
 			this.fwModel.AddModel('H6RMASTER', 'FIELDS');
 
-			//this.fwModel.getModel('H6RMASTER').addField('H6R_CODIGO'); // COD MATRICULA
-			//this.fwModel.getModel('H6RMASTER').addField('H6R_DESCRI');   // NOME
+			this.fwModel.getModel('H6RMASTER').addField('H6R_CODIGO'); // COD MATRICULA
+			this.fwModel.getModel('H6RMASTER').addField('H6R_DESCRI');   // NOME
+
+			this.fwModel.getModel('H6RMASTER').setValue('H6R_CODIGO', ChangeUndefinedToEmpty(this.formaPagForm.value.codigo));
+			this.fwModel.getModel('H6RMASTER').setValue('H6R_DESCRI', ChangeUndefinedToEmpty(this.formaPagForm.value.descricao));
 			
 			if (this.acao == 'incluir') {
 
@@ -161,6 +170,8 @@ export class DetFormaPagamentoComponent implements OnInit {
 					error: (error) => {
 						this.poNotification.error(error.error.errorMessage);
 						this.fwModel.reset();
+						this.isLoadingBtn = false;
+						this.isShowLoading = true;
 					},
 					complete: () => {
 						this.isLoadingBtn = false;
@@ -181,22 +192,38 @@ export class DetFormaPagamentoComponent implements OnInit {
 					error:(error) => {
 						this.poNotification.error(error.error.errorMessage);
 						this.fwModel.reset();
+						this.isLoadingBtn = false;
+						this.isShowLoading = true;
+					},
+					complete: () => {
+						this.isLoadingBtn = false;
+						this.isShowLoading = true;
 					}
 				});
 			}
 		}else{
-			this.poNotification.error("Erro ao salvar!")
+			this.poNotification.error(ValidaNotificacao(this.formaPagForm));
 		}
 	}
-	/**
-	 * Close - Volta para a tela de listagem de forma de pagamento
-	 */
+
+	/*******************************************************************************
+	 * @name close
+	 * @description Função responsável por redirecionar para a tela de forma de pagamento
+	 * @author	    Serviços | Breno Gomes
+	 * @since		2024
+	 * @version     v1
+	 *******************************************************************************/
 	close() {
 		this._router.navigate(['formas-de-pagamento']);
     }
-	/**
-	 * getFormaPagamento - Busca informações para setar o formulario
-	 */
+	
+	/*******************************************************************************
+	 * @name getFormaPagamento
+	 * @description Busca informações para setar o formulario
+	 * @author	    Serviços | Breno Gomes
+	 * @since		2024
+	 * @version     v1
+	 *******************************************************************************/
 	getFormaPagamento() {
 		let params = new HttpParams();
 		this.isShowLoading = false;
@@ -206,17 +233,14 @@ export class DetFormaPagamentoComponent implements OnInit {
 		this.fwModel.setVirtualField(true);
 		this.fwModel.get(params).subscribe({
 			next: (data: any) => {
-					let paymentMethod = new PaymentMethodModel();
+				let codigo: string = FindValueByName(data.models[0].fields,'H6R_CODIGO')
+				let descricao: string = FindValueByName(data.models[0].fields,'H6R_DESCRI')
 				
-					paymentMethod.codPayment = data.models[0].fields[0].value
-					paymentMethod.descPayment = data.models[0].fields[1].value
-					this.breadcrumb.items[2].label = paymentMethod.codPayment + ' - ' + paymentMethod.descPayment
-					
-					this.formaPagForm.patchValue({
-						codigo: paymentMethod.codPayment,
-						descricao: paymentMethod.descPayment
-					})
-
+				this.breadcrumb.items[2].label = codigo + ' - ' + descricao
+				this.formaPagForm.patchValue({
+					codigo: codigo,
+					descricao: descricao
+				})
 			},
 			error : (erro) =>{
 				this.poNotification.error(erro.errorMessage);

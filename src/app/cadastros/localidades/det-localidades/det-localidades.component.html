@@ -16,12 +16,11 @@
             <po-input
                 class="po-lg-9"
                 name="descricao"
-                p-label="Descrição da Localidade"
+                p-label="Descrição da Localidade*"
                 p-placeholder="Digite"
                 formControlName="descricao"
                 p-required="true"
                 p-clean="true"
-                [p-show-required]="true"
             >
             </po-input>
 
@@ -66,7 +65,7 @@
             <po-combo
                 class="po-lg-2"
                 name="estado"
-                p-label="UF"
+                p-label="UF*"
                 p-placeholder="Selecione"
                 formControlName="estado"
                 #comboUf
@@ -81,7 +80,7 @@
             <po-combo
                 class="po-lg-4 form-group"
                 name="municipio"
-                p-label="Município"
+                p-label="Município*"
                 p-placeholder="Selecione"
                 formControlName="municipio"
                 #comboMunicipio
@@ -117,11 +116,10 @@
             <po-radio-group
                 class="po-lg-3"
                 name="status"
-                p-label="Status"
+                p-label="Status*"
                 formControlName="status"
                 [p-options]="listStatus"
                 [p-required]="true"
-                [p-show-required]="true"
             >
             </po-radio-group>
 

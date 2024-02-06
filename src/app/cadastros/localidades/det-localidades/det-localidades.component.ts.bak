@@ -61,18 +61,11 @@ export class DetLocalidadesComponent implements OnInit {
         this.loadLocalidades();
     };
 
-    /*******************************************************************************
-     * @name initializeForm
-     * @description Função responsável por inicializar formulário com os campos informados
-     * @author  Serviços | Silas Gomes
-     * @since   2024
-     * @version v1
-     *******************************************************************************/
     initializeForm(): void {
         const localidade: LocalidadeForm = {} as LocalidadeForm;
 
         this.localidadesForm = this.formBuilder.group({
-            descricao: [localidade.descricao, Validators.required],
+            descricao: [localidade.descricao, Validators.required, ],
             cep: [localidade.cep],
             endereco: [localidade.endereco],
             bairro: [localidade.bairro],
@@ -83,13 +76,6 @@ export class DetLocalidadesComponent implements OnInit {
         });
     };
 
-    /*******************************************************************************
-     * @name handleAction
-     * @description Função responsável por definir ação do formulário (Incluir/Alterar)
-     * @author  Serviços | Silas Gomes
-     * @since   2024
-     * @version v1
-     *******************************************************************************/
     handleAction(): void {
         this.acao = this.route.snapshot.params['acao'];
         this.pkLocalidades = this.route.snapshot.params['id'];
@@ -113,14 +99,6 @@ export class DetLocalidadesComponent implements OnInit {
         };
     };
 
-     /*******************************************************************************
-     * @name loadLocalidades
-     * @description Função responsável por carregar localidade na tela, 
-     * quando a ação for alterar
-     * @author  Serviços | Silas Gomes
-     * @since   2024
-     * @version v1
-     *******************************************************************************/
     loadLocalidades(): void {
         
         if (this.pkLocalidades != undefined) {
@@ -171,14 +149,6 @@ export class DetLocalidadesComponent implements OnInit {
         }
     };
 
-    /*******************************************************************************
-     * @name saveLocalidade
-     * @description Função responsavél por salvar formulário preenchido
-     * @param   isSaveNew - define se salva e cria um novo ou apenas volta a rota
-     * @author  Serviços | Silas Gomes
-     * @since   2024
-     * @version v1
-     *******************************************************************************/
     saveLocalidade(isSaveNew: boolean = false): void {
         const isSubmitable: boolean = this.localidadesForm.valid;
     
@@ -261,14 +231,6 @@ export class DetLocalidadesComponent implements OnInit {
         }
     };
 
-    /*******************************************************************************
-     * @name changeValidCEP
-     * @description Função responsavél por validar cep e preencher demais campos
-     * @param   cep - cep a ser validado
-     * @author   Serviços | Silas Gomes
-     * @since       2024
-     * @version v1
-     *******************************************************************************/
     changeValidCEP(cep: string): void {
         this.validCEP.validarCEP(cep).subscribe((data) => {
             const resultado = data;
@@ -283,15 +245,6 @@ export class DetLocalidadesComponent implements OnInit {
         });
     }
 
-   /*******************************************************************************
-     * @name setFilters
-     * @description Função responsável por setar filtros corretamente na hora
-     * de carregar os campos preenchidos.
-     * @param event - Valor selecionado para setar os filtros
-     * @author   Serviços | Silas Gomes
-     * @since       2024
-     * @version v1
-     *******************************************************************************/ 
     setFilters(event: any): void {
 
         if (ChangeUndefinedToEmpty(event) !== '' && event) {
@@ -307,15 +260,7 @@ export class DetLocalidadesComponent implements OnInit {
             });
         }
     }
-    
-    /*******************************************************************************
-     * @name onClickCancel
-     * @description Função responsavél por cancelar a ação e voltar para a tela
-     * inicial de localidades.
-     * @author   Serviços | Silas Gomes
-     * @since       2024
-     * @version v1
-     *******************************************************************************/
+
     onClickCancel(): void {
         this.fwModel.reset();
         this.router.navigate(['./localidades']);

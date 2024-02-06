@@ -13,6 +13,7 @@
 			p-placeholder="digite"
 			name="codPayment"
 			formControlName="codigo"
+			[p-maxlength]="6"
 			
 		></po-input>
 		<po-input
@@ -20,6 +21,7 @@
 			p-label="Descrição*"
 			p-placeholder="Digite"
 			formControlName="descricao"
+			[p-maxlength]="30"
 			
 		></po-input>
 	</form>

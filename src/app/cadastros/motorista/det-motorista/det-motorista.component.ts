@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { PoBreadcrumb, PoCheckboxGroupOption, PoI18nPipe, PoI18nService, PoNotificationService, PoRadioGroupOption } from '@po-ui/ng-components';
+import { PoBreadcrumb, PoCheckboxGroupOption, PoNotificationService, PoRadioGroupOption } from '@po-ui/ng-components';
 import { ListStatus, ListTipoDocumento, ListTurno, MotoristaForm, MotoristaModel } from './det-motorista.struct';
 import { FuncaoComboService, RecursoComboService } from 'src/app/services/combo-filter.service';
 import { MatriculaComboService } from 'src/app/services/adaptors/wsurbano-adapter.service';
@@ -9,8 +9,7 @@ import { FwProtheusModel } from 'src/app/services/models/fw-protheus.model';
 import { HttpParams } from '@angular/common/http';
 import { ComboFilial } from '../motorista.struct';
 import { ChangeUndefinedToEmpty, FindValueByName, MakeDate, isNullOrUndefined } from 'src/app/services/functions/util.function';
-import { VldFormStruct } from 'src/app/services/gtpgenerics.struct';
-import { ApiService } from 'src/app/services/api.service';
+import { ValidaNotificacao } from 'src/app/services/functions/validateForm';
 
 @Component({
   selector: 'app-det-motorista',
@@ -30,8 +29,8 @@ export class DetMotoristaComponent implements OnInit {
 	acao: string = '';
 	status: string = '1';
 	filial: string = '';
-	mascaraCPF : string = '';
 	titulo: string = '';
+	mascaraCPF: string = '';
 	pkMotorista: string = '';
 	filterParamMatricula: string = ''
 
@@ -57,7 +56,6 @@ export class DetMotoristaComponent implements OnInit {
 		private fwModel: FwProtheusModel,
 		private formBuilder: FormBuilder,
 		private router: Router,
-		private apiService: ApiService,
 		){
 			this.createForm();
 		}
@@ -90,17 +88,22 @@ export class DetMotoristaComponent implements OnInit {
 		//Criando o formulario
 		this.createForm();
 
-		if (this.pkMotorista != undefined) {//Edição, faz a carga dos valores
+		if (this.pkMotorista != undefined) {
             this.getMotorista()
-        } else {//Inclusão, seta o status como ativo
+        } else {
 			this.motoristaForm.patchValue({
 				status: '1'
 			});
         }
 	}
-	/**
-	 * createForm - Inicializa o formulário
-	 */
+	
+	/*******************************************************************************
+	 * @name createForm
+	 * @description Inicializa o formulário
+	 * @author  Serviços | Breno Gomes
+	 * @since   2024
+	 * @version	v1
+	 *******************************************************************************/
 	createForm(): any {
 		const motorista: MotoristaForm = {} as MotoristaForm;
         this.motoristaForm = this.formBuilder.group({
@@ -118,10 +121,15 @@ export class DetMotoristaComponent implements OnInit {
 			numeroDocumento: [motorista.numeroDocumento],
         });
     }
-	/**
-	 * Ação disparada ao selecionar o tipo de documento
-	 * @param event - 1 - RG / 2 - CPF
-	 */
+	
+	/*******************************************************************************
+	 * @name changeDocumento
+	 * @description Ação disparada ao selecionar o tipo de documento
+	 * @param event = 1 - RG / 2 - CPF
+	 * @author  Serviços | Breno Gomes
+	 * @since   2024
+	 * @version	v1
+	 *******************************************************************************/
 	changeDocumento(event:any){
 		this.isDisableTipoDoc = false;
 		this.isValidCPF = false;
@@ -133,11 +141,15 @@ export class DetMotoristaComponent implements OnInit {
 		}
 	}
 
-	/**
-	 * Função responsável pela validação do cpf
-	 * @param cpf
+	/*******************************************************************************
+	 * @name validarCPF
+	 * @description Responsável pela validação do cpf
+	 * @param cpf - Numero a ser validado
 	 * @returns true ou false - Se é valido ou não
-	 */
+	 * @author  Serviços | Breno Gomes
+	 * @since   2024
+	 * @version	v1
+	 *******************************************************************************/
 	validarCPF(cpf: string): boolean {
 		if (this.isValidCPF && cpf != ''){
 			// Remove caracteres não numéricos
@@ -180,9 +192,14 @@ export class DetMotoristaComponent implements OnInit {
 		}
 
 	}
-	/**
-	 * Get Motorista
-	 */
+
+	/*******************************************************************************
+	 * @name getMotorista
+	 * @description Busca os dados do motorista, para setar o formulário de edição
+	 * @author  Serviços | Breno Gomes
+	 * @since   2024
+	 * @version	v1
+	 *******************************************************************************/
 	async getMotorista() {
 		let documento: string = '';
 		let params = new HttpParams();
@@ -236,19 +253,28 @@ export class DetMotoristaComponent implements OnInit {
 
     }
 
-	/**
-	 * incluirDocumento - Responsavel por abrir modal de inclusão de documento
-	 */
+	/*******************************************************************************
+	 * @name incluirDocumento
+	 * @description Responsavel por abrir modal de inclusão de documento
+	 * @author  Serviços | Breno Gomes
+	 * @since   2024
+	 * @version	v1
+	 *******************************************************************************/
 	incluirDocumento(){
-		//abrir modal de inclusao de documento
 		this.poNotification.warning("Pagina em construção")
 	}
 
-	/**
-	 * Ação do combo de matricula, ao clicar, será carregado o nome e o CPF
-	 */
+	
+	/*******************************************************************************
+	 * @name setFilters
+	 * @description Ação do combo de matricula, ao clicar, será carregado o nome e o CPF
+	 * @param   newValue - Valor selecionado ou undefined se for utilizado o clear do combo
+	 * @author  Serviços | Breno Gomes
+	 * @since   2024
+	 * @version	v1
+	 *******************************************************************************/
 	setFilters(newValue: any) {
-		//filtros
+
         if (this.comboMatricula != undefined && newValue != undefined){
 			this.comboMatricula['visibleOptions'].forEach( (item: any) => {
 				if(item.selected){
@@ -279,13 +305,19 @@ export class DetMotoristaComponent implements OnInit {
 		}
 
     }
-	/**
-	 * Salva os dados do motorista
-	 * @param isSaveNew define se salva e cria um novo ou apenas volta a rota
-	 */
+	
+	/*******************************************************************************
+	 * @name saveMotorista
+	 * @description Salva os dados do motorista
+	 * @param   isSaveNew - define se salva e cria um novo ou apenas volta a rota
+	 * @author  Serviços | Breno Gomes
+	 * @since   2024
+	 * @version	v1
+	 *******************************************************************************/
 	saveMotorista(isSaveNew: boolean = false) {
 		let tipoDocumento = this.motoristaForm.value.tipoDocumento;
-		let isSubmitable: boolean = true//this.motoristaForm.valid;
+		let dataNascimento = ChangeUndefinedToEmpty(this.motoristaForm.value.dataNascimento)
+		let isSubmitable: boolean = this.motoristaForm.valid;
 		if (isSubmitable){
 			this.isLoadingBtn = true;
 			this.isHideLoadingTela = false;
@@ -310,15 +342,15 @@ export class DetMotoristaComponent implements OnInit {
 
 			this.fwModel.getModel('GYGMASTER').setValue('GYG_FUNCIO', ChangeUndefinedToEmpty(this.motoristaForm.value.codMatricula));
 			this.fwModel.getModel('GYGMASTER').setValue('GYG_NOME'  , ChangeUndefinedToEmpty(this.motoristaForm.value.nome));
-			this.fwModel.getModel('GYGMASTER').setValue('GYG_DTNASC', ChangeUndefinedToEmpty(this.motoristaForm.value.dataNascimento.replace(/-/g, '')));
+			this.fwModel.getModel('GYGMASTER').setValue('GYG_DTNASC', dataNascimento != '' ? this.motoristaForm.value.dataNascimento.replace(/-/g, '') : '');
 			this.fwModel.getModel('GYGMASTER').setValue('GYG_TPDOC' , ChangeUndefinedToEmpty(tipoDocumento));
-      if(tipoDocumento !== null){
-        if (tipoDocumento == '1'){
-          this.fwModel.getModel('GYGMASTER').setValue('GYG_RG'    , this.motoristaForm.value.numeroDocumento);
-        } else {
-          this.fwModel.getModel('GYGMASTER').setValue('GYG_CPF'   , this.motoristaForm.value.numeroDocumento.replace(/[.-]/g, ''));
-        }
-      }
+			if(tipoDocumento !== null){
+				if (tipoDocumento == '1'){
+				this.fwModel.getModel('GYGMASTER').setValue('GYG_RG'    , this.motoristaForm.value.numeroDocumento);
+				} else {
+				this.fwModel.getModel('GYGMASTER').setValue('GYG_CPF'   , this.motoristaForm.value.numeroDocumento.replace(/[.-]/g, ''));
+				}
+			}
 			this.fwModel.getModel('GYGMASTER').setValue('GYG_RECCOD', ChangeUndefinedToEmpty(this.motoristaForm.value.codTipoRecurso));
 			this.fwModel.getModel('GYGMASTER').setValue('GYG_FUNCOD', this.motoristaForm.value.codFuncao);
 			this.fwModel.getModel('GYGMASTER').setValue('GYG_TURNO' , ChangeUndefinedToEmpty(this.motoristaForm.value.turno.join('')));
@@ -368,36 +400,19 @@ export class DetMotoristaComponent implements OnInit {
 				});
 			}
 		}else {
-			this.vldDetNotify();
+			this.poNotification.error(ValidaNotificacao(this.motoristaForm))
 		}
     }
-
+	/*******************************************************************************
+	 * @name close
+	 * @description Função responsável por redirecionar para a tela de motorista
+	 * @author	    Serviços | Breno Gomes
+	 * @since		2024
+	 * @version     v1
+	 *******************************************************************************/
 	close() {
         this.router.navigate(['./motorista'])
     }
-
-	/**
-	 * Responsável por apresentar a notificação de falha do formControl
-	 */
-	vldDetNotify() {
-		const listNotification: Array<VldFormStruct> = this.apiService.validateForm(this.motoristaForm);
-
-		listNotification.forEach(item => {
-			let campos: string = '';
-			item.field.forEach((fields: string) => {
-				if (isNullOrUndefined(campos)) {
-					campos = fields;
-				} else {
-					campos += `, ${fields}`;
-				}
-			});
-
-			this.poNotification.error(
-				'Campos não preenchidos: '+ campos +'. Verifique!'
-			);
-		});
-
-	}
 
 }
 
