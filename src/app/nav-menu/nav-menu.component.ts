@@ -35,13 +35,13 @@ export class NavMenuComponent {
           label: 'Formas de pagamento',
           action: this.navigate.bind(this, '/formas-de-pagamento'),
         },
-        { label: 'Pedágio' },
+        { label: 'PedÃ¡gio' },
         {
           label: 'Tarifas',
           action: this.navigate.bind(this, '/tarifas'),
         },
         { label: 'Linhas' },
-        { label: 'Seções' },
+        { label: 'SeÃ§Ãµees' },
         { label: 'Validadores' },
         { label: 'Roleta' },
         { label: 'Frota' },
@@ -62,8 +62,8 @@ export class NavMenuComponent {
     },
   ];
   /**
-   * Método responsável pelo redirecionamento da rota conforme a ação selecionada
-   * @param newRoute string contendo a url que será redirecionada
+   * Mï¿½todo responsï¿½vel pelo redirecionamento da rota conforme a aï¿½ï¿½o selecionada
+   * @param newRoute string contendo a url que serï¿½ redirecionada
    */
   navigate(newRoute: string) {
     this._router.navigate([newRoute]);
