@@ -41,7 +41,7 @@ export class NavMenuComponent {
           action: this.navigate.bind(this, '/tarifas'),
         },
         { label: 'Linhas' },
-        { label: 'Seçõees' },
+        { label: 'Seções' },
         { label: 'Validadores' },
         { label: 'Roleta' },
         { label: 'Frota' },
