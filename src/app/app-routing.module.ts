@@ -10,6 +10,7 @@ import { DetFormaPagamentoComponent } from './cadastros/formas-de-pagamento/det-
 import { TarifasComponent } from './cadastros/tarifas/tarifas.component';
 import { DetTarifasComponent } from './cadastros/tarifas/det-tarifas/det-tarifas.component';
 import { ViewTarifasComponent } from './cadastros/tarifas/view-tarifas/view-tarifas.component';
+import { SecoesComponent } from './cadastros/secoes/secoes.component';
 
 const routes: Routes = [
   {
@@ -17,8 +18,10 @@ const routes: Routes = [
     loadChildren: () =>
       import('./nav-menu/nav-menu.module').then(m => m.NavMenuModule),
   },
+
+  // ##### MOTORISTA #####
+
   { path: 'motorista', component: MotoristaComponent },
-  { path: 'localidades', component: LocalidadesComponent },
   {
     path: 'motorista/detMotorista/:acao/:filial/:id',
     component: DetMotoristaComponent,
@@ -28,6 +31,9 @@ const routes: Routes = [
     path: 'motorista/viewMotorista/:acao/:filial/:id',
     component: ViewMotoristaComponent,
   },
+
+  // ##### LOCALIDADE #####
+  { path: 'localidades', component: LocalidadesComponent },
   {
     path: 'localidades/detLocalidades/:acao',
     component: DetLocalidadesComponent,
@@ -36,6 +42,8 @@ const routes: Routes = [
     path: 'localidades/detLocalidades/:acao/:id',
     component: DetLocalidadesComponent,
   },
+
+  // ##### FORMAS DE PAGAMENTO #####
   { path: 'formas-de-pagamento', component: FormasDePagamentoComponent },
   {
     path: 'formas-de-pagamento/det-forma-pagamento/:acao',
@@ -45,6 +53,8 @@ const routes: Routes = [
     path: 'formas-de-pagamento/det-forma-pagamento/:acao/:id',
     component: DetFormaPagamentoComponent,
   },
+
+  // ##### TARIFAS #####
   { path: 'tarifas', component: TarifasComponent },
   {
     path: 'tarifas/detTarifas/:acao/:filial/:pk',
@@ -52,6 +62,15 @@ const routes: Routes = [
   },
   { path: 'tarifas/detTarifas/:acao', component: DetTarifasComponent },
   { path: 'tarifas/viewTarifas/:filial/:pk', component: ViewTarifasComponent },
+
+  // ##### SECOES #####
+  { path: 'secoes', component: SecoesComponent },
+  // {
+  //   path: 'secoes/detSecoes/:acao/:filial/:pk',
+  //   component: DetSecoesComponent,
+  // },
+  // { path: 'secoes/detSecoes/:acao', component: DetSecoesComponent },
+  // { path: 'secoes/viewSecoes/:filial/:pk', component: ViewSecoesComponent },
 ];
 
 @NgModule({

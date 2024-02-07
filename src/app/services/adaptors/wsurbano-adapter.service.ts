@@ -620,3 +620,245 @@ export class poLookUpFormasDePagamento implements PoLookupFilter {
     return this._http.get(this.endpoint, params);
   }
 }
+
+// ##### TELA DE SEÇÕES #####
+
+// ##### COMBO SEÇÕES #####
+@Injectable({
+  providedIn: 'root',
+})
+export class SecaoComboService implements PoComboFilter {
+  private endpoint: string = 'FRETAMENTOURBANO/local';
+
+  constructor(private apiService: ApiService) {}
+
+  getFilteredData(
+    params: any,
+    filterParams?: any
+  ): Observable<TarifaComboStruct[]> {
+    let httpParams = new HttpParams();
+    let filter: string = '';
+
+    if (filterParams) {
+      filter = filterParams;
+    }
+
+    if (params.value != '') {
+      filter =
+        " AND (UPPER(GI1_COD) LIKE UPPER('%" +
+        params.value +
+        "%') OR " +
+        " UPPER(GI1_DESCRI) LIKE UPPER('%" +
+        params.value +
+        "%') ) ";
+    }
+
+    httpParams = httpParams.append('filter', filter);
+
+    // return of(items);
+    return this.apiService.get(this.endpoint, httpParams).pipe(
+      map((response: any) => {
+        const items: FilterComboStruct[] = [];
+        let hasNext = true;
+
+        response.Localidade.forEach((resource: any) => {
+          let itemReturn: FilterComboStruct = new FilterComboStruct();
+
+          itemReturn.value = resource.codLocal;
+          itemReturn.label = resource.descLocal;
+          itemReturn.desc = resource.codMuni;
+
+          items.push(itemReturn);
+
+          if (params.page * params.pageSize >= response.total) {
+            hasNext = false;
+          }
+        });
+        return items;
+      })
+    );
+  }
+
+  getObjectByValue(
+    value: string | number,
+    filterParams?: any
+  ): Observable<PoComboOption> {
+    let params = new HttpParams();
+
+    let filter: string = ``;
+
+    params = params.append('FILTER', filter);
+
+    return this.apiService.get(this.endpoint, params).pipe(
+      map((response: any) => {
+        let itemReturn = new FilterComboStruct();
+
+        itemReturn.value = response.codLocal;
+        itemReturn.label = response.descLocal;
+        itemReturn.desc = response.codMuni;
+
+        return itemReturn;
+      })
+    );
+  }
+}
+
+//  ##### COMBO LINHAS #####
+@Injectable({
+  providedIn: 'root',
+})
+export class LinhasComboService implements PoComboFilter {
+  private endpoint: string = 'FRETAMENTOURBANO/local';
+
+  constructor(private apiService: ApiService) {}
+
+  getFilteredData(
+    params: any,
+    filterParams?: any
+  ): Observable<TarifaComboStruct[]> {
+    let httpParams = new HttpParams();
+    let filter: string = '';
+
+    if (filterParams) {
+      filter = filterParams;
+    }
+
+    if (params.value != '') {
+      filter =
+        " AND (UPPER(GI1_COD) LIKE UPPER('%" +
+        params.value +
+        "%') OR " +
+        " UPPER(GI1_DESCRI) LIKE UPPER('%" +
+        params.value +
+        "%') ) ";
+    }
+
+    httpParams = httpParams.append('filter', filter);
+
+    // return of(items);
+    return this.apiService.get(this.endpoint, httpParams).pipe(
+      map((response: any) => {
+        const items: FilterComboStruct[] = [];
+        let hasNext = true;
+
+        response.Localidade.forEach((resource: any) => {
+          let itemReturn: FilterComboStruct = new FilterComboStruct();
+
+          itemReturn.value = resource.codLocal;
+          itemReturn.label = resource.descLocal;
+          itemReturn.desc = resource.codMuni;
+
+          items.push(itemReturn);
+
+          if (params.page * params.pageSize >= response.total) {
+            hasNext = false;
+          }
+        });
+        return items;
+      })
+    );
+  }
+
+  getObjectByValue(
+    value: string | number,
+    filterParams?: any
+  ): Observable<PoComboOption> {
+    let params = new HttpParams();
+
+    let filter: string = ``;
+
+    params = params.append('FILTER', filter);
+
+    return this.apiService.get(this.endpoint, params).pipe(
+      map((response: any) => {
+        let itemReturn = new FilterComboStruct();
+
+        itemReturn.value = response.codLocal;
+        itemReturn.label = response.descLocal;
+        itemReturn.desc = response.codMuni;
+
+        return itemReturn;
+      })
+    );
+  }
+}
+
+//  ##### COMBO STATUS #####
+@Injectable({
+  providedIn: 'root',
+})
+export class StatusComboService implements PoComboFilter {
+  private endpoint: string = 'FRETAMENTOURBANO/local';
+
+  constructor(private apiService: ApiService) {}
+
+  getFilteredData(
+    params: any,
+    filterParams?: any
+  ): Observable<TarifaComboStruct[]> {
+    let httpParams = new HttpParams();
+    let filter: string = '';
+
+    if (filterParams) {
+      filter = filterParams;
+    }
+
+    if (params.value != '') {
+      filter =
+        " AND (UPPER(GI1_COD) LIKE UPPER('%" +
+        params.value +
+        "%') OR " +
+        " UPPER(GI1_DESCRI) LIKE UPPER('%" +
+        params.value +
+        "%') ) ";
+    }
+
+    httpParams = httpParams.append('filter', filter);
+
+    // return of(items);
+    return this.apiService.get(this.endpoint, httpParams).pipe(
+      map((response: any) => {
+        const items: FilterComboStruct[] = [];
+        let hasNext = true;
+
+        response.Localidade.forEach((resource: any) => {
+          let itemReturn: FilterComboStruct = new FilterComboStruct();
+
+          itemReturn.value = resource.codLocal;
+          itemReturn.label = resource.descLocal;
+          itemReturn.desc = resource.codMuni;
+
+          items.push(itemReturn);
+
+          if (params.page * params.pageSize >= response.total) {
+            hasNext = false;
+          }
+        });
+        return items;
+      })
+    );
+  }
+
+  getObjectByValue(
+    value: string | number,
+    filterParams?: any
+  ): Observable<PoComboOption> {
+    let params = new HttpParams();
+
+    let filter: string = ``;
+
+    params = params.append('FILTER', filter);
+
+    return this.apiService.get(this.endpoint, params).pipe(
+      map((response: any) => {
+        let itemReturn = new FilterComboStruct();
+
+        itemReturn.value = response.codLocal;
+        itemReturn.label = response.descLocal;
+        itemReturn.desc = response.codMuni;
+
+        return itemReturn;
+      })
+    );
+  }
+}

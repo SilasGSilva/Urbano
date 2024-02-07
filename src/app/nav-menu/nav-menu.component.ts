@@ -40,7 +40,7 @@ export class NavMenuComponent {
           action: this.navigate.bind(this, '/tarifas'),
         },
         { label: 'Linhas' },
-        { label: 'Seções' },
+        { label: 'Seções', action: this.navigate.bind(this, '/secoes') },
         { label: 'Validadores' },
         { label: 'Roleta' },
         { label: 'Frota' },
