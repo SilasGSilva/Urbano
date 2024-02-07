@@ -58,9 +58,7 @@ export class MatriculaComboService implements PoComboFilter {
 	private endpoint: string = 'FRETAMENTOURBANO/matricula';
 
 	constructor(
-		private apiService: ApiService,
-		private route: ActivatedRoute
-	) { }
+		private apiService: ApiService	) { }
 
 	getFilteredData(
 		params: any,
@@ -79,15 +77,6 @@ export class MatriculaComboService implements PoComboFilter {
 				"%'OR UPPER(RA_NOME) LIKE '%" +
 				params.value +
 				"%'";
-
-		filter =
-			"UPPER(RA_MAT) LIKE '%" +
-			params.value +
-			"%' OR UPPER(RA_CIC) LIKE '%" +
-			params.value +
-			"%'OR UPPER(RA_NOME) LIKE '%" +
-			params.value +
-			"%'";
 
 		httpParams = httpParams.append('FILTER', filter);
 		httpParams = httpParams.append('FIELDEMPTY', true);
