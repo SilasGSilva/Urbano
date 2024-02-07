@@ -219,13 +219,14 @@ export class SecoesComponent {
           ' - ' +
           resource.getModel('GI1MASTER').getValue('GI1_DESCRI');
 
-        secoes.linhas = resource.getModel('GI1MASTER').getValue('GI1_DESCRI');
+        secoes.linhas = [
+          `${resource.getModel('GI1MASTER').getValue('GI1_DESCRI')}`,
+          `${resource.getModel('GI1MASTER').getValue('GI1_DESCRI')}`,
+        ];
 
-        secoes.direction = resource
-          .getModel('GI1MASTER')
-          .getValue('GI1_DESCRI');
+        secoes.sentido = resource.getModel('GI1MASTER').getValue('GI1_DESCRI');
 
-        secoes.status = resource.getModel('GI1MASTER').getValue('GI1_DESCRI');
+        secoes.status = 1;
 
         secoes.otherActions = ['edit', 'view'];
 

@@ -11,6 +11,8 @@ import { TarifasComponent } from './cadastros/tarifas/tarifas.component';
 import { DetTarifasComponent } from './cadastros/tarifas/det-tarifas/det-tarifas.component';
 import { ViewTarifasComponent } from './cadastros/tarifas/view-tarifas/view-tarifas.component';
 import { SecoesComponent } from './cadastros/secoes/secoes.component';
+import { DetSecoesComponent } from './cadastros/secoes/det-secoes/det-secoes.component';
+import { ViewSecoesComponent } from './cadastros/secoes/view-secoes/view-secoes.component';
 
 const routes: Routes = [
   {
@@ -63,14 +65,14 @@ const routes: Routes = [
   { path: 'tarifas/detTarifas/:acao', component: DetTarifasComponent },
   { path: 'tarifas/viewTarifas/:filial/:pk', component: ViewTarifasComponent },
 
-  // ##### SECOES #####
+  // ##### SEÇÕES #####
   { path: 'secoes', component: SecoesComponent },
-  // {
-  //   path: 'secoes/detSecoes/:acao/:filial/:pk',
-  //   component: DetSecoesComponent,
-  // },
-  // { path: 'secoes/detSecoes/:acao', component: DetSecoesComponent },
-  // { path: 'secoes/viewSecoes/:filial/:pk', component: ViewSecoesComponent },
+  {
+    path: 'secoes/detSecoes/:acao/:filial/:pk',
+    component: DetSecoesComponent,
+  },
+  { path: 'secoes/detSecoes/:acao', component: DetSecoesComponent },
+  { path: 'secoes/viewSecoes/:filial/:pk', component: ViewSecoesComponent },
 ];
 
 @NgModule({

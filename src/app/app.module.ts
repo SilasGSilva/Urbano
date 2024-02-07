@@ -18,6 +18,8 @@ import { TarifasComponent } from './cadastros/tarifas/tarifas.component';
 import { DetTarifasComponent } from './cadastros/tarifas/det-tarifas/det-tarifas.component';
 import { ViewTarifasComponent } from './cadastros/tarifas/view-tarifas/view-tarifas.component';
 import { SecoesComponent } from './cadastros/secoes/secoes.component';
+import { DetSecoesComponent } from './cadastros/secoes/det-secoes/det-secoes.component';
+import { ViewSecoesComponent } from './cadastros/secoes/view-secoes/view-secoes.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +37,8 @@ import { SecoesComponent } from './cadastros/secoes/secoes.component';
     DetTarifasComponent,
     ViewTarifasComponent,
     SecoesComponent,
+    DetSecoesComponent,
+    ViewSecoesComponent,
   ],
   imports: [
     BrowserModule,

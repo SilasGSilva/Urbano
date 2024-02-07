@@ -7,16 +7,21 @@ export const ColumnsSecao: Array<PoTableColumn> = [
   { property: 'codTariff', label: 'cod', sortable: false, visible: false },
   { property: 'labelSecao', label: 'Seção' },
   {
-    property: 'lines',
+    property: 'linhas',
     label: 'Linhas',
   },
   {
-    property: 'direction',
+    property: 'sentido',
     label: 'Sentido',
   },
   {
     property: 'status',
     label: 'Status',
+    type: 'label',
+    labels: [
+      { value: 1, label: 'Ativa', textColor: '#0F5236', color: '#DEF7ED' },
+      { value: 2, label: 'Inativa', textColor: '#72211D', color: '#F6E6E5' },
+    ],
   },
   {
     property: 'otherActions',
@@ -48,9 +53,9 @@ export class SecoesModel {
   codSecao: string = '';
   descSecao: string = '';
   labelSecao: string = '';
-  linhas?: string = '';
-  status?: string = '';
-  direction?: string = '';
-  otherActions?: Array<string>;
+  linhas: Array<any> = [];
+  status: number = 2;
+  sentido: string = '';
+  otherActions: Array<string>;
   index?: number;
 }
