@@ -10,6 +10,7 @@ import { DetFormaPagamentoComponent } from './cadastros/formas-de-pagamento/det-
 import { TarifasComponent } from './cadastros/tarifas/tarifas.component';
 import { DetTarifasComponent } from './cadastros/tarifas/det-tarifas/det-tarifas.component';
 import { ViewTarifasComponent } from './cadastros/tarifas/view-tarifas/view-tarifas.component';
+import { ViewLocalidadesComponent } from './cadastros/localidades/view-localidades/view-localidades.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,7 @@ const routes: Routes = [
     path: 'localidades/detLocalidades/:acao/:id',
     component: DetLocalidadesComponent,
   },
+  { path: 'localidades/viewLocalidades/:acao/:id', component: ViewLocalidadesComponent },
   { path: 'formas-de-pagamento', component: FormasDePagamentoComponent },
   {
     path: 'formas-de-pagamento/det-forma-pagamento/:acao',
