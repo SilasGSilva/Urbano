@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import {
   PoBreadcrumb,
-  PoNotificationService,
   PoPageAction,
   PoTableColumn,
   PoTableColumnSort,
@@ -22,17 +21,8 @@ import {
   selector: 'app-formas-de-pagamento',
   templateUrl: './formas-de-pagamento.component.html',
   styleUrls: ['./formas-de-pagamento.component.css'],
-  providers: [UtilsService],
 })
 export class FormasDePagamentoComponent {
-  constructor(
-    private poNotification: PoNotificationService,
-    private _router: Router,
-    private _utilsService: UtilsService,
-    private fwModel: FwProtheusModel
-  ) {
-    this.setColProperties();
-  }
 
   columns: Array<PoTableColumn> = PaymentMethodColumns;
   listPagamento: Array<PaymentMethodModel> = [];
@@ -40,7 +30,8 @@ export class FormasDePagamentoComponent {
   nNextPage: number = 1;
   nPageSize: number = 10;
   nRegIndex: number = 1;
-  nHeightMonitor: number = window.innerHeight * 0.7;
+  nHeightMonitor: number =
+    window.innerHeight * 0.7;
 
   isTableLoading: boolean = false;
   isShowMoreDisabled: boolean = false;
@@ -53,20 +44,26 @@ export class FormasDePagamentoComponent {
       },
     },
   ];
-
+  
   public breadcrumb: PoBreadcrumb = {
     items: [
       { label: 'Fretamento Urbano', link: '/' },
       { label: 'Formas de pagamento' },
     ],
   };
-
+  constructor(
+    private _router: Router,
+    private _utilsService: UtilsService,
+    private fwModel: FwProtheusModel
+  ) {
+    this.setColProperties();
+  }
   ngOnInit() {
     this.getFormaPagamento();
   }
 
   setColProperties() {
-    this.columns.forEach(col => {
+    this.columns.forEach((col) => {
       if (
         col.property === 'otherActions' &&
         col.icons &&
@@ -82,10 +79,7 @@ export class FormasDePagamentoComponent {
    * @param row linha selecionada
    */
   incluir() {
-    this._router.navigate([
-      `formas-de-pagamento/det-forma-pagamento`,
-      'incluir',
-    ]);
+    this._router.navigate([`formas-de-pagamento/det-forma-pagamento`, 'incluir']);
   }
 
   /**
@@ -101,64 +95,83 @@ export class FormasDePagamentoComponent {
     this.listPagamento = result;
   }
 
-  getFormaPagamento() {
-    let params = new HttpParams();
-    this.isTableLoading = true;
+  	/*******************************************************************************
+	 * @name getFormaPagamento
+	 * @description Responsavel por trazer os dados da forma de pagamento e listar os dados
+	 * @author   Serviços | Breno Gomes
+	 * @since    2024
+	 * @version  v2
+	 *******************************************************************************/
+	getFormaPagamento() {
+		let params = new HttpParams();
+		this.isTableLoading = true;
+		
+		if (this.nPageSize.toString() != '')
+			params = params.append('COUNT', this.nPageSize.toString());
+		if (this.nRegIndex.toString() != '')
+			params = params.append('STARTINDEX', this.nRegIndex.toString());
 
-    //Caso haja filtro, não realizar paginação
+		this.fwModel.setEndPoint('GTPU001/');
 
-    if (this.nPageSize.toString() != '')
-      params = params.append('COUNT', this.nPageSize.toString());
-    if (this.nRegIndex.toString() != '')
-      params = params.append('STARTINDEX', this.nRegIndex.toString());
+		this.fwModel.setVirtualField(true);
+		this.fwModel.get(params).subscribe(() => {
+			this.fwModel.resources.forEach((resource: Resource) => {
+				let paymentMethod = new PaymentMethodModel();
+			
+				paymentMethod.id = resource.pk;
+				paymentMethod.codPayment = resource
+				.getModel('H6RMASTER')
+				.getValue('H6R_CODIGO');
 
-    this.fwModel.setEndPoint('GTPU001/');
+				paymentMethod.labelPayment =
+				resource.getModel('H6RMASTER').getValue('H6R_CODIGO') +
+				' - ' +
+				resource.getModel('H6RMASTER').getValue('H6R_DESCRI');
 
-    this.fwModel.setVirtualField(true);
-    this.fwModel.get(params).subscribe(() => {
-      this.fwModel.resources.forEach((resource: Resource) => {
-        let paymentMethod = new PaymentMethodModel();
+				paymentMethod.descPayment = resource
+				.getModel('H6RMASTER')
+				.getValue('H6R_DESCRI');
 
-        paymentMethod.id = resource.pk;
-        paymentMethod.codPayment = resource
-          .getModel('H6RMASTER')
-          .getValue('H6R_CODIGO');
+        		paymentMethod.otherActions = ['editar'];
+				this.listPagamento = [...this.listPagamento, paymentMethod];
+				this.isTableLoading = false;
+			});
+			console.log(this.listPagamento)
+			this.setShowMore(this.fwModel.total);
+		});
+	}
+	
+	/*******************************************************************************
+	 * @name setShowMore
+	 * @description Responsavel pelo controle do carregar mais
+	 * @param total numero total de cadastro de forma de pagamento
+	 * @author   Serviços | Levy Santos
+	 * @since    2024
+	 * @version  v1
+	 *******************************************************************************/
+	setShowMore(total: number) {
+		this.isTableLoading = false;
+		if (this.nRegIndex === 1) {
+			this.nRegIndex = this.nPageSize + 1;
+		} else {
+			this.nRegIndex += this.nPageSize;
+		}
 
-        paymentMethod.labelPayment =
-          resource.getModel('H6RMASTER').getValue('H6R_CODIGO') +
-          ' - ' +
-          resource.getModel('H6RMASTER').getValue('H6R_DESCRI');
-
-        paymentMethod.descPayment = resource
-          .getModel('H6RMASTER')
-          .getValue('H6R_DESCRI');
-
-        paymentMethod.otherActions = ['editar'];
-        this.listPagamento = [...this.listPagamento, paymentMethod];
-        this.isTableLoading = false;
-      });
-      this.setShowMore(this.fwModel.total);
-    });
+		if (this.nRegIndex <= total) {
+			this.isShowMoreDisabled = false;
+		} else {
+			this.isShowMoreDisabled = true;
+		}
   }
-  /**
-   * setShowMore - Responsavel pelo controle do carregar mais
-   * @param total numero total de cadastro de forma de pagamento
-   */
-  setShowMore(total: number) {
-    this.isTableLoading = false;
-    if (this.nRegIndex === 1) {
-      this.nRegIndex = this.nPageSize;
-    } else {
-      this.nRegIndex += this.nPageSize;
-    }
-
-    if (this.nRegIndex <= total) {
-      this.isShowMoreDisabled = false;
-    } else {
-      this.isShowMoreDisabled = true;
-    }
-  }
-
+   /*******************************************************************************
+   * @name actionShowMore
+   * @description Função responsável por abrir a tela de edição da linha
+   * selecionada
+   * @param row Linha qual foi clicada
+   * @author   Serviços | Levy Santos
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
   actionShowMore() {
     this.nNextPage++;
     // se for clicado pela 4a vez carrega o restante dos dados
@@ -180,10 +193,7 @@ export class FormasDePagamentoComponent {
    * @version  v1
    *******************************************************************************/
   editRow(row: any) {
-    this._router.navigate([
-      `formas-de-pagamento/det-forma-pagamento`,
-      'editar',
-      row.id,
-    ]);
+
+    this._router.navigate([`formas-de-pagamento/det-forma-pagamento`,"editar", row.id]);
   }
 }
