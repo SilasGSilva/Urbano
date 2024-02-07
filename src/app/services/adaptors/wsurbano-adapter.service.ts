@@ -270,6 +270,7 @@ export class comboFormService implements PoComboFilter {
 		if (typeof filterParams === 'boolean' && true) {
 
 			httpParams = httpParams.set('lUf', filterParams);
+
 			if (params.value != '') {
 				filter = (
 					" AND (UPPER(CC2_EST) LIKE UPPER('%" + params.value + "%')) "
@@ -285,12 +286,12 @@ export class comboFormService implements PoComboFilter {
 			if (params.value != '') {
 				if (filter != '') {
 					filter += (
-						" AND (UPPER(CC2_MUN) LIKE UPPER('%" + params.value + "')) "
+						" AND (UPPER(CC2_MUN) LIKE UPPER('" + params.value + "%')) "
 					);
 
 				} else {
 					filter = (
-						" AND (UPPER(CC2_MUN) LIKE UPPER('%" + params.value + "')) "
+						" AND (UPPER(CC2_MUN) LIKE UPPER('" + params.value + "%')) "
 					);
 				};
 			}

@@ -60,9 +60,13 @@ export class LocalidadesComponent implements OnInit {
 		this.getLocalidades();
 	}
 
-	/**
-	 * Seta as demais propriedades das colunas
-	 */
+	/*******************************************************************************
+     * @name setColProperties
+     * @description Seta as demais propriedades das colunas
+     * @author   Serviços | Silas Gomes
+     * @since       2024
+     * @version v1
+     *******************************************************************************/
 	setColProperties() {
 		this.itemsColumns.forEach(col => {
 			if (col.property === "outrasAcoes" && col.icons && col.icons.length >= 0) {
@@ -72,9 +76,13 @@ export class LocalidadesComponent implements OnInit {
 		});
 	}
 
-	/**
-	 * Ação do combo, ao selecionar o registro ele busca novamente
-	 */
+	/*******************************************************************************
+     * @name setFilters
+     * @description Ação do combo, ao selecionar o registro ele busca novamente
+     * @author   Serviços | Silas Gomes
+     * @since       2024
+     * @version v1
+     *******************************************************************************/
 	setFilters(event: any) {
 		this.listLocalidade = [];
 
@@ -129,11 +137,14 @@ export class LocalidadesComponent implements OnInit {
 
 	}
 
-	/**
-	 * @name getLocalidades
-	 * @description Busca dados para o grid de localidades
+	/*******************************************************************************
+     * @name getLocalidades
+     * @description Busca dados para o grid de localidades
+     * @author   Serviços | Silas Gomes
 	 * @param showMore indica se a função foi chamada via botão show more
-	 */
+     * @since       2024
+     * @version v1
+     *******************************************************************************/
 	getLocalidades(showMore?: boolean) {
 
 		let params = new HttpParams();
@@ -175,11 +186,15 @@ export class LocalidadesComponent implements OnInit {
 		})
 
 	}
-	/**
-	 * Incrementa o index de paginação da tela e
+	
+	/*******************************************************************************
+     * @name setShowMore
+     * @description Incrementa o index de paginação da tela e
 	 * Seta se o botão de carregar mais continua habilitado ou não
-	 * @param total Total de andamentos
-	 */
+     * @author   Serviços | Silas Gomes
+     * @since       2024
+     * @version v1
+     *******************************************************************************/
 	setShowMore(total: number) {
 		this.isLoading = false;
 		if (this.nRegIndex === 1) {
@@ -196,10 +211,14 @@ export class LocalidadesComponent implements OnInit {
 		}
 	}
 
-	/**
-	 * Ação do botão Carregar mais resultados
+	/*******************************************************************************
+     * @name actionShowMore
+     * @description Ação do botão Carregar mais resultados
 	 * Se for clicado pela 4ª vez carrega o restante dos dados
-	 */
+     * @author   Serviços | Silas Gomes
+     * @since       2024
+     * @version v1
+     *******************************************************************************/
 	actionShowMore() {
 		this.nNextPage++;
 		// se for clicado pela 4a vez carrega o restante dos dados
@@ -210,32 +229,46 @@ export class LocalidadesComponent implements OnInit {
 		this.getLocalidades();
 	}
 
-	/**
-	 * Redireciona para a página de edição
-	 * @param row linha selecionada
-	 */
+	/*******************************************************************************
+     * @name editar
+     * @description Redireciona para a página de edição
+     * @author   Serviços | Silas Gomes
+     * @since       2024
+     * @version v1
+     *******************************************************************************/
 	editar(item: any) {
 		this.router.navigate(["./detLocalidades", "editar", item.pk], { relativeTo: this.route });
 	}
-	/**
-	 * Redireciona para a página de visualização
-	 * @param row linha selecionada
-	 */
+
+	/*******************************************************************************
+     * @name visualizar
+     * @description Redireciona para a página de visualização
+     * @author   Serviços | Silas Gomes
+     * @since       2024
+     * @version v1
+     *******************************************************************************/
 	visualizar(item: any) {
 		this.router.navigate(["./viewLocalidades", "visualizar", item.pk], { relativeTo: this.route });
 	}
-	/**
-	 * Redireciona para a página de inclusao
-	 * @param row linha selecionada
-	 */
+
+	/*******************************************************************************
+     * @name incluir
+     * @description Redireciona para o formulário de inclusão
+     * @author   Serviços | Silas Gomes
+     * @since       2024
+     * @version v1
+     *******************************************************************************/
 	incluir() {
 		this.router.navigate(["./detLocalidades", "incluir"], { relativeTo: this.route });
 	}
 
-	/**
-	 * Ordena colunas da tabela de crescente para decrescente
-	 * @param event  
-	 */
+	/*******************************************************************************
+     * @name editar
+     * @description Ordena colunas da tabela de crescente para decrescente
+     * @author   Serviços | Silas Gomes
+     * @since       2024
+     * @version v1
+     *******************************************************************************/
 	sortTable(event: PoTableColumnSort) {
 		const result = [...this.listLocalidade];
 

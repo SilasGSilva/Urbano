@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { PoBreadcrumb, PoDynamicViewField, PoPageAction } from '@po-ui/ng-components';
+import { PoBreadcrumb, PoDynamicViewField, PoNotificationService, PoPageAction } from '@po-ui/ng-components';
 import { ColunaDados } from './view-localidades.struct';
 import { FwProtheusModel } from 'src/app/services/models/fw-protheus.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpParams } from '@angular/common/http';
 
 @Component({
 	selector: 'app-view-localidades',
@@ -29,6 +28,7 @@ export class ViewLocalidadesComponent {
 			{ label: '' }]
 	};
 	constructor(
+		public poNotification: PoNotificationService,
 		private fwModel: FwProtheusModel,
 		private route: ActivatedRoute,
 		private router: Router,
@@ -40,12 +40,17 @@ export class ViewLocalidadesComponent {
 		this.getLocalidade()
 	}
 
-	/**
-	 * Get Localidade
-	 */
+	/*******************************************************************************
+	 * @name getLocalidade
+	 * @description Carrega as informações para serem apresentadas na tela
+	 * @author   Serviços | Silas Gomes
+	 * @since       2024
+	 * @version v1
+	 *******************************************************************************/
 	async getLocalidade() {
+
 		this.isHideLoadingTela = false;
-		let params = new HttpParams();
+
 		this.fwModel.reset();
 		this.fwModel.setEndPoint('GTPA001/' + this.pkLocalidade)
 		this.fwModel.setVirtualField(true)
@@ -81,7 +86,9 @@ export class ViewLocalidadesComponent {
 					status
 				}
 			},
-			error(err) {
+			error: (error) => {
+				this.poNotification.error(error.error.errorMessage);
+				this.fwModel.reset();
 			},
 			complete: () => {
 				this.isHideLoadingTela = true;
@@ -90,17 +97,24 @@ export class ViewLocalidadesComponent {
 		})
 	}
 
-	/**
-	* Redireciona para a página de edição
-	* @param row linha selecionada
-	*/
+	/*******************************************************************************
+	 * @name editar
+	 * @description Redireciona para a página de edição
+	 * @author   Serviços | Silas Gomes
+	 * @since       2024
+	 * @version v1
+	 *******************************************************************************/
 	editar() {
 		this.router.navigateByUrl(`localidades/detLocalidades/editar/${this.pkLocalidade}`);
 	}
 
-	/**
-	* realiza o retorno para a tela de localidade
-	*/
+	/*******************************************************************************
+	 * @name close
+	 * @description Redireciona para a página incial de localidades
+	 * @author   Serviços | Silas Gomes
+	 * @since       2024
+	 * @version v1
+	 *******************************************************************************/
 	close() {
 		this.fwModel.reset();
 		this.router.navigate(['./localidades']);
