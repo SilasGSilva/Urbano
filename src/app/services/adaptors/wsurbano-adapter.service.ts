@@ -1,8 +1,14 @@
 import { Injectable } from '@angular/core';
-import { PoComboFilter, PoComboOption } from '@po-ui/ng-components';
-import { Observable, map } from 'rxjs';
+import {
+  PoComboFilter,
+  PoComboOption,
+  PoLookupFilter,
+  PoLookupFilteredItemsParams,
+  PoLookupResponseApi,
+} from '@po-ui/ng-components';
+import { Observable, map, of } from 'rxjs';
 import { ApiService } from '../api.service';
-import { HttpParams } from '@angular/common/http';
+import { HttpParams, HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 
 /**
@@ -16,98 +22,125 @@ import { ActivatedRoute } from '@angular/router';
  * Ao alterar essa classe, verificar os locais aonde é utilizado o adaptor.
  */
 export class AdaptorReturnStruct implements PoComboOption {
-	value: string = '';
-	label: string = '';
-	cpf: string = '';
+  value: string = '';
+  label: string = '';
+  cpf: string = '';
 }
 
 export class FilterComboStruct implements PoComboOption {
-	label: string = '';
-	value: string = '';
-	desc: string = '';
+  label: string = '';
+  value: string = '';
+  desc: string = '';
 }
 
 export class EstadoComboStruct implements PoComboOption {
-	label: string = '';
-	value: string = '';
-	uf: string = '';
+  label: string = '';
+  value: string = '';
+  uf: string = '';
+}
+
+export class TarifaComboStruct implements PoComboOption {
+  label: string = '';
+  value: string = '';
+  desc: string = '';
+}
+
+export class OrgaoConcessorPoLookUpService implements PoComboOption {
+  label: string = '';
+  value: string = '';
+  desc: string = '';
 }
 
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root',
 })
 export class MatriculaComboService implements PoComboFilter {
+  private endpoint: string = 'FRETAMENTOURBANO/matricula';
 
-	private endpoint: string = 'FRETAMENTOURBANO/matricula'
+  constructor(
+    private apiService: ApiService,
+    private route: ActivatedRoute
+  ) {}
 
-	constructor(private apiService: ApiService,
-		private route: ActivatedRoute,) { }
+  getFilteredData(
+    params: any,
+    filterParams?: any
+  ): Observable<AdaptorReturnStruct[]> {
+    let httpParams = new HttpParams();
 
-	getFilteredData(params: any, filterParams?: any): Observable<AdaptorReturnStruct[]> {
+    let filter: string = '';
 
-		let httpParams = new HttpParams();
+    if (params.value != '')
+      filter =
+        "AND UPPER(RA_MAT) LIKE '%" +
+        params.value +
+        "%' OR UPPER(RA_CIC) LIKE '%" +
+        params.value +
+        "%'OR UPPER(RA_NOME) LIKE '%" +
+        params.value +
+        "%'";
 
-		let filter: string = '';
+    filter =
+      "UPPER(RA_MAT) LIKE '%" +
+      params.value +
+      "%' OR UPPER(RA_CIC) LIKE '%" +
+      params.value +
+      "%'OR UPPER(RA_NOME) LIKE '%" +
+      params.value +
+      "%'";
 
-		if (params.value != '')
-			filter = "AND UPPER(RA_MAT) LIKE '%" + params.value + "%' OR UPPER(RA_CIC) LIKE '%" + params.value + "%'OR UPPER(RA_NOME) LIKE '%" + params.value + "%'"
+    httpParams = httpParams.append('FILTER', filter);
+    httpParams = httpParams.append('FIELDEMPTY', true);
+    httpParams = httpParams.append('FIELDVIRTUAL', true);
 
-		httpParams = httpParams.append('FILTER', filter);
-		httpParams = httpParams.append('FIELDEMPTY', true)
-		httpParams = httpParams.append('FIELDVIRTUAL', true)
+    return this.apiService.get(this.endpoint, httpParams).pipe(
+      map((response: any) => {
+        const items: AdaptorReturnStruct[] = [];
+        let hasNext = true;
 
-		return this.apiService.get(this.endpoint, httpParams).pipe(map((response: any) => {
+        response.Matricula.forEach((resource: any) => {
+          let itemReturn: AdaptorReturnStruct = new AdaptorReturnStruct();
 
-			const items: AdaptorReturnStruct[] = [];
-			let hasNext = true;
+          itemReturn.value = resource.matricula;
+          itemReturn.label = resource.nome;
+          itemReturn.cpf = resource.cic;
 
-			response.Matricula.forEach((resource: any) => {
+          items.push(itemReturn);
 
-				let itemReturn: AdaptorReturnStruct = new AdaptorReturnStruct();
+          if (params.page * params.pageSize >= response.total) {
+            hasNext = false;
+          }
+        });
 
-				itemReturn.value = resource.matricula
-				itemReturn.label = resource.nome
-				itemReturn.cpf = resource.cic
+        return items;
+      })
+    );
+  }
 
-				items.push(itemReturn)
+  getObjectByValue(
+    value: string | number,
+    filterParams?: any
+  ): Observable<PoComboOption> {
+    let params = new HttpParams();
 
-				if ((params.page * params.pageSize) >= response.total) {
+    let filter: string = `AND RA_MAT='${value}'`;
 
-					hasNext = false;
+    if (filterParams != undefined) {
+      filter += ' AND ' + filterParams;
+    }
+    params = params.append('FILTER', filter);
 
-				}
+    return this.apiService.get(this.endpoint, params).pipe(
+      map((response: any) => {
+        let itemReturn = new AdaptorReturnStruct();
+        itemReturn.value = response.Matricula[0].matricula;
+        itemReturn.label = response.Matricula[0].nome;
+        itemReturn.cpf = response.Matricula[0].cic;
 
-			})
-
-			return items
-
-		}))
-
-	}
-
-	getObjectByValue(value: string | number, filterParams?: any): Observable<PoComboOption> {
-
-		let params = new HttpParams();
-		let filter: string = `AND RA_MAT='${value}'`;
-
-		if (filterParams != undefined) {
-			filter += ' AND ' + filterParams
-		}
-		params = params.append('FILTER', filter)
-
-		return this.apiService.get(this.endpoint, params).pipe(map((response: any) => {
-
-			let itemReturn = new AdaptorReturnStruct();
-
-			itemReturn.value = response.Matricula[0].matricula
-			itemReturn.label = response.Matricula[0].nome
-			itemReturn.cpf = response.Matricula[0].cic
-
-			return itemReturn
-
-		}))
-
-	}
+        return itemReturn;
+      })
+    );
+  }
 }
 
 /**
@@ -115,71 +148,73 @@ export class MatriculaComboService implements PoComboFilter {
  * Utilizado no combo de Local
  */
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root',
 })
 export class localComboService implements PoComboFilter {
+  private endpoint: string = 'FRETAMENTOURBANO/local';
 
-	private endpoint: string = 'FRETAMENTOURBANO/local'
+  constructor(private apiService: ApiService) {}
 
-	constructor(private apiService: ApiService) { }
+  getFilteredData(
+    params: any,
+    filterParams?: any
+  ): Observable<FilterComboStruct[]> {
+    let httpParams = new HttpParams();
+    let filter: string = '';
 
-	getFilteredData(params: any, filterParams?: any): Observable<FilterComboStruct[]> {
+    if (filterParams) {
+      filter = filterParams;
+    }
 
-		let httpParams = new HttpParams();
-		let filter: string = '';
+    if (params.value != '') {
+      filter =
+        " AND (UPPER(GI1_COD) LIKE UPPER('%" +
+        params.value +
+        "%') OR " +
+        " UPPER(GI1_DESCRI) LIKE UPPER('%" +
+        params.value +
+        "%') ) ";
+    }
 
-		if (filterParams) {
-			filter = filterParams
-		}
+    httpParams = httpParams.append('filter', filter);
 
-		if (params.value != '') {
-			filter = " AND (UPPER(GI1_COD) LIKE UPPER('%" + params.value + "%') OR " +
-				" UPPER(GI1_DESCRI) LIKE UPPER('%" + params.value + "%') ) "
-		}
+    return this.apiService.get(this.endpoint, httpParams).pipe(
+      map((response: any) => {
+        const items: FilterComboStruct[] = [];
+        let hasNext = true;
 
-		httpParams = httpParams.append('filter', filter);
+        response.Localidade.forEach((resource: any) => {
+          let itemReturn: FilterComboStruct = new FilterComboStruct();
+          itemReturn.value = resource.codLocal;
+          itemReturn.label = resource.descLocal;
+          itemReturn.desc = resource.codMuni;
 
-		return this.apiService.get(this.endpoint, httpParams).pipe(map((response: any) => {
+          items.push(itemReturn);
+        });
+        return items;
+      })
+    );
+  }
 
-			const items: FilterComboStruct[] = [];
+  getObjectByValue(): Observable<PoComboOption> {
+    let params = new HttpParams();
 
-			response.Localidade.forEach((resource: any) => {
+    let filter: string = ``;
 
-				let itemReturn: FilterComboStruct = new FilterComboStruct();
+    params = params.append('FILTER', filter);
 
-				itemReturn.value = resource.codLocal
-				itemReturn.label = resource.descLocal
-				itemReturn.desc = resource.codMuni
+    return this.apiService.get(this.endpoint, params).pipe(
+      map((response: any) => {
+        let itemReturn = new FilterComboStruct();
 
-				items.push(itemReturn)
+        itemReturn.value = response.codLocal;
+        itemReturn.label = response.descLocal;
+        itemReturn.desc = response.codMuni;
 
-			})
-			return items
-		}))
-
-	}
-
-	getObjectByValue(): Observable<PoComboOption> {
-
-		let params = new HttpParams();
-
-		let filter: string = ``;
-
-		params = params.append('FILTER', filter)
-
-		return this.apiService.get(this.endpoint, params).pipe(map((response: any) => {
-
-			let itemReturn = new FilterComboStruct();
-
-			itemReturn.value = response.codLocal
-			itemReturn.label = response.descLocal
-			itemReturn.desc = response.codMuni
-
-			return itemReturn
-
-		}))
-
-	}
+        return itemReturn;
+      })
+    );
+  }
 }
 
 /**
@@ -187,65 +222,68 @@ export class localComboService implements PoComboFilter {
  * Utilizado no combo de municipio
  */
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root',
 })
 export class muniComboService implements PoComboFilter {
+  private endpoint: string = 'FRETAMENTOURBANO/municipio';
 
-	private endpoint: string = 'FRETAMENTOURBANO/municipio'
+  constructor(private apiService: ApiService) {}
 
-	constructor(private apiService: ApiService) { }
+  getFilteredData(
+    params: any,
+    filterParams: any
+  ): Observable<FilterComboStruct[]> {
+    let httpParams = new HttpParams();
+    let filter: string = '';
 
-	getFilteredData(params: any, filterParams: any): Observable<FilterComboStruct[]> {
+    if (filterParams) {
+      filter = filterParams;
+    }
 
-		let httpParams = new HttpParams();
-		let filter: string = '';
+    if (params.value != '')
+      filter =
+        " AND (UPPER(GI1_CDMUNI) LIKE UPPER('%" +
+        params.value +
+        "%') OR " +
+        " UPPER(GI1_DSMUNI) LIKE UPPER('%" +
+        params.value +
+        "%') ) ";
 
-		if (filterParams) {
-			filter = filterParams;
-		}
+    httpParams = httpParams.append('FILTER', filter);
 
-		if (params.value != '')
-			filter = " AND (UPPER(GI1_CDMUNI) LIKE UPPER('%" + params.value + "%') OR " +
-				" UPPER(GI1_DSMUNI) LIKE UPPER('%" + params.value + "%') ) "
+    return this.apiService.get(this.endpoint, httpParams).pipe(
+      map((response: any) => {
+        const items: FilterComboStruct[] = [];
+        let hasNext = true;
 
-		httpParams = httpParams.append('FILTER', filter);
+        response.Municipio.forEach((resource: any) => {
+          let itemReturn: FilterComboStruct = new FilterComboStruct();
 
-		return this.apiService.get(this.endpoint, httpParams).pipe(map((response: any) => {
+          itemReturn.value = resource.codMuni;
+          itemReturn.label = resource.descMuni;
+          itemReturn.desc = resource.uf;
 
-			const items: FilterComboStruct[] = [];
+          items.push(itemReturn);
+        });
+        return items;
+      })
+    );
+  }
 
-			response.Municipio.forEach((resource: any) => {
+  getObjectByValue(): Observable<PoComboOption> {
+    let params = new HttpParams();
+    return this.apiService.get(this.endpoint, params).pipe(
+      map(() => {
+        let itemReturn = new AdaptorReturnStruct();
 
-				let itemReturn: FilterComboStruct = new FilterComboStruct();
+        itemReturn.value = '';
+        itemReturn.label = '';
+        itemReturn.cpf = '';
 
-				itemReturn.value = resource.codMuni
-				itemReturn.label = resource.descMuni
-				itemReturn.desc = resource.uf
-
-				items.push(itemReturn)
-
-			})
-			return items
-		}))
-
-	}
-
-	getObjectByValue(): Observable<PoComboOption> {
-
-		let params = new HttpParams();
-		return this.apiService.get(this.endpoint, params).pipe(map(() => {
-
-			let itemReturn = new AdaptorReturnStruct();
-
-			itemReturn.value = ''
-			itemReturn.label = ''
-			itemReturn.cpf = ''
-
-			return itemReturn
-
-		}))
-
-	}
+        return itemReturn;
+      })
+    );
+  }
 }
 
 /**
@@ -253,114 +291,332 @@ export class muniComboService implements PoComboFilter {
  * Utilizado no combo de municipio
  */
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root',
 })
 export class comboFormService implements PoComboFilter {
+  private endpoint: string = 'FRETAMENTOURBANO/estadoMun';
+  private filterUf: string = '';
 
-	private endpoint: string = 'FRETAMENTOURBANO/estadoMun';
-	private filterUf: string = '';
+  constructor(private apiService: ApiService) {}
 
-	constructor(private apiService: ApiService) { }
+  getFilteredData(
+    params: any,
+    filterParams: any
+  ): Observable<EstadoComboStruct[]> {
+    let httpParams = new HttpParams();
+    let filter: string = '';
 
-	getFilteredData(params: any, filterParams: any): Observable<EstadoComboStruct[]> {
+    if (typeof filterParams === 'boolean' && true) {
+      httpParams = httpParams.set('lUf', filterParams);
+      if (params.value != '') {
+        filter = " AND (UPPER(CC2_EST) LIKE UPPER('%" + params.value + "%')) ";
+      }
+    } else {
+      if (filterParams) {
+        filter = filterParams;
+      }
 
-		let httpParams = new HttpParams();
-		let filter: string = '';
+      if (params.value != '') {
+        if (filter != '') {
+          filter +=
+            " AND (UPPER(CC2_MUN) LIKE UPPER('" + params.value + "%')) ";
+        } else {
+          filter = " AND (UPPER(CC2_MUN) LIKE UPPER('" + params.value + "%')) ";
+        }
+      }
+    }
 
-		if (typeof filterParams === 'boolean' && true) {
+    httpParams = httpParams.append('FILTER', filter);
 
-			httpParams = httpParams.set('lUf', filterParams);
+    return this.apiService.get(this.endpoint, httpParams).pipe(
+      map((response: any) => {
+        const items: EstadoComboStruct[] = [];
 
-			if (params.value != '') {
-				filter = (
-					" AND (UPPER(CC2_EST) LIKE UPPER('%" + params.value + "%')) "
-				)
-			};
+        response.EstadoMun.forEach((resource: any) => {
+          let itemReturn: EstadoComboStruct = new EstadoComboStruct();
 
-		} else {
+          if (typeof filterParams === 'boolean') {
+            itemReturn.value = resource.uf;
+            itemReturn.label = resource.uf;
+            itemReturn.uf = resource.uf;
+          } else {
+            itemReturn.value = resource.codigo;
+            itemReturn.label = resource.municipio;
+            itemReturn.uf = resource.uf;
 
-			if (filterParams) {
-				filter = filterParams;
-			}
+            itemReturn.value = resource.codMuni;
+            itemReturn.label = resource.descMuni;
+            itemReturn.uf = resource.uf;
+          }
+          items.push(itemReturn);
+        });
+        return items;
+      })
+    );
+  }
 
-			if (params.value != '') {
-				if (filter != '') {
-					filter += (
-						" AND (UPPER(CC2_MUN) LIKE UPPER('" + params.value + "%')) "
-					);
+  getObjectByValue(
+    value: string | number,
+    filterParams?: any
+  ): Observable<PoComboOption> {
+    let params = new HttpParams();
+    let filter: string = ``;
 
-				} else {
-					filter = (
-						" AND (UPPER(CC2_MUN) LIKE UPPER('" + params.value + "%')) "
-					);
-				};
-			}
-		}
+    if (typeof filterParams === 'boolean' && filterParams) {
+      params = params.set('lUf', filterParams);
+      filter = `AND(UPPER(CC2_EST) LIKE UPPER('%${value}'))`;
+    } else {
+      filter = `AND(UPPER(CC2_CODMUN) LIKE UPPER('%${value}') ${this.filterUf} `;
+    }
 
-		httpParams = httpParams.append('FILTER', filter);
+    params = params.append('FILTER', filter);
 
-		return this.apiService.get(this.endpoint, httpParams).pipe(map((response: any) => {
+    return this.apiService.get(this.endpoint, params).pipe(
+      map((response: any) => {
+        let itemReturn = new EstadoComboStruct();
 
-			const items: EstadoComboStruct[] = [];
+        if (typeof filterParams === 'boolean') {
+          itemReturn.value = response.EstadoMun[0].uf;
+          itemReturn.label = response.EstadoMun[0].uf;
+          itemReturn.uf = response.EstadoMun[0].uf;
+        } else {
+          itemReturn.value = response.EstadoMun[0].codigo;
+          itemReturn.label = response.EstadoMun[0].municipio;
+          itemReturn.uf = response.EstadoMun[0].uf;
+        }
 
-			response.EstadoMun.forEach((resource: any) => {
+        return itemReturn;
+      })
+    );
+  }
 
-				let itemReturn: EstadoComboStruct = new EstadoComboStruct();
+  setFilterUf(value: string) {
+    this.filterUf = value;
+  }
+}
 
-				if (typeof filterParams === 'boolean') {
-					itemReturn.value = resource.uf
-					itemReturn.label = resource.uf
-					itemReturn.uf = resource.uf
-				} else {
-					itemReturn.value = resource.codigo
-					itemReturn.label = resource.municipio
-					itemReturn.uf = resource.uf
-				}
-				items.push(itemReturn)
-			});
+@Injectable({
+  providedIn: 'root',
+})
+export class TarifaComboService implements PoComboFilter {
+  private endpoint: string = 'FRETAMENTOURBANO/local';
 
-			return items
+  constructor(private apiService: ApiService) {}
 
-		}));
-	}
+  getFilteredData(
+    params: any,
+    filterParams?: any
+  ): Observable<TarifaComboStruct[]> {
+    let httpParams = new HttpParams();
+    let filter: string = '';
 
-	getObjectByValue(value: string | number, filterParams?: any): Observable<PoComboOption> {
+    if (filterParams) {
+      filter = filterParams;
+    }
 
-		let params = new HttpParams();
-		let filter: string = ``;
+    if (params.value != '') {
+      filter =
+        " AND (UPPER(GI1_COD) LIKE UPPER('%" +
+        params.value +
+        "%') OR " +
+        " UPPER(GI1_DESCRI) LIKE UPPER('%" +
+        params.value +
+        "%') ) ";
+    }
 
-		if (typeof filterParams === 'boolean' && filterParams) {
-			params = params.set('lUf', filterParams);
-			filter = `AND(UPPER(CC2_EST) LIKE UPPER('%${value}'))`;
-		} else {
-			filter = `AND(UPPER(CC2_CODMUN) LIKE UPPER('%${value}') ${this.filterUf} `;
+    httpParams = httpParams.append('filter', filter);
 
-		}
+    let items: TarifaComboStruct[] = [];
+    items = [
+      { label: '0001 - Tarifa 1', value: '0001', desc: 'Tarifa 1' },
+      { label: '0002 - Tarifa 2', value: '0002', desc: 'Tarifa 2' },
+      { label: '0003 - Tarifa 3', value: '0003', desc: 'Tarifa 3' },
+    ];
 
-		params = params.append('FILTER', filter)
+    // return of(items);
+    return this.apiService.get(this.endpoint, httpParams).pipe(
+      map((response: any) => {
+        const items: FilterComboStruct[] = [];
+        let hasNext = true;
 
-		return this.apiService.get(this.endpoint, params).pipe(map((response: any) => {
+        response.Localidade.forEach((resource: any) => {
+          let itemReturn: FilterComboStruct = new FilterComboStruct();
 
-			let itemReturn = new EstadoComboStruct();
+          itemReturn.value = resource.codLocal;
+          itemReturn.label = resource.descLocal;
+          itemReturn.desc = resource.codMuni;
 
-			if (typeof filterParams === 'boolean') {
-				itemReturn.value = response.EstadoMun[0].uf
-				itemReturn.label = response.EstadoMun[0].uf
-				itemReturn.uf = response.EstadoMun[0].uf
-			} else {
-				itemReturn.value = response.EstadoMun[0].codigo
-				itemReturn.label = response.EstadoMun[0].municipio
-				itemReturn.uf = response.EstadoMun[0].uf
-			};
+          items.push(itemReturn);
 
-			return itemReturn
+          if (params.page * params.pageSize >= response.total) {
+            hasNext = false;
+          }
+        });
+        return items;
+      })
+    );
+  }
 
-		}));
-	};
+  getObjectByValue(
+    value: string | number,
+    filterParams?: any
+  ): Observable<PoComboOption> {
+    let params = new HttpParams();
 
-	setFilterUf(value: string) {
+    let filter: string = ``;
 
-		this.filterUf = value;
+    params = params.append('FILTER', filter);
 
-	}
+    return this.apiService.get(this.endpoint, params).pipe(
+      map((response: any) => {
+        let itemReturn = new FilterComboStruct();
+
+        itemReturn.value = response.codLocal;
+        itemReturn.label = response.descLocal;
+        itemReturn.desc = response.codMuni;
+
+        return itemReturn;
+      })
+    );
+  }
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class OrgaoConcessorComboService implements PoComboFilter {
+  private endpoint: string = 'FRETAMENTOURBANO/local';
+
+  constructor(private apiService: ApiService) {}
+
+  getFilteredData(
+    params: any,
+    filterParams?: any
+  ): Observable<TarifaComboStruct[]> {
+    let httpParams = new HttpParams();
+    let filter: string = '';
+
+    if (filterParams) {
+      filter = filterParams;
+    }
+
+    if (params.value != '') {
+      filter =
+        " AND (UPPER(GI1_COD) LIKE UPPER('%" +
+        params.value +
+        "%') OR " +
+        " UPPER(GI1_DESCRI) LIKE UPPER('%" +
+        params.value +
+        "%') ) ";
+    }
+
+    httpParams = httpParams.append('filter', filter);
+
+    return this.apiService.get(this.endpoint, httpParams).pipe(
+      map((response: any) => {
+        const items: FilterComboStruct[] = [];
+        let hasNext = true;
+
+        response.Localidade.forEach((resource: any) => {
+          let itemReturn: FilterComboStruct = new FilterComboStruct();
+
+          itemReturn.value = resource.codLocal;
+          itemReturn.label = resource.descLocal;
+          itemReturn.desc = resource.codMuni;
+
+          items.push(itemReturn);
+
+          if (params.page * params.pageSize >= response.total) {
+            hasNext = false;
+          }
+        });
+        return items;
+      })
+    );
+  }
+
+  getObjectByValue(
+    value: string | number,
+    filterParams?: any
+  ): Observable<PoComboOption> {
+    let params = new HttpParams();
+
+    let filter: string = ``;
+
+    params = params.append('FILTER', filter);
+
+    return this.apiService.get(this.endpoint, params).pipe(
+      map((response: any) => {
+        let itemReturn = new FilterComboStruct();
+
+        itemReturn.value = response.codLocal;
+        itemReturn.label = response.descLocal;
+        itemReturn.desc = response.codMuni;
+
+        return itemReturn;
+      })
+    );
+  }
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class poLookUpOrgaoConcessor implements PoLookupFilter {
+  // private endpoint: string = 'FRETAMENTOURBANO/local';
+  private endpoint: string = 'https://po-sample-api.onrender.com/v1/heroes';
+
+  constructor(
+    private apiService: ApiService,
+    private _http: HttpClient
+  ) {}
+
+  getObjectByValue(value: any): Observable<any> {
+    return this.apiService.get(this.endpoint, value);
+  }
+
+  getFilteredItems(
+    filteredParams: PoLookupFilteredItemsParams
+  ): Observable<any> {
+    const { filterParams, advancedFilters, ...restFilteredItemsParams } =
+      filteredParams;
+    const params = {
+      ...restFilteredItemsParams,
+      ...filterParams,
+      ...advancedFilters,
+    };
+
+    return this._http.get(this.endpoint, params);
+  }
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class poLookUpFormasDePagamento implements PoLookupFilter {
+  // private endpoint: string = 'FRETAMENTOURBANO/local';
+  private endpoint: string = 'https://po-sample-api.onrender.com/v1/heroes';
+
+  constructor(
+    private apiService: ApiService,
+    private _http: HttpClient
+  ) {}
+
+  getObjectByValue(value: any): Observable<any> {
+    return this.apiService.get(this.endpoint, value);
+  }
+
+  getFilteredItems(
+    filteredParams: PoLookupFilteredItemsParams
+  ): Observable<any> {
+    const { filterParams, advancedFilters, ...restFilteredItemsParams } =
+      filteredParams;
+    const params = {
+      ...restFilteredItemsParams,
+      ...filterParams,
+      ...advancedFilters,
+    };
+
+    return this._http.get(this.endpoint, params);
+  }
 }
