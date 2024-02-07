@@ -1,0 +1,19 @@
+<po-page-default
+    p-title="{{titulo}}" 
+    [p-breadcrumb]="breadcrumb"
+    [p-actions]="actions"
+>
+    <po-loading-overlay
+        [p-screen-lock]="true"
+        [hidden]="isHideLoadingTela"
+        p-text="Carregando localidade"
+    >
+    </po-loading-overlay>
+
+    <po-dynamic-view
+        [p-fields]="colunaDados"
+        [p-value]="viewLocalidade"
+    >
+    </po-dynamic-view>
+
+</po-page-default>
