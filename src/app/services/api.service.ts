@@ -9,6 +9,7 @@ import { VldFormStruct } from './gtpgenerics.struct';
 	providedIn: 'root',
 })
 export class ApiService {
+	// private apiUrl = 'http://138.219.88.134:8084/rest/';
 	private apiUrl = 'http://localhost:12173/rest/';
 
 	constructor(private http: HttpClient) { }
@@ -25,9 +26,9 @@ export class ApiService {
 
 	/**
 	 * Metodo get http
-	 * @param endpoint 
-	 * @param params 
-	 * @returns 
+	 * @param endpoint
+	 * @param params
+	 * @returns
 	 */
 	get<T>(endpoint: string, params?: HttpParams): Observable<T> {
 		const url = `${this.apiUrl}${endpoint}`;
@@ -39,9 +40,9 @@ export class ApiService {
 	}
 	/**
 	 * Metodo post http
-	 * @param endpoint 
-	 * @param data 
-	 * @returns 
+	 * @param endpoint
+	 * @param data
+	 * @returns
 	 */
 	post<T>(endpoint: string, data: any): Observable<T> {
 		const url = `${this.apiUrl}/${endpoint}`;
@@ -53,9 +54,9 @@ export class ApiService {
 	}
 	/**
 	 * Metodo put HTTP
-	 * @param endpoint 
-	 * @param data 
-	 * @returns 
+	 * @param endpoint
+	 * @param data
+	 * @returns
 	 */
 	put<T>(endpoint: string, data: any): Observable<T> {
 		const url = `${this.apiUrl}/${endpoint}`;
@@ -67,8 +68,8 @@ export class ApiService {
 	}
 	/**
 	 * Método delete HTTP
-	 * @param endpoint 
-	 * @returns 
+	 * @param endpoint
+	 * @returns
 	 */
 	delete<T>(endpoint: string): Observable<T> {
 		const url = `${this.apiUrl}/${endpoint}`;
