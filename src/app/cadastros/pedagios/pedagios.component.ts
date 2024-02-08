@@ -104,7 +104,7 @@ export class PedagiosComponent {
   setColProperties() {
     this.columns.forEach(col => {
       if (
-        col.property === 'otherActions' &&
+        col.property === 'outrasAcoes' &&
         col.icons &&
         col.icons.length >= 0
       ) {
