@@ -1,0 +1,73 @@
+<po-page-default
+  p-title="Pedágios"
+  [p-breadcrumb]="breadcrumb"
+  [p-actions]="actions">
+  <!-- Grid-->
+  <!-- Combo de pedágios -->
+  <po-combo
+    #pedagioFilterCombo
+    name="pedagio"
+    class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
+    p-label="Pedágio"
+    [p-filter-service]="pedagioComboService"
+    [p-filter-params]="pedagioFilter"
+    (p-change)="setFilters(); clearFilter('pedagio')"
+    p-clean="true"
+    p-placeholder="Selecionar"
+    [p-sort]="true">
+    <ng-template p-combo-option-template let-option>
+      <div class="po-row">
+        <div class="po-sm-10 po-md-9 po-lg-11">
+          <div class="po-font-text-large-bold">{{ option.label }}</div>
+          <div class="po-font-text-smaller">Código: {{ option.value }}</div>
+        </div>
+      </div>
+    </ng-template>
+  </po-combo>
+
+  <po-combo
+    #valorFilterCombo
+    name="valor"
+    class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
+    p-label="Valor"
+    [p-filter-service]="valorComboService"
+    [p-filter-params]="valorFilter"
+    (p-change)="setFilters(); clearFilter('valor')"
+    p-clean="true"
+    p-placeholder="Selecionar"
+    [p-sort]="true">
+    <ng-template p-combo-option-template let-option>
+      <div class="po-row">
+        <div class="po-sm-10 po-md-9 po-lg-11">
+          <div class="po-font-text-large-bold">{{ option.label }}</div>
+          <div class="po-font-text-smaller">Código: {{ option.value }}</div>
+        </div>
+      </div>
+    </ng-template>
+  </po-combo>
+
+  <po-datepicker-range
+    #vigenciafilterRange
+    name="vigencia"
+    class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
+    p-label="Vigência"
+    (p-change)="setRangeFilter($event)"></po-datepicker-range>
+
+  <!-- Tabela com itens de pedágios -->
+  <po-table
+    class="po-md-12 po-pl-0 po-pt-2"
+    [p-columns]="columns"
+    [p-items]="listPedagios"
+    p-sort="true"
+    (p-sort-by)="sortTable($event)"
+    p-hide-columns-manager="true"
+    p-striped="true"
+    p-hide-text-overflow
+    p-actions-right="true"
+    (p-show-more)="actionShowMore()"
+    [p-show-more-disabled]="isShowMoreDisabled"
+    p-striped="true"
+    [p-height]="nHeightMonitor"
+    [p-loading]="isLoading">
+  </po-table>
+</po-page-default>

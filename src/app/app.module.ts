@@ -18,6 +18,7 @@ import { DetTarifasComponent } from './cadastros/tarifas/det-tarifas/det-tarifas
 import { ViewTarifasComponent } from './cadastros/tarifas/view-tarifas/view-tarifas.component';
 import { ViewLocalidadesComponent } from './cadastros/localidades/view-localidades/view-localidades.component';
 import { TarifasComponent } from './cadastros/tarifas/tarifas.component';
+import { PedagiosComponent } from './cadastros/pedagios/pedagios.component';
 
 
 @NgModule({
@@ -35,6 +36,7 @@ import { TarifasComponent } from './cadastros/tarifas/tarifas.component';
     DetTarifasComponent,
     ViewTarifasComponent,
     ViewLocalidadesComponent,
+    PedagiosComponent,
   ],
   imports: [
     BrowserModule,

@@ -11,6 +11,7 @@ import { TarifasComponent } from './cadastros/tarifas/tarifas.component';
 import { DetTarifasComponent } from './cadastros/tarifas/det-tarifas/det-tarifas.component';
 import { ViewTarifasComponent } from './cadastros/tarifas/view-tarifas/view-tarifas.component';
 import { ViewLocalidadesComponent } from './cadastros/localidades/view-localidades/view-localidades.component';
+import { PedagiosComponent } from './cadastros/pedagios/pedagios.component';
 
 const routes: Routes = [
   {
@@ -37,7 +38,10 @@ const routes: Routes = [
     path: 'localidades/detLocalidades/:acao/:id',
     component: DetLocalidadesComponent,
   },
-  { path: 'localidades/viewLocalidades/:acao/:id', component: ViewLocalidadesComponent },
+  {
+    path: 'localidades/viewLocalidades/:acao/:id',
+    component: ViewLocalidadesComponent,
+  },
   { path: 'formas-de-pagamento', component: FormasDePagamentoComponent },
   {
     path: 'formas-de-pagamento/det-forma-pagamento/:acao',
@@ -54,6 +58,14 @@ const routes: Routes = [
   },
   { path: 'tarifas/detTarifas/:acao', component: DetTarifasComponent },
   { path: 'tarifas/viewTarifas/:filial/:pk', component: ViewTarifasComponent },
+
+  { path: 'pedagios', component: PedagiosComponent },
+  // {
+  //   path: 'pedagios/detPedagios/:acao/:filial/:pk',
+  //   component: DetPedagiosComponent,
+  // },
+  // { path: 'pedagios/detPedagios/:acao', component: DetPedagiosComponent },
+  // { path: 'pedagios/viewPedagios/:filial/:pk', component: ViewPedagiosComponent },
 ];
 
 @NgModule({
