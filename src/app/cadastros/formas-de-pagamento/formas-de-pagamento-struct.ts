@@ -9,26 +9,31 @@ import { PoTableColumn } from '@po-ui/ng-components';
  * @version  v1
  *******************************************************************************/
 export const PaymentMethodColumns: Array<PoTableColumn> = [
-  { property: 'codPayment', label: 'Código', sortable: false, visible: false },
-  {
-    property: 'labelPayment',
-    label: 'Forma de pagamento',
-    sortable: true,
-  },
-  {
-    property: 'otherActions',
-    label: ' ',
-    type: 'icon',
-    sortable: false,
-    icons: [
-      {
-        value: 'editar',
-        icon: 'po-icon po-icon-edit',
-        color: '#29b6c5',
-        tooltip: 'Editar',
-      },
-    ],
-  },
+    {
+        property: 'codPayment',
+        label: 'Código',
+        sortable: false,
+        visible: false,
+    },
+    {
+        property: 'labelPayment',
+        label: 'Forma de pagamento',
+        sortable: true,
+    },
+    {
+        property: 'otherActions',
+        label: ' ',
+        type: 'icon',
+        sortable: false,
+        icons: [
+            {
+                value: 'editar',
+                icon: 'po-icon po-icon-edit',
+                color: '#29b6c5',
+                tooltip: 'Editar',
+            },
+        ],
+    },
 ];
 
 /*******************************************************************************
@@ -40,15 +45,15 @@ export const PaymentMethodColumns: Array<PoTableColumn> = [
  * @version  v1
  *******************************************************************************/
 export class PaymentMethodModel {
-  id: string = '';
-  codPayment: string = '';
-  descPayment: string = '';
-  labelPayment: string = '';
-  otherActions?: Array<string>;
-  index?: number;
+    id: string = '';
+    codPayment: string = '';
+    descPayment: string = '';
+    labelPayment: string = '';
+    otherActions?: Array<string>;
+    index?: number;
 }
 
 export interface FormaPagForm {
-  codigo: string;
-  descricao: string;
+    codigo: string;
+    descricao: string;
 }

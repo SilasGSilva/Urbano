@@ -6,14 +6,14 @@ import { PoTableColumnSort, PoTableColumnSortType } from '@po-ui/ng-components';
  * @param value variavel que será verificada
  */
 export function isNullOrUndefined(value: any): boolean {
-  value = typeof value === 'string' ? value.trim() : value;
-  return (
-    value === '' ||
-    value === null ||
-    value === 'null' ||
-    value === undefined ||
-    value === 'undefined'
-  );
+    value = typeof value === 'string' ? value.trim() : value;
+    return (
+        value === '' ||
+        value === null ||
+        value === 'null' ||
+        value === undefined ||
+        value === 'undefined'
+    );
 }
 
 /**
@@ -22,19 +22,19 @@ export function isNullOrUndefined(value: any): boolean {
  * @param encodedString - string codificada como entidade HTML
  */
 export function DecodeHtmlEntities(encodedString: any) {
-  let decodedHtmlEntities: string = encodedString;
-  decodedHtmlEntities = decodedHtmlEntities.replace(/&quot;/gm, '"');
-  decodedHtmlEntities = decodedHtmlEntities.replace(/&amp;/gm, '&');
-  decodedHtmlEntities = decodedHtmlEntities.replace(/&#38;/gm, '&');
-  decodedHtmlEntities = decodedHtmlEntities.replace(/&#39;/gm, "'");
-  decodedHtmlEntities = decodedHtmlEntities.replace(/&gt;/gm, '>');
-  decodedHtmlEntities = decodedHtmlEntities.replace(/&lt;/gm, '<');
-  decodedHtmlEntities = decodedHtmlEntities.replace(/&#60;/gm, '<');
-  decodedHtmlEntities = decodedHtmlEntities.replace(/&#62;/gm, '>');
-  decodedHtmlEntities = decodedHtmlEntities.replace(/&#34;/gm, '"');
-  decodedHtmlEntities = decodedHtmlEntities.replace(/\u2010/g, '-');
+    let decodedHtmlEntities: string = encodedString;
+    decodedHtmlEntities = decodedHtmlEntities.replace(/&quot;/gm, '"');
+    decodedHtmlEntities = decodedHtmlEntities.replace(/&amp;/gm, '&');
+    decodedHtmlEntities = decodedHtmlEntities.replace(/&#38;/gm, '&');
+    decodedHtmlEntities = decodedHtmlEntities.replace(/&#39;/gm, "'");
+    decodedHtmlEntities = decodedHtmlEntities.replace(/&gt;/gm, '>');
+    decodedHtmlEntities = decodedHtmlEntities.replace(/&lt;/gm, '<');
+    decodedHtmlEntities = decodedHtmlEntities.replace(/&#60;/gm, '<');
+    decodedHtmlEntities = decodedHtmlEntities.replace(/&#62;/gm, '>');
+    decodedHtmlEntities = decodedHtmlEntities.replace(/&#34;/gm, '"');
+    decodedHtmlEntities = decodedHtmlEntities.replace(/\u2010/g, '-');
 
-  return decodedHtmlEntities;
+    return decodedHtmlEntities;
 }
 /**
  * Busca dados a partir de um array. Se não encontrar, retorna `undefined`
@@ -54,18 +54,21 @@ export function DecodeHtmlEntities(encodedString: any) {
  * ```
  */
 export function JFwFldGet(
-  aDados: Array<any>,
-  cCampo: string,
-  defaultValue?: any
+    aDados: Array<any>,
+    cCampo: string,
+    defaultValue?: any
 ) {
-  const aEncontrado = aDados.find(x => x.id === cCampo);
+    const aEncontrado = aDados.find(x => x.id === cCampo);
 
-  if (!isNullOrUndefined(aEncontrado) && aEncontrado.hasOwnProperty('value')) {
-    return typeof aEncontrado.value === 'string'
-      ? DecodeHtmlEntities(aEncontrado.value)
-      : aEncontrado.value;
-  }
-  return defaultValue;
+    if (
+        !isNullOrUndefined(aEncontrado) &&
+        aEncontrado.hasOwnProperty('value')
+    ) {
+        return typeof aEncontrado.value === 'string'
+            ? DecodeHtmlEntities(aEncontrado.value)
+            : aEncontrado.value;
+    }
+    return defaultValue;
 }
 
 /**
@@ -75,7 +78,7 @@ export function JFwFldGet(
  * @example sleep(300).then(x=>{})
  */
 export async function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /**
@@ -83,10 +86,10 @@ export async function sleep(ms: number) {
  * @param valor: Conteúdo há ser formatado
  */
 export function JFormatString(valor: string): string {
-  return valor
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '');
+    return valor
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
 }
 
 /**
@@ -95,17 +98,20 @@ export function JFormatString(valor: string): string {
  * @returns Verdadeiro ou falso
  */
 export function validUrl(path: string): boolean {
-  let url: URL;
-  let isValid: boolean = false;
-  try {
-    url = new URL(path);
-    if (url.protocol.search('http') > -1 && !isNullOrUndefined(url.hostname)) {
-      isValid = true;
+    let url: URL;
+    let isValid: boolean = false;
+    try {
+        url = new URL(path);
+        if (
+            url.protocol.search('http') > -1 &&
+            !isNullOrUndefined(url.hostname)
+        ) {
+            isValid = true;
+        }
+        return isValid;
+    } catch {
+        return isValid;
     }
-    return isValid;
-  } catch {
-    return isValid;
-  }
 }
 
 /**
@@ -114,53 +120,53 @@ export function validUrl(path: string): boolean {
  * @returns boolean que indica se possui caracteres especiais
  */
 export function validacaoCaracteresEsp(campo: string = '') {
-  if (!isNullOrUndefined(campo)) {
-    return (
-      campo.indexOf(' ') > -1 ||
-      campo.indexOf('+') > -1 ||
-      campo.indexOf('-') > -1 ||
-      campo.indexOf('©') > -1 ||
-      campo.indexOf('®') > -1 ||
-      campo.indexOf('<') > -1 ||
-      campo.indexOf('>') > -1 ||
-      campo.indexOf('&') > -1 ||
-      campo.indexOf('=') > -1 ||
-      campo.indexOf('§') > -1 ||
-      campo.indexOf('?') > -1 ||
-      campo.indexOf('{') > -1 ||
-      campo.indexOf('}') > -1 ||
-      campo.indexOf('@') > -1 ||
-      campo.indexOf('#') > -1 ||
-      campo.indexOf('%') > -1 ||
-      campo.indexOf('.') > -1 ||
-      campo.indexOf(',') > -1 ||
-      campo.indexOf('¨¨') > -1 ||
-      campo.indexOf(';') > -1 ||
-      campo.indexOf(':') > -1 ||
-      campo.indexOf('!') > -1 ||
-      campo.indexOf('"') > -1 ||
-      campo.indexOf('*') > -1
-    );
-  } else {
-    return false;
-  }
+    if (!isNullOrUndefined(campo)) {
+        return (
+            campo.indexOf(' ') > -1 ||
+            campo.indexOf('+') > -1 ||
+            campo.indexOf('-') > -1 ||
+            campo.indexOf('©') > -1 ||
+            campo.indexOf('®') > -1 ||
+            campo.indexOf('<') > -1 ||
+            campo.indexOf('>') > -1 ||
+            campo.indexOf('&') > -1 ||
+            campo.indexOf('=') > -1 ||
+            campo.indexOf('§') > -1 ||
+            campo.indexOf('?') > -1 ||
+            campo.indexOf('{') > -1 ||
+            campo.indexOf('}') > -1 ||
+            campo.indexOf('@') > -1 ||
+            campo.indexOf('#') > -1 ||
+            campo.indexOf('%') > -1 ||
+            campo.indexOf('.') > -1 ||
+            campo.indexOf(',') > -1 ||
+            campo.indexOf('¨¨') > -1 ||
+            campo.indexOf(';') > -1 ||
+            campo.indexOf(':') > -1 ||
+            campo.indexOf('!') > -1 ||
+            campo.indexOf('"') > -1 ||
+            campo.indexOf('*') > -1
+        );
+    } else {
+        return false;
+    }
 }
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class UtilsService {
-  constructor() {}
+    constructor() {}
 
-  public sort(value: any, valueToCompare: any, sort: PoTableColumnSort) {
-    const property = sort.column?.property;
-    const type = sort.type;
+    public sort(value: any, valueToCompare: any, sort: PoTableColumnSort) {
+        const property = sort.column?.property;
+        const type = sort.type;
 
-    if (value[property!] < valueToCompare[property!]) {
-      return type === PoTableColumnSortType.Ascending ? -1 : 1;
+        if (value[property!] < valueToCompare[property!]) {
+            return type === PoTableColumnSortType.Ascending ? -1 : 1;
+        }
+        return type === PoTableColumnSortType.Ascending ? 1 : -1;
     }
-    return type === PoTableColumnSortType.Ascending ? 1 : -1;
-  }
 }
 
 /**
@@ -169,10 +175,10 @@ export class UtilsService {
  * @returns O valor passado ou vazio `("")`
  */
 export function ChangeUndefinedToEmpty(value: string | undefined): string {
-  if (value === undefined || value === 'undefined' || value === null) {
-    value = '';
-  }
-  return value;
+    if (value === undefined || value === 'undefined' || value === null) {
+        value = '';
+    }
+    return value;
 }
 
 /** Monta a data no formato mm-dd-yyyy para utilizar como Data
@@ -187,29 +193,29 @@ export function ChangeUndefinedToEmpty(value: string | undefined): string {
  *
  */
 export function MakeDate(
-  strDate: string,
-  formato: string = 'mm-dd-yyyy',
-  separador: string = '-'
+    strDate: string,
+    formato: string = 'mm-dd-yyyy',
+    separador: string = '-'
 ): string {
-  let dataFinal: string;
-  let strMes: string;
+    let dataFinal: string;
+    let strMes: string;
 
-  if (!isNullOrUndefined(strDate)) {
-    const dia: string = strDate.substring(6, 8);
-    const mes: string = strDate.substring(4, 6);
-    const ano: string = strDate.substring(0, 4);
+    if (!isNullOrUndefined(strDate)) {
+        const dia: string = strDate.substring(6, 8);
+        const mes: string = strDate.substring(4, 6);
+        const ano: string = strDate.substring(0, 4);
 
-    dataFinal = formato
-      .replace(/dd/g, dia)
-      .replace(/MM/g, strMes)
-      .replace(/mm/g, mes)
-      .replace(/yyyy/g, ano)
-      .replace(/-/g, separador);
-  } else {
-    dataFinal = '';
-  }
+        dataFinal = formato
+            .replace(/dd/g, dia)
+            .replace(/MM/g, strMes)
+            .replace(/mm/g, mes)
+            .replace(/yyyy/g, ano)
+            .replace(/-/g, separador);
+    } else {
+        dataFinal = '';
+    }
 
-  return dataFinal;
+    return dataFinal;
 }
 
 /**
@@ -230,16 +236,16 @@ export function MakeDate(
  * ```
  */
 export function FindValueByName(aDados: Array<any>, cCampo: string) {
-  const aEncontrado = aDados.find(x => x.id == cCampo);
+    const aEncontrado = aDados.find(x => x.id == cCampo);
 
-  if (
-    !isNullOrUndefined(aEncontrado) &&
-    typeof aEncontrado.value === 'string'
-  ) {
-    return typeof aEncontrado.value == 'string'
-      ? DecodeHtmlEntities(aEncontrado.value)
-      : aEncontrado.value;
-  } else {
-    return '';
-  }
+    if (
+        !isNullOrUndefined(aEncontrado) &&
+        typeof aEncontrado.value === 'string'
+    ) {
+        return typeof aEncontrado.value == 'string'
+            ? DecodeHtmlEntities(aEncontrado.value)
+            : aEncontrado.value;
+    } else {
+        return '';
+    }
 }

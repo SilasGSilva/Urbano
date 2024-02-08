@@ -13,51 +13,57 @@ import { ViewTarifasComponent } from './cadastros/tarifas/view-tarifas/view-tari
 import { ViewLocalidadesComponent } from './cadastros/localidades/view-localidades/view-localidades.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    loadChildren: () =>
-      import('./nav-menu/nav-menu.module').then(m => m.NavMenuModule),
-  },
-  { path: 'motorista', component: MotoristaComponent },
-  { path: 'localidades', component: LocalidadesComponent },
-  {
-    path: 'motorista/detMotorista/:acao/:filial/:id',
-    component: DetMotoristaComponent,
-  },
-  { path: 'motorista/detMotorista/:acao', component: DetMotoristaComponent },
-  {
-    path: 'motorista/viewMotorista/:acao/:filial/:id',
-    component: ViewMotoristaComponent,
-  },
-  {
-    path: 'localidades/detLocalidades/:acao',
-    component: DetLocalidadesComponent,
-  },
-  {
-    path: 'localidades/detLocalidades/:acao/:id',
-    component: DetLocalidadesComponent,
-  },
-  { path: 'localidades/viewLocalidades/:acao/:id', component: ViewLocalidadesComponent },
-  { path: 'formas-de-pagamento', component: FormasDePagamentoComponent },
-  {
-    path: 'formas-de-pagamento/det-forma-pagamento/:acao',
-    component: DetFormaPagamentoComponent,
-  },
-  {
-    path: 'formas-de-pagamento/det-forma-pagamento/:acao/:id',
-    component: DetFormaPagamentoComponent,
-  },
-  { path: 'tarifas', component: TarifasComponent },
-  {
-    path: 'tarifas/detTarifas/:acao/:filial/:pk',
-    component: DetTarifasComponent,
-  },
-  { path: 'tarifas/detTarifas/:acao', component: DetTarifasComponent },
-  { path: 'tarifas/viewTarifas/:filial/:pk', component: ViewTarifasComponent },
+    {
+        path: '',
+        loadChildren: () =>
+            import('./nav-menu/nav-menu.module').then(m => m.NavMenuModule),
+    },
+    { path: 'motorista', component: MotoristaComponent },
+    { path: 'localidades', component: LocalidadesComponent },
+    {
+        path: 'motorista/detMotorista/:acao/:filial/:id',
+        component: DetMotoristaComponent,
+    },
+    { path: 'motorista/detMotorista/:acao', component: DetMotoristaComponent },
+    {
+        path: 'motorista/viewMotorista/:acao/:filial/:id',
+        component: ViewMotoristaComponent,
+    },
+    {
+        path: 'localidades/detLocalidades/:acao',
+        component: DetLocalidadesComponent,
+    },
+    {
+        path: 'localidades/detLocalidades/:acao/:id',
+        component: DetLocalidadesComponent,
+    },
+    {
+        path: 'localidades/viewLocalidades/:acao/:id',
+        component: ViewLocalidadesComponent,
+    },
+    { path: 'formas-de-pagamento', component: FormasDePagamentoComponent },
+    {
+        path: 'formas-de-pagamento/det-forma-pagamento/:acao',
+        component: DetFormaPagamentoComponent,
+    },
+    {
+        path: 'formas-de-pagamento/det-forma-pagamento/:acao/:id',
+        component: DetFormaPagamentoComponent,
+    },
+    { path: 'tarifas', component: TarifasComponent },
+    {
+        path: 'tarifas/detTarifas/:acao/:filial/:pk',
+        component: DetTarifasComponent,
+    },
+    { path: 'tarifas/detTarifas/:acao', component: DetTarifasComponent },
+    {
+        path: 'tarifas/viewTarifas/:filial/:pk',
+        component: ViewTarifasComponent,
+    },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule],
 })
 export class AppRoutingModule {}

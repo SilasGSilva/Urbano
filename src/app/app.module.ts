@@ -19,33 +19,32 @@ import { ViewTarifasComponent } from './cadastros/tarifas/view-tarifas/view-tari
 import { ViewLocalidadesComponent } from './cadastros/localidades/view-localidades/view-localidades.component';
 import { TarifasComponent } from './cadastros/tarifas/tarifas.component';
 
-
 @NgModule({
-  declarations: [
-    AppComponent,
-    MotoristaComponent,
-    LocalidadesComponent,
-    NavMenuComponent,
-    DetMotoristaComponent,
-    DetLocalidadesComponent,
-    ViewMotoristaComponent,
-    FormasDePagamentoComponent,
-    DetFormaPagamentoComponent,
-    TarifasComponent,
-    DetTarifasComponent,
-    ViewTarifasComponent,
-    ViewLocalidadesComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    PoModule,
-    HttpClientModule,
-    RouterModule.forRoot([]),
-    FormsModule,
-    ReactiveFormsModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent,
+        MotoristaComponent,
+        LocalidadesComponent,
+        NavMenuComponent,
+        DetMotoristaComponent,
+        DetLocalidadesComponent,
+        ViewMotoristaComponent,
+        FormasDePagamentoComponent,
+        DetFormaPagamentoComponent,
+        TarifasComponent,
+        DetTarifasComponent,
+        ViewTarifasComponent,
+        ViewLocalidadesComponent,
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        PoModule,
+        HttpClientModule,
+        RouterModule.forRoot([]),
+        FormsModule,
+        ReactiveFormsModule,
+    ],
+    providers: [],
+    bootstrap: [AppComponent],
 })
 export class AppModule {}
