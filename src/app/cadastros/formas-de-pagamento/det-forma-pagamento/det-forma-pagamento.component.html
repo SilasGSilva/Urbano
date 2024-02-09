@@ -1,0 +1,55 @@
+<po-page-default [p-title]="titulo" [p-breadcrumb]="breadcrumb">
+    <po-loading-overlay [hidden]="isShowLoading"></po-loading-overlay>
+    <p *ngIf="!editView" class="po-font-text-large text-color-gray">
+        Preencha as informações da forma de pagamento:
+    </p>
+    <p *ngIf="editView" class="po-font-text-large text-color-gray">
+        Edite as informações da forma de pagamento:
+    </p>
+    <form [formGroup]="formaPagForm" class="po-row po-pl-0">
+        <po-input
+            class="po-xl-3 po-lg-3 po-md-3 po-sm-12"
+            p-label="Código*"
+            p-placeholder="digite"
+            name="codPayment"
+            formControlName="codigo"
+            [p-maxlength]="6"></po-input>
+        <po-input
+            class="po-xl-9 po-lg-9 po-md-9 po-sm-12"
+            p-label="Descrição*"
+            p-placeholder="Digite"
+            formControlName="descricao"
+            [p-maxlength]="30"></po-input>
+    </form>
+    <div
+        class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-row"
+        style="margin-top: 2rem; padding-top: 1rem">
+        <div class="po-xl-6 po-lg-6 po-md-6 po-sm-12"></div>
+        <div class="po-xl-6 po-lg-6 po-md-6 po-sm-12 container-buttons">
+            <po-button
+                p-label="Cancelar"
+                p-kind="tertiary"
+                (p-click)="modalCancel.open()"></po-button>
+            <po-button
+                *ngIf="isVisibleBtn"
+                p-label="Salvar e incluir outro"
+                p-kind="secondary"
+                (p-click)="saveAction(true)"
+                [p-loading]="isLoadingBtn"></po-button>
+            <po-button
+                p-label="Salvar"
+                p-kind="primary"
+                (p-click)="saveAction()"
+                [p-loading]="isLoadingBtn"></po-button>
+        </div>
+    </div>
+</po-page-default>
+
+<po-modal
+    #modalCancel
+    p-title="Cancelar"
+    [p-primary-action]="confirmCancel"
+    [p-secondary-action]="exitCancel"
+    [p-hide-close]="true">
+    Deseja realmente sair? Irá perder todos os dados não salvos</po-modal
+>

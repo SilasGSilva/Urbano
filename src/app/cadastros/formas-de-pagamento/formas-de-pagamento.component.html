@@ -1,0 +1,22 @@
+<po-page-default
+    p-title="Formas de pagamento"
+    [p-breadcrumb]="breadcrumb"
+    [p-actions]="actions">
+    <!-- Tabela com itens de localidades -->
+    <po-table
+        class="po-md-12 po-pl-0 po-pt-2"
+        [p-columns]="columns"
+        [p-items]="listPagamento"
+        p-sort="true"
+        (p-sort-by)="sortTable($event)"
+        p-hide-columns-manager="true"
+        p-striped="true"
+        p-hide-text-overflow
+        p-actions-right="true"
+        (p-show-more)="actionShowMore()"
+        [p-show-more-disabled]="isShowMoreDisabled"
+        p-striped="true"
+        [p-height]="nHeightMonitor"
+        [p-loading]="isTableLoading">
+    </po-table>
+</po-page-default>

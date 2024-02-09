@@ -1,0 +1,80 @@
+<po-page-default
+  p-title="Linhas"
+  [p-breadcrumb]="breadcrumb"
+  [p-actions]="actions"
+>
+
+    <!-- po-combo: Prefixo Linha-->
+    <po-combo
+        name="comboprefixo"
+        class="po-lg-3 po-pl-0"
+        p-label="Prefixo Linha"
+        p-placeholder="Selecionar"
+    >
+    </po-combo>
+
+    <!-- po-combo: Origem -->
+    <po-combo
+        name="comboorigem"
+        class="po-lg-3 po-pl-0"
+        p-label="Origem"
+        [p-filter-service]="localidadeComboService"
+        p-placeholder="Selecionar"
+    >
+        <ng-template p-combo-option-template let-option>
+            <div class="po-row">
+                <div class="po-sm-10 po-md-9 po-lg-11">
+                <div class="po-font-text-large-bold">{{ option.label }}</div>
+                <div class="po-font-text-smaller">CÓDIGO: {{ option.value }}</div>
+                </div>
+            </div>
+        </ng-template>
+
+    </po-combo>
+
+    <!-- po-combo: Destino -->
+    <po-combo
+        name="combodestino"
+        class="po-lg-3 po-pl-0"
+        p-label="Destino"
+        p-placeholder="Selecionar"
+        [p-filter-service]="localidadeComboService"
+    >
+        <ng-template p-combo-option-template let-option>
+            <div class="po-row">
+                <div class="po-sm-10 po-md-9 po-lg-11">
+                <div class="po-font-text-large-bold">{{ option.label }}</div>
+                <div class="po-font-text-smaller">CÓDIGO: {{ option.value }}</div>
+                </div>
+            </div>
+        </ng-template>
+    </po-combo>
+    <!-- po-combo: Status -->
+    <po-combo
+        name="combostatus"
+        class="po-lg-3 po-pl-0"
+        p-label="Status"
+        [p-options]="listStatus"
+        p-placeholder="Selecionar"
+    >
+    </po-combo>
+
+    <!-- po-grid -->
+    <po-table
+        class="po-md-12 po-pl-0 po-pt-2"
+        [p-columns]="itemsColumns"
+        [p-items]="listLinhas"
+        [p-actions]="tableActions"
+        p-sort="true"
+        p-hide-columns-manager="true"
+        p-striped="true"
+        p-hide-text-overflow
+        [p-height]="nHeightMonitor"
+        (p-show-more)="actionShowMore()"
+        [p-show-more-disabled]="isShowMoreDisabled"
+        [p-loading]="isLoading"
+    >
+
+    </po-table>
+
+</po-page-default>

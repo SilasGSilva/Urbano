@@ -1,1 +1,81 @@
-<p>motorista works!</p>
+<po-page-default
+    p-title="Motoristas/Colaboradores"
+    [p-breadcrumb]="breadcrumb"
+    [p-actions]="actions">
+    <!-- Grid-->
+
+    <po-combo
+        #cmbMotorista
+        name="motoristas"
+        class="po-lg-4 po-pl-0"
+        p-label="Colaborador/Matrícula"
+        [p-filter-service]="motoristaComboService"
+        (p-change)="setFilters()"
+        p-placeholder="Selecionar"
+        p-clean="true">
+        <ng-template p-combo-option-template let-option>
+            <div class="po-row">
+                <div class="po-sm-10 po-md-9 po-lg-11">
+                    <div class="po-font-text-large-bold">
+                        {{ option.label }}
+                    </div>
+                    <div class="po-font-text-smaller">
+                        Código: {{ option.value }}
+                    </div>
+                    <div class="po-font-text-smaller">
+                        Matrícula: {{ option.matricula }}
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </po-combo>
+    <!-- combo de tipo de recurso-->
+    <po-combo
+        #cmbRecurso
+        name="recurso"
+        class="po-lg-4 po-pl-1"
+        p-label="Tipo de Recurso"
+        [p-filter-service]="recursoComboService"
+        (p-change)="setFilters()"
+        p-placeholder="Selecionar"
+        p-clean="true">
+        <ng-template p-combo-option-template let-option>
+            <div class="po-row">
+                <div class="po-sm-10 po-md-9 po-lg-11">
+                    <div class="po-font-text-large-bold">
+                        {{ option.label }}
+                    </div>
+                    <div class="po-font-text-smaller">
+                        Código: {{ option.value }}
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </po-combo>
+    <po-combo
+        #cmbTurno
+        name="turno"
+        class="po-lg-4 po-pl-1"
+        p-label="Turno"
+        [p-options]="listTurno"
+        p-clean="true"
+        (p-change)="setFilters()"
+        p-placeholder="Selecionar">
+    </po-combo>
+
+    <po-table
+        class="po-md-12 po-pl-0 po-pt-2"
+        [p-columns]="columns"
+        [p-items]="listMotoristas"
+        p-sort="true"
+        p-hide-columns-manager="true"
+        p-striped="true"
+        p-hide-text-overflow
+        p-actions-right="true"
+        (p-show-more)="actionShowMore()"
+        [p-show-more-disabled]="isShowMoreDisabled"
+        p-striped="true"
+        [p-height]="nHeightMonitor"
+        [p-loading]="isLoading">
+    </po-table>
+</po-page-default>
