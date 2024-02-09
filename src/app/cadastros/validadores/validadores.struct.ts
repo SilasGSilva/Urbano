@@ -23,12 +23,6 @@ export const ColumnsValidadores: Array<PoTableColumn> = [
                 color: '#29b6c5',
                 tooltip: 'Editar',
             },
-            {
-                value: 'view',
-                icon: 'po-icon po-icon-eye',
-                color: '#29b6c5',
-                tooltip: 'Visualizar',
-            },
         ],
     },
 ];

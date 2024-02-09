@@ -87,7 +87,6 @@ export class ValidadoresComponent {
                 col.icons.length >= 0
             ) {
                 col.icons[0].action = this.editValiddador.bind(this);
-                col.icons[1].action = this.viewValidador.bind(this);
             }
         });
     }
@@ -235,22 +234,6 @@ export class ValidadoresComponent {
         this._router.navigate([
             'validadores/detValidadores',
             'editar',
-            btoa(event.pk),
-            event.pk,
-        ]);
-    }
-
-    /*******************************************************************************
-     * @name viewValidador
-     * @description Função responsável por ir para tela de visualização quando o
-     * ícone de 'olho' é clicado na tabela
-     * @author   Serviços | Levy Santos
-     * @since    2024
-     * @version  v1
-     *******************************************************************************/
-    viewValidador(event: any) {
-        this._router.navigate([
-            'validadores/viewValidadores',
             btoa(event.pk),
             event.pk,
         ]);
