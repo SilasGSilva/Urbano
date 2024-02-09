@@ -151,7 +151,7 @@ export class ValidadoresComponent {
                     ' - ' +
                     resource.getModel('GI1MASTER').getValue('GI1_DESCRI');
 
-                validadores.outrasAcoes = ['edit', 'view'];
+                validadores.outrasAcoes = ['edit',];
 
                 this.listValidadores = [...this.listValidadores, validadores];
                 this.isLoading = false;
