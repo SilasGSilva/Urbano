@@ -85,7 +85,7 @@ export class TarifasComponent {
     public breadcrumb: PoBreadcrumb = {
         items: [
             { label: 'Fretamento Urbano', link: '/' },
-            { label: 'Tarifas' },
+            { label: 'Cadastrar tarifas' },
         ],
     };
 
