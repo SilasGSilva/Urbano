@@ -42,7 +42,10 @@ export class NavMenuComponent {
                 { label: 'Linhas' },
                 { label: 'Seções' },
                 { label: 'Validadores' },
-                { label: 'Roleta' },
+                {
+                    label: 'Roleta',
+                    action: this.navigate.bind(this, '/roletas'),
+                },
                 { label: 'Frota' },
             ],
         },

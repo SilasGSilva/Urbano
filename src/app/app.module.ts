@@ -18,6 +18,8 @@ import { DetTarifasComponent } from './cadastros/tarifas/det-tarifas/det-tarifas
 import { ViewTarifasComponent } from './cadastros/tarifas/view-tarifas/view-tarifas.component';
 import { ViewLocalidadesComponent } from './cadastros/localidades/view-localidades/view-localidades.component';
 import { TarifasComponent } from './cadastros/tarifas/tarifas.component';
+import { RoletasComponent } from './cadastros/roletas/roletas.component';
+import { DetRoletasComponent } from './cadastros/roletas/det-roletas/det-roletas.component';
 
 @NgModule({
     declarations: [
@@ -34,6 +36,8 @@ import { TarifasComponent } from './cadastros/tarifas/tarifas.component';
         DetTarifasComponent,
         ViewTarifasComponent,
         ViewLocalidadesComponent,
+        RoletasComponent,
+        DetRoletasComponent,
     ],
     imports: [
         BrowserModule,
