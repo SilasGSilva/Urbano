@@ -2,17 +2,19 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MotoristaComponent } from './cadastros/motorista/motorista.component';
 import { DetMotoristaComponent } from './cadastros/motorista/det-motorista/det-motorista.component';
+import { ViewMotoristaComponent } from './cadastros/motorista/view-motorista/view-motorista.component';
 import { LocalidadesComponent } from './cadastros/localidades/localidades.component';
 import { DetLocalidadesComponent } from './cadastros/localidades/det-localidades/det-localidades.component';
-import { ViewMotoristaComponent } from './cadastros/motorista/view-motorista/view-motorista.component';
+import { ViewLocalidadesComponent } from './cadastros/localidades/view-localidades/view-localidades.component';
 import { FormasDePagamentoComponent } from './cadastros/formas-de-pagamento/formas-de-pagamento.component';
 import { DetFormaPagamentoComponent } from './cadastros/formas-de-pagamento/det-forma-pagamento/det-forma-pagamento.component';
 import { TarifasComponent } from './cadastros/tarifas/tarifas.component';
 import { DetTarifasComponent } from './cadastros/tarifas/det-tarifas/det-tarifas.component';
 import { ViewTarifasComponent } from './cadastros/tarifas/view-tarifas/view-tarifas.component';
-import { ViewLocalidadesComponent } from './cadastros/localidades/view-localidades/view-localidades.component';
 import { ValidadoresComponent } from './cadastros/validadores/validadores.component';
 import { DetValidadoresComponent } from './cadastros/validadores/det-validadores/det-validadores.component';
+import { RoletasComponent } from './cadastros/roletas/roletas.component';
+import { DetRoletasComponent } from './cadastros/roletas/det-roletas/det-roletas.component';
 
 const routes: Routes = [
     {
@@ -71,10 +73,17 @@ const routes: Routes = [
         path: 'validadores/detValidadores/:acao',
         component: DetValidadoresComponent,
     },
+
+    { path: 'roletas', component: RoletasComponent },
+    {
+        path: 'roletas/detRoletas/:acao/:filial/:pk',
+        component: DetRoletasComponent,
+    },
+    { path: 'roletas/detRoletas/:acao', component: DetRoletasComponent },
 ];
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

@@ -6,38 +6,42 @@ import { AppComponent } from './app.component';
 import { PoModule } from '@po-ui/ng-components';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { MotoristaComponent } from './cadastros/motorista/motorista.component';
-import { LocalidadesComponent } from './cadastros/localidades/localidades.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
+import { MotoristaComponent } from './cadastros/motorista/motorista.component';
 import { DetMotoristaComponent } from './cadastros/motorista/det-motorista/det-motorista.component';
-import { DetLocalidadesComponent } from './cadastros/localidades/det-localidades/det-localidades.component';
 import { ViewMotoristaComponent } from './cadastros/motorista/view-motorista/view-motorista.component';
+import { LocalidadesComponent } from './cadastros/localidades/localidades.component';
+import { DetLocalidadesComponent } from './cadastros/localidades/det-localidades/det-localidades.component';
+import { ViewLocalidadesComponent } from './cadastros/localidades/view-localidades/view-localidades.component';
 import { FormasDePagamentoComponent } from './cadastros/formas-de-pagamento/formas-de-pagamento.component';
 import { DetFormaPagamentoComponent } from './cadastros/formas-de-pagamento/det-forma-pagamento/det-forma-pagamento.component';
+import { TarifasComponent } from './cadastros/tarifas/tarifas.component';
 import { DetTarifasComponent } from './cadastros/tarifas/det-tarifas/det-tarifas.component';
 import { ViewTarifasComponent } from './cadastros/tarifas/view-tarifas/view-tarifas.component';
-import { ViewLocalidadesComponent } from './cadastros/localidades/view-localidades/view-localidades.component';
-import { TarifasComponent } from './cadastros/tarifas/tarifas.component';
 import { ValidadoresComponent } from './cadastros/validadores/validadores.component';
 import { DetValidadoresComponent } from './cadastros/validadores/det-validadores/det-validadores.component';
+import { RoletasComponent } from './cadastros/roletas/roletas.component';
+import { DetRoletasComponent } from './cadastros/roletas/det-roletas/det-roletas.component';
 
 @NgModule({
     declarations: [
         AppComponent,
-        MotoristaComponent,
-        LocalidadesComponent,
         NavMenuComponent,
+        MotoristaComponent,
         DetMotoristaComponent,
-        DetLocalidadesComponent,
         ViewMotoristaComponent,
+        LocalidadesComponent,
+        DetLocalidadesComponent,
+        ViewLocalidadesComponent,
         FormasDePagamentoComponent,
         DetFormaPagamentoComponent,
         TarifasComponent,
         DetTarifasComponent,
         ViewTarifasComponent,
-        ViewLocalidadesComponent,
         ValidadoresComponent,
         DetValidadoresComponent,
+        RoletasComponent,
+        DetRoletasComponent,
     ],
     imports: [
         BrowserModule,
@@ -51,4 +55,4 @@ import { DetValidadoresComponent } from './cadastros/validadores/det-validadores
     providers: [],
     bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
