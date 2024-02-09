@@ -11,6 +11,8 @@ import { TarifasComponent } from './cadastros/tarifas/tarifas.component';
 import { DetTarifasComponent } from './cadastros/tarifas/det-tarifas/det-tarifas.component';
 import { ViewTarifasComponent } from './cadastros/tarifas/view-tarifas/view-tarifas.component';
 import { ViewLocalidadesComponent } from './cadastros/localidades/view-localidades/view-localidades.component';
+import { ValidadoresComponent } from './cadastros/validadores/validadores.component';
+import { DetValidadoresComponent } from './cadastros/validadores/det-validadores/det-validadores.component';
 
 const routes: Routes = [
     {
@@ -59,6 +61,15 @@ const routes: Routes = [
     {
         path: 'tarifas/viewTarifas/:filial/:pk',
         component: ViewTarifasComponent,
+    },
+    { path: 'validadores', component: ValidadoresComponent },
+    {
+        path: 'validadores/detValidadores/:acao/:filial/:pk',
+        component: DetValidadoresComponent,
+    },
+    {
+        path: 'validadores/detValidadores/:acao',
+        component: DetValidadoresComponent,
     },
 ];
 
