@@ -41,7 +41,10 @@ export class NavMenuComponent {
                 },
                 { label: 'Linhas' },
                 { label: 'Seções' },
-                { label: 'Validadores' },
+                {
+                    label: 'Validadores',
+                    action: this.navigate.bind(this, '/validadores'),
+                },
                 { label: 'Roleta' },
                 { label: 'Frota' },
             ],
