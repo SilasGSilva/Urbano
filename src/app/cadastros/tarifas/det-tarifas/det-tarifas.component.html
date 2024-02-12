@@ -34,17 +34,30 @@
                 [p-show-required]="true"
                 p-placeholder="5,20">
             </po-number>
-            <po-lookup
-                class="po-xl-4 po-lg-4 po-md-6 po-sm-12"
-                formControlName="orgaoConcessor"
-                p-label="Órgão Concessor*"
+            <po-combo
+                #orgaoConcessorFilterCombo
                 name="orgaoConcessor"
-                p-field-label="nickname"
-                p-field-value="id"
-                [p-columns]="columns"
-                [p-filter-service]="poLookUpOrgaoConcessor"
-                [p-filter-params]="filterParamOrgaoConcessor"
-                [p-hide-columns-manager]="true"></po-lookup>
+                formControlName="orgaoConcessor"
+                class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
+                p-label="Orgão Concessor"
+                [p-filter-service]="orgaoConcessorComboService"
+                [p-filter-params]="orgaoConcessorFilter"
+                p-clean="true"
+                p-placeholder="Selecionar"
+                [p-sort]="true">
+                <ng-template p-combo-option-template let-option>
+                    <div class="po-row">
+                        <div class="po-sm-10 po-md-9 po-lg-11">
+                            <div class="po-font-text-large-bold">
+                                {{ option.label }}
+                            </div>
+                            <div class="po-font-text-smaller po-ml-1">
+                                Código: {{ option.value }}
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </po-combo>
 
             <po-datepicker-range
                 #vigenciafilterRange

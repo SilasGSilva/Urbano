@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
     PoBreadcrumb,
+    PoComboComponent,
     PoLookupColumn,
     PoModalAction,
     PoModalComponent,
@@ -10,8 +11,8 @@ import {
 } from '@po-ui/ng-components';
 import { TarifaForm, TariffStruct } from './det-tarifas.struct';
 import {
-    poLookUpOrgaoConcessor,
     poLookUpFormasDePagamento,
+    OrgaoConcessorComboService,
 } from 'src/app/services/adaptors/wsurbano-adapter.service';
 import { HttpParams } from '@angular/common/http';
 import { FwProtheusModel } from 'src/app/services/models/fw-protheus.model';
@@ -21,11 +22,7 @@ import { FindValueByName } from 'src/app/services/functions/util.function';
     selector: 'app-det-tarifas',
     templateUrl: './det-tarifas.component.html',
     styleUrls: ['./det-tarifas.component.css'],
-    providers: [
-        poLookUpOrgaoConcessor,
-        poLookUpFormasDePagamento,
-        TariffStruct,
-    ],
+    providers: [poLookUpFormasDePagamento, TariffStruct],
 })
 export class DetTarifasComponent {
     @ViewChild('modalCancel', { static: false })
@@ -33,6 +30,9 @@ export class DetTarifasComponent {
 
     @ViewChild('modalConfirmation', { static: false })
     modalConfirmation!: PoModalComponent;
+
+    @ViewChild('orgaoConcessorFilterCombo', { static: true })
+    orgaoConcessorFilterCombo!: PoComboComponent;
 
     tarifaForm!: FormGroup;
 
@@ -46,8 +46,7 @@ export class DetTarifasComponent {
     public filial: string = '';
     public title: string = '';
     public subtitle: string = '';
-    public orgaoConcessor: string = '';
-    public formasDePagamento: string = '';
+    public orgaoConcessorFilter = '';
     public vigenciaStartFilter: string = '';
     public vigenciaEndFilter: string = '';
     public filterParamOrgaoConcessor: string = '';
@@ -59,7 +58,7 @@ export class DetTarifasComponent {
         private _activedRoute: ActivatedRoute,
         private _router: Router,
         private _formBuilder: FormBuilder,
-        public poLookUpOrgaoConcessor: poLookUpOrgaoConcessor,
+        public orgaoConcessorComboService: OrgaoConcessorComboService,
         public poLookUpFormasDePagamento: poLookUpFormasDePagamento,
         private _fwModel: FwProtheusModel,
         private _poNotification: PoNotificationService,
