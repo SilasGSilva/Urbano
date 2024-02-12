@@ -51,11 +51,10 @@ import { ViewSecoesComponent } from './cadastros/secoes/view-secoes/view-secoes.
         PedagiosComponent,
         DetPedagiosComponent,
         ViewPedagiosComponent,
+        SecoesComponent,
+        DetSecoesComponent,
+        ViewSecoesComponent,
     ],
-    SecoesComponent,
-    DetSecoesComponent,
-    ViewSecoesComponent,
-  ],
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -68,4 +67,4 @@ import { ViewSecoesComponent } from './cadastros/secoes/view-secoes/view-secoes.
     providers: [],
     bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
