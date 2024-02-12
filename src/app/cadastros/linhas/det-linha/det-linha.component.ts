@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { 
 	FormBuilder, 
 	FormGroup, 
@@ -6,6 +6,7 @@ import {
 } from '@angular/forms';
 import { 
 	PoBreadcrumb, 
+	PoComboComponent, 
 	PoRadioGroupOption 
 } from '@po-ui/ng-components';
 import { 
@@ -20,6 +21,9 @@ import {
 	PoLookupColumn, 
 	PoNotificationService 
 } from '@po-ui/ng-components';
+import { 
+	localidadeComboService 
+  } from 'src/app/services/adaptors/wsurbano-adapter.service';
 import { LocalidadeLookupService } from 'src/app/services/lookup-filter.service';
 import { FwProtheusModel } from 'src/app/services/models/fw-protheus.model';
 import { VldFormStruct } from 'src/app/services/gtpgenerics.struct';
@@ -35,7 +39,24 @@ import { FindValueByName } from 'src/app/services/functions/util.function';
   providers:[LocalidadeLookupService]
 })
 export class DetLinhaComponent {
+	@ViewChild('origemFilterCombo',{static:true})
+	origemFilterCombo!: PoComboComponent
 
+	@ViewChild('origemFilterCombo',{static:true})
+	destinoFilterCombo!: PoComboComponent
+
+	@ViewChild('origemFilterCombo',{static:true})
+	orgaoregulamentadorFilterCombo!: PoComboComponent
+
+	@ViewChild('origemFilterCombo',{static:true})
+	tarifaFilterCombo!: PoComboComponent
+
+	@ViewChild('origemFilterCombo',{static:true})
+	pedagioFilterCombo!: PoComboComponent
+
+	@ViewChild('origemFilterCombo',{static:true})
+	classificacaofiscalFilterCombo!: PoComboComponent
+	
 	listForm!:FormGroup;
 	public isShowLoading: boolean = false;
     public editView: boolean = false;
@@ -75,7 +96,9 @@ export class DetLinhaComponent {
 		private apiService: ApiService,
 		public poNotification: PoNotificationService,
 		private _fwModel:FwProtheusModel,
-		private _poNotification: PoNotificationService
+		private _poNotification: PoNotificationService,
+		public localidadeComboService: localidadeComboService,
+
 	){
 		// Ação
 		this.action = this._activatedRoute.snapshot.params['acao'];
@@ -298,5 +321,8 @@ export class DetLinhaComponent {
       
         }
     }
+	setFilters(){
 
+		return ''
+	}
 }

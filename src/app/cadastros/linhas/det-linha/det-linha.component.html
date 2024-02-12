@@ -6,7 +6,6 @@
 
 <form [formGroup]="linhaForm" class="po-row po-pl-0">
     <div class="po-xl-12">
-        
         <po-input
             class="po-lg-2"
             name="prefixo"
@@ -41,96 +40,200 @@
          >
         </po-input>
 
-
-        <po-lookup 
+        <po-combo
+            #origemFilterCombo
             class="po-lg-4" 
-            name="origem"  
-            p-field-label="descricao"
-            p-field-value="codigo" 
-            p-label="Origem*" 
-            [p-columns]="LookupColumns"
-            [p-filter-service]="localidadeLookupService"
-            [p-field-format]="['codigo','descricao']"
-            formControlName="origem"
-            required="true"
-            p-placeholder="Selecione"
+            name="origem"
+            formControlName="origem"  
+            p-label="Origem"
+            [p-filter-service]="localidadeComboService"
+            p-placeholder="Selecionar"
+            (p-change)="setFilters()"
+            p-clean="true"
         >
-        </po-lookup>
+            <ng-template p-combo-option-template let-option>
+                <div class="po-row">
+                    <div class="po-sm-10 po-md-9 po-lg-11">
+                    <div class="po-font-text-large-bold">
+                        {{ option.label + "-" + option.value }}
+                    </div>
+                    <div class="po-font-text-smaller" style="margin-left:1em">
+                        Prefixo: {{ option.label }}
+                    </div>
+                    <div class="po-font-text-smaller" style="margin-left: 1em;">
+                        Município: {{ option.value }}
+                    </div>
+                    <div class="po-font-text-smaller" style="margin-left: 1em;">
+                        Tipo: {{ option.desc }}
+                    </div>
         
-        <po-lookup 
-            class="po-lg-4" 
-            name="destino"  
-            [p-columns]="LookupColumns"
-            p-field-label="descricao"
-            p-field-value="codigo"
-            [p-filter-service]="localidadeLookupService"
-            [p-field-format]="['codigo','descricao']"
-            p-label="Destino*" 
-            formControlName="destino"
-            p-placeholder="Selecione"
-            [p-hide-columns-manager]="true"
-            [p-filter-params]="filterParams"
+                    </div>
+                    
+                </div>
+            </ng-template>
 
-        >
-        </po-lookup>
+        </po-combo>
 
-        <po-lookup 
+        <po-combo
+            #destinoFilterCombo
             class="po-lg-4" 
-            name="orgaoregulamentador"  
-            p-field-label="descricao"
-            p-field-value="codigo" 
-            [p-filter-service]="localidadeLookupService"
-            [p-field-format]="['codigo','descricao']"
-            p-label="Órgão regulamentador*" 
-            formControlName="orgaoregulamentador"
-            required="true"
-            p-placeholder="Selecione"
-            [p-filter-params]="filterParams"
+            name="destino"
+            formControlName="destino"  
+            p-label="Destino*"
+            [p-filter-service]="localidadeComboService"
+            p-placeholder="Selecionar"
+            (p-change)="setFilters()"
+            p-clean="true"
         >
-        </po-lookup>
+            <ng-template p-combo-option-template let-option>
+                <div class="po-row">
+                    <div class="po-sm-10 po-md-9 po-lg-11">
+                    <div class="po-font-text-large-bold">
+                        {{ option.label + "-" + option.value }}
+                    </div>
+                    <div class="po-font-text-smaller" style="margin-left:1em">
+                        Prefixo: {{ option.label }}
+                    </div>
+                    <div class="po-font-text-smaller" style="margin-left: 1em;">
+                        Município: {{ option.value }}
+                    </div>
+                    <div class="po-font-text-smaller" style="margin-left: 1em;">
+                        Tipo: {{ option.desc }}
+                    </div>
+        
+                    </div>
+                    
+                </div>
+            </ng-template>
 
-        <po-lookup 
-            class="po-lg-4" 
-            name="tarifa"  
-            p-field-label="descricao"
-            p-field-value="codigo" 
-            [p-filter-service]="localidadeLookupService"
-            [p-field-format]="['codigo','descricao']"
-            p-label="Tarifa*" 
-            formControlName="tarifa"
-            required="true"
-            p-placeholder="Selecione"
-            [p-filter-params]="filterParams"
-        >
-        </po-lookup>
+        </po-combo>
 
-        <po-lookup 
+        <po-combo
+            #orgaoregulamentadorFilterCombo
             class="po-lg-4" 
-            name="pedagio"  
-            [p-filter-service]="localidadeLookupService"
-            [p-field-format]="['codigo','descricao']"
-            p-field-label="descricao"
-            p-field-value="codigo"
-            p-label="Pedágio" 
-            formControlName="pedagio"
-            p-placeholder="Selecione"
-            [p-filter-params]="filterParams"
+            name="orgaoregulamentador"
+            formControlName="orgaoregulamentador"  
+            p-label="Órgão regulamentador*"
+            [p-filter-service]="localidadeComboService"
+            p-placeholder="Selecionar"
+            (p-change)="setFilters()"
+            p-clean="true"
         >
-        </po-lookup>
+            <ng-template p-combo-option-template let-option>
+                <div class="po-row">
+                    <div class="po-sm-10 po-md-9 po-lg-11">
+                    <div class="po-font-text-large-bold">
+                        {{ option.label + "-" + option.value }}
+                    </div>
+                    <div class="po-font-text-smaller" style="margin-left:1em">
+                        Prefixo: {{ option.label }}
+                    </div>
+                    <div class="po-font-text-smaller" style="margin-left: 1em;">
+                        Município: {{ option.value }}
+                    </div>
+                    <div class="po-font-text-smaller" style="margin-left: 1em;">
+                        Tipo: {{ option.desc }}
+                    </div>
 
-        <po-lookup 
+                    </div>
+                    
+                </div>
+            </ng-template>
+        </po-combo>
+
+
+        <po-combo
+            #tarifaFilterCombo
             class="po-lg-4" 
-            name="classificacaofiscal"  
-            p-field-label="descricao"
-            p-field-value="codigo"
-            [p-filter-service]="localidadeLookupService"
-            [p-field-format]="['codigo','descricao']" 
-            p-label="Classificação fiscal" 
-            formControlName="classificacaofiscal"
-            p-placeholder="Selecione"
-            [p-filter-params]="filterParams"
+            name="tarifa"
+            formControlName="tarifa"  
+            p-label="Tarifa*"
+            [p-filter-service]="localidadeComboService"
+            p-placeholder="Selecionar"
+            (p-change)="setFilters()"
+            p-clean="true"
         >
-        </po-lookup>
+            <ng-template p-combo-option-template let-option>
+                <div class="po-row">
+                    <div class="po-sm-10 po-md-9 po-lg-11">
+                        <div class="po-font-text-large-bold">
+                            {{ option.label + "-" + option.value }}
+                        </div>
+                        <div class="po-font-text-smaller" style="margin-left:1em">
+                            Prefixo: {{ option.label }}
+                        </div>
+                        <div class="po-font-text-smaller" style="margin-left: 1em;">
+                            Município: {{ option.value }}
+                        </div>
+                        <div class="po-font-text-smaller" style="margin-left: 1em;">
+                            Tipo: {{ option.desc }}
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </po-combo>
+        
+        <po-combo
+            #pedagioFilterCombo
+            class="po-lg-4" 
+            name="pedagio"
+            formControlName="pedagio"  
+            p-label="Pedagio"
+            [p-filter-service]="localidadeComboService"
+            p-placeholder="Selecionar"
+            (p-change)="setFilters()"
+            p-clean="true"
+        >
+            <ng-template p-combo-option-template let-option>
+                <div class="po-row">
+                    <div class="po-sm-10 po-md-9 po-lg-11">
+                        <div class="po-font-text-large-bold">
+                            {{ option.label + "-" + option.value }}
+                        </div>
+                        <div class="po-font-text-smaller" style="margin-left:1em">
+                            Prefixo: {{ option.label }}
+                        </div>
+                        <div class="po-font-text-smaller" style="margin-left: 1em;">
+                            Município: {{ option.value }}
+                        </div>
+                        <div class="po-font-text-smaller" style="margin-left: 1em;">
+                            Tipo: {{ option.desc }}
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </po-combo>
+
+        <po-combo
+            #classificacaofiscalFilterCombo
+            class="po-lg-4" 
+            name="classificacaofiscal"
+            formControlName="classificacaofiscal"  
+            p-label="Classificação fiscal"
+            [p-filter-service]="localidadeComboService"
+            p-placeholder="Selecionar"
+            (p-change)="setFilters()"
+            p-clean="true"
+        >
+            <ng-template p-combo-option-template let-option>
+                <div class="po-row">
+                    <div class="po-sm-10 po-md-9 po-lg-11">
+                        <div class="po-font-text-large-bold">
+                            {{ option.label + "-" + option.value }}
+                        </div>
+                        <div class="po-font-text-smaller" style="margin-left:1em">
+                            Prefixo: {{ option.label }}
+                        </div>
+                        <div class="po-font-text-smaller" style="margin-left: 1em;">
+                            Município: {{ option.value }}
+                        </div>
+                        <div class="po-font-text-smaller" style="margin-left: 1em;">
+                            Tipo: {{ option.desc }}
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </po-combo>
 
         <!--Linha 3 com botões radio -->
         <div class="po-row custom-fld-row" style="margin-bottom: 3em;">
@@ -143,20 +246,37 @@
                 p-clean="false"
             >
             </po-input>
-        
-            <po-lookup 
+
+            <po-combo
+                #categoriaFilterCombo
                 class="po-lg-4" 
-                name="categoria"  
-                p-field-label="descricao"
-                p-field-value="codigo"
-                p-label="Categoria" 
-                [p-filter-service]="localidadeLookupService"
-                [p-field-format]="['codigo','descricao']"
-                formControlName="categoria"
-                p-placeholder="Selecione"
-                [p-filter-params]="filterParams"
+                name="categoria"
+                formControlName="categoria"  
+                p-label="Categoria"
+                [p-filter-service]="localidadeComboService"
+                p-placeholder="Selecionar"
+                (p-change)="setFilters()"
+                p-clean="true"
             >
-            </po-lookup>
+                <ng-template p-combo-option-template let-option>
+                    <div class="po-row">
+                        <div class="po-sm-10 po-md-9 po-lg-11">
+                            <div class="po-font-text-large-bold">
+                                {{ option.label + "-" + option.value }}
+                            </div>
+                            <div class="po-font-text-smaller" style="margin-left:1em">
+                                Prefixo: {{ option.label }}
+                            </div>
+                            <div class="po-font-text-smaller" style="margin-left: 1em;">
+                                Município: {{ option.value }}
+                            </div>
+                            <div class="po-font-text-smaller" style="margin-left: 1em;">
+                                Tipo: {{ option.desc }}
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </po-combo>
         
             <po-radio-group
                 class="po-lg-3"

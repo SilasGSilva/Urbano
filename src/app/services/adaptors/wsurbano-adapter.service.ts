@@ -54,7 +54,11 @@ export class LocalidadePoLookUpService implements PoComboOption {
     value: string = '';
     desc: string = '';
 }
-
+export class comboLocalidadeStruct {
+	label: string;
+	value: string;
+    desc:string;
+}
 @Injectable({
     providedIn: 'root',
 })
@@ -626,13 +630,13 @@ export class poLookUpFormasDePagamento implements PoLookupFilter {
 @Injectable({
 	providedIn: 'root'
 })
-export class localidadeComboService implements PoComboFilter {
+export class localidadeComboService2 implements PoComboFilter {
 	private endpoint: string = 'FRETAMENTOURBANO/local'
 
 	constructor(private apiService: ApiService) { }
 
 	getFilteredData(params: any, filterParams?: any): Observable<FilterComboStruct[]> {
-
+        
 		let httpParams = new HttpParams();
 		let filter: string = '';
 
@@ -654,11 +658,10 @@ export class localidadeComboService implements PoComboFilter {
 			response.Localidade.forEach((resource: any) => {
 
 				let itemReturn: FilterComboStruct = new FilterComboStruct();
-
 				itemReturn.value = resource.codLocal
 				itemReturn.label = resource.descLocal
 				itemReturn.desc = resource.codMuni
-
+                
 				items.push(itemReturn)
 
 			})
@@ -679,6 +682,93 @@ export class localidadeComboService implements PoComboFilter {
 
 			let itemReturn = new FilterComboStruct();
 
+			itemReturn.value = response.codLocal
+			itemReturn.label = response.descLocal
+			itemReturn.desc = response.codMuni
+
+			return itemReturn
+
+		}))
+
+	}
+}
+
+
+@Injectable({
+	providedIn: 'root'
+})
+export class localidadeComboService implements PoComboFilter {
+	private endpoint: string = 'fwmodel/GTPA001'
+
+	constructor(
+        private apiService: ApiService
+        ) { }
+
+	getFilteredData(params: any, filterParams?: any): Observable<comboLocalidadeStruct[]> {
+        debugger
+		let httpParams = new HttpParams();
+		let filter: string = '';
+
+        params.STARTINDEX = ((params.page * params.pageSize) - 9);
+        params.FIELDVIRTUAL = true;
+        params.FIELDEMPTY = true;
+
+		if (filterParams) {
+			filter = filterParams
+		}
+
+		if (params.value != '') {
+			filter = " (UPPER(GI1_COD) LIKE UPPER('%" + params.value + "%') OR " +
+				" UPPER(GI1_DESCRI) LIKE UPPER('%" + params.value + "%') ) "
+		}
+
+		httpParams = httpParams.append('filter', filter);
+
+		return this.apiService.get(this.endpoint, httpParams).pipe(map((response: any) => {
+            debugger
+			const items: comboLocalidadeStruct[] = [];
+                response.resources.forEach((resource: any) => {
+				let itemReturn: comboLocalidadeStruct = new comboLocalidadeStruct();
+                const tipoLocalidadeMap = {
+                    '1': 'PONTO DE RECOLHE',
+                    '2': 'GARAGEM'
+                  };
+                // Assegura que o valor existe antes de acessá-lo
+                let field = resource.models[0].fields.find(field => field.id == 'GI1_TPLOC');
+                let codigoTipoLocalidade = field ? field.value : '';
+                  
+                // Convertendo o valor para a descrição correspondente
+                let descricaoTipoLocalidade = '';
+                if (codigoTipoLocalidade && codigoTipoLocalidade.includes('1') && codigoTipoLocalidade.includes('2')) {
+                    descricaoTipoLocalidade = codigoTipoLocalidade.split('').map(codigo => tipoLocalidadeMap[codigo]).join(' - ');
+                } else if (codigoTipoLocalidade) {
+                    descricaoTipoLocalidade = tipoLocalidadeMap[codigoTipoLocalidade] || '';
+                }
+                
+                itemReturn.label = resource.models[0].fields.find(field => field.id == 'GI1_DESCRI')?.value;
+                itemReturn.value = resource.models[0].fields.find(field => field.id == 'GI1_COD')?.value;
+                itemReturn.desc = descricaoTipoLocalidade;
+        
+				items.push(itemReturn)
+
+			})
+			return items
+		}))
+
+	}
+
+	getObjectByValue(): Observable<PoComboOption> {
+        
+		let params = new HttpParams();
+
+		let filter: string = ``;
+
+		params = params.append('FILTER', filter)
+
+		return this.apiService.get(this.endpoint, params).pipe(map((response: any) => {
+
+			let itemReturn = new FilterComboStruct();
+            debugger
 			itemReturn.value = response.codLocal
 			itemReturn.label = response.descLocal
 			itemReturn.desc = response.codMuni
