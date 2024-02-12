@@ -6,20 +6,35 @@
 
     <!-- po-combo: Prefixo Linha-->
     <po-combo
+        #prefixoFilterCombo
         name="comboprefixo"
         class="po-lg-3 po-pl-0"
         p-label="Prefixo Linha"
         p-placeholder="Selecionar"
+        [p-filter-service]="localidadeComboService"
+        p-clean="true"
+        (p-change)="setFilters()"
     >
+    <ng-template p-combo-option-template let-option>
+        <div class="po-row">
+            <div class="po-sm-10 po-md-9 po-lg-11">
+            <div class="po-font-text-large-bold">{{ option.label }}</div>
+            <div class="po-font-text-smaller">CÓDIGO: {{ option.value }}</div>
+            </div>
+        </div>
+    </ng-template>
     </po-combo>
 
     <!-- po-combo: Origem -->
     <po-combo
+        #origemFilterCombo
         name="comboorigem"
         class="po-lg-3 po-pl-0"
         p-label="Origem"
         [p-filter-service]="localidadeComboService"
         p-placeholder="Selecionar"
+        (p-change)="setFilters()"
+        p-clean="true"
     >
         <ng-template p-combo-option-template let-option>
             <div class="po-row">
@@ -34,11 +49,14 @@
 
     <!-- po-combo: Destino -->
     <po-combo
+        #destinoFilterCombo
         name="combodestino"
         class="po-lg-3 po-pl-0"
         p-label="Destino"
         p-placeholder="Selecionar"
         [p-filter-service]="localidadeComboService"
+        (p-change)="setFilters()"
+        p-clean="true"
     >
         <ng-template p-combo-option-template let-option>
             <div class="po-row">
@@ -51,11 +69,14 @@
     </po-combo>
     <!-- po-combo: Status -->
     <po-combo
+        #statusFilterCombo
         name="combostatus"
         class="po-lg-3 po-pl-0"
         p-label="Status"
         [p-options]="listStatus"
         p-placeholder="Selecionar"
+        (p-change)="setFilters()"
+        p-clean="true"
     >
     </po-combo>
 

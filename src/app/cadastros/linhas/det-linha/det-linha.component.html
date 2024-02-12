@@ -1,5 +1,5 @@
 <po-page-default
-    [p-title] = "titulo"
+    [p-title] = "title"
     [p-breadcrumb]="breadcrumb"
    
 >
@@ -45,7 +45,8 @@
         <po-lookup 
             class="po-lg-4" 
             name="origem"  
-            p-field-value="origem" 
+            p-field-label="descricao"
+            p-field-value="codigo" 
             p-label="Origem*" 
             [p-columns]="LookupColumns"
             [p-filter-service]="localidadeLookupService"
@@ -60,39 +61,46 @@
             class="po-lg-4" 
             name="destino"  
             [p-columns]="LookupColumns"
+            p-field-label="descricao"
+            p-field-value="codigo"
             [p-filter-service]="localidadeLookupService"
-            p-field-value="destino" 
             [p-field-format]="['codigo','descricao']"
             p-label="Destino*" 
             formControlName="destino"
-            required="true"
             p-placeholder="Selecione"
+            [p-hide-columns-manager]="true"
+            [p-filter-params]="filterParams"
+
         >
         </po-lookup>
 
         <po-lookup 
             class="po-lg-4" 
             name="orgaoregulamentador"  
-            p-field-value="orgaoregulamentador" 
+            p-field-label="descricao"
+            p-field-value="codigo" 
             [p-filter-service]="localidadeLookupService"
             [p-field-format]="['codigo','descricao']"
             p-label="Órgão regulamentador*" 
             formControlName="orgaoregulamentador"
             required="true"
             p-placeholder="Selecione"
+            [p-filter-params]="filterParams"
         >
         </po-lookup>
 
         <po-lookup 
             class="po-lg-4" 
             name="tarifa"  
-            p-field-value="tarifa" 
+            p-field-label="descricao"
+            p-field-value="codigo" 
             [p-filter-service]="localidadeLookupService"
             [p-field-format]="['codigo','descricao']"
             p-label="Tarifa*" 
             formControlName="tarifa"
             required="true"
             p-placeholder="Selecione"
+            [p-filter-params]="filterParams"
         >
         </po-lookup>
 
@@ -101,22 +109,26 @@
             name="pedagio"  
             [p-filter-service]="localidadeLookupService"
             [p-field-format]="['codigo','descricao']"
-            p-field-value="pedagio" 
+            p-field-label="descricao"
+            p-field-value="codigo"
             p-label="Pedágio" 
             formControlName="pedagio"
             p-placeholder="Selecione"
+            [p-filter-params]="filterParams"
         >
         </po-lookup>
 
         <po-lookup 
             class="po-lg-4" 
             name="classificacaofiscal"  
-            p-field-value="classificacaofiscal"
+            p-field-label="descricao"
+            p-field-value="codigo"
             [p-filter-service]="localidadeLookupService"
             [p-field-format]="['codigo','descricao']" 
             p-label="Classificação fiscal" 
             formControlName="classificacaofiscal"
             p-placeholder="Selecione"
+            [p-filter-params]="filterParams"
         >
         </po-lookup>
 
@@ -135,12 +147,14 @@
             <po-lookup 
                 class="po-lg-4" 
                 name="categoria"  
-                p-field-value="categoria" 
+                p-field-label="descricao"
+                p-field-value="codigo"
                 p-label="Categoria" 
                 [p-filter-service]="localidadeLookupService"
                 [p-field-format]="['codigo','descricao']"
                 formControlName="categoria"
                 p-placeholder="Selecione"
+                [p-filter-params]="filterParams"
             >
             </po-lookup>
         
@@ -169,6 +183,8 @@
                     class="po-ml-1" 
                     p-label="Salvar e incluir novo" 
                     p-kind="secondary"
+                    [p-disabled]="!linhaForm.valid"
+                    (p-click)="saveLinha(false)"
                 > 
                 </po-button>
     
@@ -176,6 +192,8 @@
                     class="po-ml-1" 
                     p-label="Salvar" 
                     p-kind="primary"
+                    [p-disabled]="!linhaForm.valid"
+                    (p-click)="saveLinha(false)"
                 > 
                 </po-button>
     

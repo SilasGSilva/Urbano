@@ -49,6 +49,12 @@ export class OrgaoConcessorPoLookUpService implements PoComboOption {
     desc: string = '';
 }
 
+export class LocalidadePoLookUpService implements PoComboOption {
+    label: string = '';
+    value: string = '';
+    desc: string = '';
+}
+
 @Injectable({
     providedIn: 'root',
 })

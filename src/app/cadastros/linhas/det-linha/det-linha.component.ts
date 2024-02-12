@@ -1,14 +1,32 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PoBreadcrumb, PoRadioGroupOption } from '@po-ui/ng-components';
-import { ListStatus, linhaForm } from './det-linha.struct';
-import { ActivatedRoute, Router } from '@angular/router';
-import { PoLookupColumn, PoNotificationService } from '@po-ui/ng-components';
+import { 
+	FormBuilder, 
+	FormGroup, 
+	Validators 
+} from '@angular/forms';
+import { 
+	PoBreadcrumb, 
+	PoRadioGroupOption 
+} from '@po-ui/ng-components';
+import { 
+	ListStatus, 
+	linhaForm 
+} from './det-linha.struct';
+import { 
+	ActivatedRoute, 
+	Router 
+} from '@angular/router';
+import { 
+	PoLookupColumn, 
+	PoNotificationService 
+} from '@po-ui/ng-components';
 import { LocalidadeLookupService } from 'src/app/services/lookup-filter.service';
 import { FwProtheusModel } from 'src/app/services/models/fw-protheus.model';
 import { VldFormStruct } from 'src/app/services/gtpgenerics.struct';
 import { ApiService } from 'src/app/services/api.service';
 import { isNullOrUndefined } from 'src/app/services/functions/util.function';
+import { HttpParams } from '@angular/common/http';
+import { FindValueByName } from 'src/app/services/functions/util.function';
 
 @Component({
   selector: 'app-det-linha',
@@ -17,25 +35,17 @@ import { isNullOrUndefined } from 'src/app/services/functions/util.function';
   providers:[LocalidadeLookupService]
 })
 export class DetLinhaComponent {
-	constructor(
-		private _activatedRoute: ActivatedRoute,
-		private _router: Router,
-		private _formBuilder: FormBuilder,
-		public localidadeLookupService:LocalidadeLookupService,
-		private fwModel: FwProtheusModel,
-		private apiService: ApiService,
-		public poNotification: PoNotificationService
-	){}
 
-	ngOnInit(){
-		this.initializeForm();
-		this.handleAction();
-	}
+	listForm!:FormGroup;
+	public isShowLoading: boolean = false;
+    public editView: boolean = false;
+    public isVisibleBtn: boolean = false;
+	public filial: string = '';
 
-	acao: string = '';
-	pkLinha: string = '';
-	titulo: string = '';
-	isLoadingBtn: boolean = false;
+    public action: string = '';
+    public pk: string = '';
+	public title: string = '';
+	public isLoadingBtn: boolean = false;
 	isHideLoadingTela: boolean = true;
 	listStatus: PoRadioGroupOption[] = ListStatus;
 	editItem:any = '';
@@ -54,124 +64,239 @@ export class DetLinhaComponent {
 	};
 
 	public linhaForm!: FormGroup
+	public filterParams: string = ""
 
-	handleAction():void {
+	constructor(
+		private _activatedRoute: ActivatedRoute,
+		private _router: Router,
+		private _formBuilder: FormBuilder,
+		public localidadeLookupService:LocalidadeLookupService,
+		private fwModel: FwProtheusModel,
+		private apiService: ApiService,
+		public poNotification: PoNotificationService,
+		private _fwModel:FwProtheusModel,
+		private _poNotification: PoNotificationService
+	){
 		// Ação
-		this.acao = this._activatedRoute.snapshot.params['acao'];
+		this.action = this._activatedRoute.snapshot.params['acao'];
 		// PK do modelo
-		this.pkLinha = this._activatedRoute.snapshot.params['pk'];
+		this.pk = this._activatedRoute.snapshot.params['pk'];
+	}
+	
+	ngOnInit(){
 		
-		switch(this.acao){
+		switch(this.action){
 			case 'editar':
-				this.titulo = 'Editar linha'
-				this.breadcrumb.items[2].label = 'Alterar Linha';
+				this.editView = true;
+				// this.filial = atob(
+				// 	this._activatedRoute.snapshot.params['filial']
+				// );
+				this.title = 'Editar linha'
+				this.breadcrumb.items[2].label = 'Editar linha';
+				this.getLinha();
 				break;
-
 			case 'incluir':
-				this.titulo = 'Incluir linha'
-				this.breadcrumb.items[2].label = 'Editar Linha';
-
+				this.title = 'Incluir linha';
+				this.isVisibleBtn = true;
+				this.breadcrumb.items[2].label = 'Incluir linha';
 				break;
 		}
-	}
 
-	saveLinha(isSaveNew:boolean = false):void {
-		const isSubmitable: boolean = this.linhaForm.valid;
+		this.createForm();
 
-		if(isSubmitable){
-			this.isLoadingBtn = true;
-
-			this.fwModel.reset();
-			/* 
-				setar modelId
-				setar endpoint
-				adicionar modelo
-	
-				adicionar campos
-	
-				setar valor para os campos
-				
-			*/
-	
-			this.isLoadingBtn = false;
-			if (this.acao == 'incluir'){
-				 this.fwModel.post().subscribe({
-					next: ()=>{
-						this.poNotification.success('Linha incluída com sucesso');
-						if (isSaveNew){
-							this.fwModel.reset();
-							this.linhaForm.reset();
-							this.linhaForm.patchValue({
-								status: '1'
-							});
-						} else {
-							this.onClickCancel();
-							this.fwModel.reset();
-						}
-					},
-					error:(error)=>{
-						this.poNotification.error(error.error.errorMessage);
-						this.fwModel.reset();
-					},
-					complete:()=>{
-						this.isLoadingBtn = false;
-						this.isHideLoadingTela = true;
-					},
-				 });
-			} else {
-				this.fwModel.operation = 4;
-				//this.fwModel.setEndPoint()
-
-				this.fwModel.put().subscribe({
-					next: ()=>{
-						this.poNotification.success('Linha alterada com sucesso')
-					}
-				})
-			}
-		} else {
-			this.vldDetNotify();
-		}
-
-	}
-
-	vldDetNotify(): void {
-        const listNotification: VldFormStruct[] = this.apiService.validateForm(this.linhaForm);
-
-        listNotification.forEach((item) => {
-            let campos: string = '';
-            item.field.forEach((fields: string) => {
-                if (isNullOrUndefined(campos)) {
-                    campos = fields.toUpperCase();
-                } else {
-                    campos += `, ${fields.toUpperCase()}`;
-                }
+		if (this.pk != undefined) {
+            //Edição, faz a carga dos valores
+            this.getLinha();
+        } else {
+            //Inclusão, seta o status como ativo
+            this.linhaForm.patchValue({
+                status: '1',
             });
+        }
+	}
 
-            this.poNotification.error('Campos não preenchidos: ' + campos + '. Verifique!');
-        });
-
-    }
+	createForm():any{
+		const linha: linhaForm = {} as linhaForm;
+		this.linhaForm = this._formBuilder.group({
+			
+			prefixo:[
+				linha.prefixo, 
+				Validators.compose([Validators.required])
+			],
+			codlinha:[
+				linha.codlinha
+			],
+			descricao:[
+				linha.descricao, 
+				Validators.compose([Validators.required])
+			],
+			origem:[
+				linha.origem, 
+				Validators.compose([Validators.required])
+			],
+			destino:[
+				linha.destino, 
+				Validators.compose([Validators.required])
+			],
+			orgaoregulamentador:[
+				linha.orgaoregulamentador, 
+				Validators.compose([Validators.required])
+			],
+			tarifa:[
+				linha.tarifa, 
+				Validators.compose([Validators.required])
+			],
+			pedagio:[
+				linha.pedagio
+			],
+			classificacaofiscal:[
+				linha.classificacaofiscal
+			],
+			kmdalinha:[
+				linha.kmdalinha, 
+				Validators.compose([Validators.required])
+			],
+			categoria:[
+				linha.categoria
+			],
+			status:[
+				linha.status, 
+				Validators.compose([Validators.required])
+			]
+ 
 	
+		})
+	}
+
+	getLinha() {
+		this.changeLoading();
+        let params = new HttpParams();
+        this._fwModel.reset();
+		debugger
+        this._fwModel.setEndPoint('GTPA001/' + this.pk);
+        this._fwModel.setVirtualField(true);
+        this._fwModel.get(params).subscribe({
+            next: (data: any) => {
+				
+                this.breadcrumb.items[2].label = `${FindValueByName(
+                    data.models[0].fields,
+                    'GI1_COD'
+                )} - ${FindValueByName(data.models[0].fields, 'GI1_DESCRI')}`;
+
+                this.linhaForm.patchValue({
+                    prefixo: FindValueByName(data.models[0].fields, 'GI1_COD'),
+                    codlinha: FindValueByName(
+                        data.models[0].fields,
+                        'GI1_DESCRI'
+                    ),
+					descricao:  FindValueByName(data.models[0].fields, 'GI1_DESCRI') 
+								+ '-'
+								+  FindValueByName(data.models[0].fields, 'GI1_COD'),    
+										
+					/**
+					 * 			
+					origem:.......
+					destino: .......
+					orgaoregulamentador: ......
+					tarifa: .......
+					pedagio: .......
+					classificacaofiscal: ........
+					kmdalinha: ........
+					categoria: ........
+					status: ........
+							
+					*/
+    
+                });
+            },
+            error: (err: any) => {
+                this._poNotification.error(err.errorMessage);
+            },
+            complete: () => {
+                this.changeLoading();
+            },
+        });
+		
+	}
+
+	changeLoading() {
+        if (this.isShowLoading) {
+            this.isShowLoading = false;
+        } else {
+            this.isShowLoading = true;
+        }
+    }
+
 	onClickCancel(): void {
         this.fwModel.reset();
         this._router.navigate(['./linhas']);
     }
 
-	initializeForm():void{
-		const linha: linhaForm = {} as linhaForm;
-		this.linhaForm = this._formBuilder.group({
-			prefixo:[linha.prefixo, Validators.compose([Validators.required])],
-			codlinha:[linha.codlinha],
-			descricao:[linha.descricao, Validators.compose([Validators.required])],
-			origem:[linha.origem, Validators.compose([Validators.required])],
-			destino:[linha.destino, Validators.compose([Validators.required])],
-			orgaoregulamentador:[linha.orgaoregulamentador, Validators.compose([Validators.required])],
-			tarifa:[linha.tarifa, Validators.compose([Validators.required])],
-			pedagio:[linha.pedagio],
-			classificacaofiscal:[linha.classificacaofiscal],
-			kmdalinha:[linha.kmdalinha, Validators.compose([Validators.required])],
-			categoria:[linha.categoria],
-			status:[linha.status, Validators.compose([Validators.required])]
-		})
-	}
+	saveLinha(stay: boolean) {
+        if (!this.editView) {
+            //nova tarifa
+            this.changeLoading();
+            setTimeout(() => {
+                this.changeLoading();
+                if (!stay) {
+                    this.linhaForm.patchValue({
+                        prefixo: '',
+                        codlinha: '',
+                        descricao: '',
+                        origem: '',
+                        destino: '',
+                        orgaoregulamentador: '',
+						tarifa: '',
+						pedagio: '',
+						classificacaofiscal: '',
+						kmdalinha: '',
+						categoria: '',
+						status: ''
+                    });
+                    this._router.navigate(['linhas']);
+                } else {
+                    this.linhaForm.patchValue({
+                        prefixo: '',
+                        codlinha: '',
+                        descricao: '',
+                        origem: '',
+                        destino: '',
+                        orgaoregulamentador: '',
+						tarifa: '',
+						pedagio: '',
+						classificacaofiscal: '',
+						kmdalinha: '',
+						categoria: '',
+						status: ''
+                    });
+                }
+                this._poNotification.success('Linha criada com sucesso!');
+            }, 1000);
+        } else {
+			this.changeLoading();
+			setTimeout(() => {
+				this.linhaForm.patchValue({
+					prefixo: '',
+					codlinha: '',
+					descricao: '',
+					origem: '',
+					destino: '',
+					orgaoregulamentador: '',
+					tarifa: '',
+					pedagio: '',
+					classificacaofiscal: '',
+					kmdalinha: '',
+					categoria: '',
+					status: ''
+				});
+				this.changeLoading();
+				this._router.navigate(['linhas']);
+				this._poNotification.success(
+					'Linha alterada com sucesso!'
+				);
+			}, 1000);
+      
+        }
+    }
+
 }
