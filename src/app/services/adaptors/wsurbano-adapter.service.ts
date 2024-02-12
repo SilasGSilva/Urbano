@@ -705,7 +705,6 @@ export class localidadeComboService implements PoComboFilter {
         ) { }
 
 	getFilteredData(params: any, filterParams?: any): Observable<comboLocalidadeStruct[]> {
-        debugger
 		let httpParams = new HttpParams();
 		let filter: string = '';
 
@@ -725,7 +724,6 @@ export class localidadeComboService implements PoComboFilter {
 		httpParams = httpParams.append('filter', filter);
 
 		return this.apiService.get(this.endpoint, httpParams).pipe(map((response: any) => {
-            debugger
 			const items: comboLocalidadeStruct[] = [];
                 response.resources.forEach((resource: any) => {
 				let itemReturn: comboLocalidadeStruct = new comboLocalidadeStruct();
@@ -760,7 +758,6 @@ export class localidadeComboService implements PoComboFilter {
 	getObjectByValue(): Observable<PoComboOption> {
         
 		let params = new HttpParams();
-
 		let filter: string = ``;
 
 		params = params.append('FILTER', filter)
@@ -768,14 +765,11 @@ export class localidadeComboService implements PoComboFilter {
 		return this.apiService.get(this.endpoint, params).pipe(map((response: any) => {
 
 			let itemReturn = new FilterComboStruct();
-            debugger
 			itemReturn.value = response.codLocal
 			itemReturn.label = response.descLocal
 			itemReturn.desc = response.codMuni
 
 			return itemReturn
-
 		}))
-
 	}
 }

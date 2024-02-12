@@ -45,7 +45,7 @@
             class="po-lg-4" 
             name="origem"
             formControlName="origem"  
-            p-label="Origem"
+            p-label="Origem*"
             [p-filter-service]="localidadeComboService"
             p-placeholder="Selecionar"
             (p-change)="setFilters()"
@@ -304,7 +304,7 @@
                     p-label="Salvar e incluir novo" 
                     p-kind="secondary"
                     [p-disabled]="!linhaForm.valid"
-                    (p-click)="saveLinha(false)"
+                    (p-click)="saveLinha(true)"
                 > 
                 </po-button>
     

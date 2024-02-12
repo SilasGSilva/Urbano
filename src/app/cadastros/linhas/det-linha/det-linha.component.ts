@@ -137,7 +137,13 @@ export class DetLinhaComponent {
             });
         }
 	}
-
+	/*******************************************************************************
+   * @name createForm
+   * @description Realiza a criação do formulário e a inclusão dos validadores
+   * @author   Serviços | Diego Bezerra
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
 	createForm():any{
 		const linha: linhaForm = {} as linhaForm;
 		this.linhaForm = this._formBuilder.group({
@@ -191,11 +197,17 @@ export class DetLinhaComponent {
 		})
 	}
 
+	/*******************************************************************************
+   * @name getLinha
+   * @description Obtem os dados da linha que será alterada
+   * @author   Serviços | Diego Bezerra
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
 	getLinha() {
 		this.changeLoading();
         let params = new HttpParams();
         this._fwModel.reset();
-		debugger
         this._fwModel.setEndPoint('GTPA001/' + this.pk);
         this._fwModel.setVirtualField(true);
         this._fwModel.get(params).subscribe({
@@ -242,6 +254,13 @@ export class DetLinhaComponent {
 		
 	}
 
+	/*******************************************************************************
+   * @name changeLoading
+   * @description Altera o estado da variãvel de controle do loader
+   * @author   Serviços | Diego Bezerra
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
 	changeLoading() {
         if (this.isShowLoading) {
             this.isShowLoading = false;
@@ -250,11 +269,26 @@ export class DetLinhaComponent {
         }
     }
 
+	/*******************************************************************************
+   * @name onClickCancel
+   * @description Ação realizado ao clicar em cancelar
+   * @author   Serviços | Diego Bezerra
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
 	onClickCancel(): void {
         this.fwModel.reset();
         this._router.navigate(['./linhas']);
     }
 
+	/*******************************************************************************
+   * @name saveLinha
+   * @description realiza a gravação de uma nova linha
+   * @param stay parâmetro booleano. true == salvar e incluir novo
+   * @author   Serviços | Diego Bezerra
+   * @since    2024
+   * @version  v1
+   *******************************************************************************/
 	saveLinha(stay: boolean) {
         if (!this.editView) {
             //nova tarifa
@@ -278,6 +312,8 @@ export class DetLinhaComponent {
                     });
                     this._router.navigate(['linhas']);
                 } else {
+					this.fwModel.reset();
+					this.linhaForm.reset();
                     this.linhaForm.patchValue({
                         prefixo: '',
                         codlinha: '',
@@ -290,7 +326,7 @@ export class DetLinhaComponent {
 						classificacaofiscal: '',
 						kmdalinha: '',
 						categoria: '',
-						status: ''
+						status: '1'
                     });
                 }
                 this._poNotification.success('Linha criada com sucesso!');
@@ -322,7 +358,6 @@ export class DetLinhaComponent {
         }
     }
 	setFilters(){
-
 		return ''
 	}
 }

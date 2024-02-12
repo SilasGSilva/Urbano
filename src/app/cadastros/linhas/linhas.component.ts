@@ -52,7 +52,9 @@ export class LinhasComponent {
         private _activedRoute: ActivatedRoute,
         private _fwModel:FwProtheusModel,
         public localidadeComboService: localidadeComboService,
-      ){}
+      ){
+        this.setColProperties();
+      }
   public nHeightMonitor: number = window.innerHeight * (window.innerHeight > 850 ? 0.6 : 0.45);
   public isShowMoreDisabled: boolean = false;
   public isLoading: boolean = false;
@@ -179,6 +181,7 @@ export class LinhasComponent {
             linhas.prefixolinha = resource
                 .getModel('GI1MASTER')
                 .getValue('GI1_COD');
+            linhas.descricao = 'Descricao teste asdf asdf asdf asdf asdf fdsa';
             linhas.origem =
                 resource.getModel('GI1MASTER').getValue('GI1_COD') +
                 ' - ' +
@@ -248,6 +251,7 @@ export class LinhasComponent {
       data.pk = linha.pk;
       data.prefixolinha = linha.prefixolinha;
       data.codigolinha = linha.codigolinha;
+      data.descricao = linha.descricao;
       data.tarifa = linha.tarifa;
       data.origem = linha.origem;
       data.destino = linha.destino;
@@ -259,55 +263,6 @@ export class LinhasComponent {
     return returnData;
   }
 
-  // Gerar dados fake
-  public generateMock(source:string){
-    let returnData = []
-    if (source == 'linhas'){
-      returnData = [
-        {
-          "pk":"0123",
-          "prefixolinha": "1 0123",
-          "codigolinha": "12345",
-          "tarifa": "00001-TABELA1-URBANO - R$ 4,40",
-          "origem": "00001-METRÔ SANTANA",
-          "destino": "00002-PQ. DOM PEDRO II",
-          "status": "1",
-          "outrasAcoes":['editar','visualizar']
-        },        
-        {
-          "pk":"0124",
-          "prefixolinha": "1 0123",
-          "codigolinha": "4245",
-          "tarifa": "00001-TABELA1-URBANO - R$ 4,40",
-          "origem": "00001-METRÔ SANTANA",
-          "destino": "00003-TERMINAL GRAJAÚ",
-          "status": "1",
-          "outrasAcoes":['editar','visualizar']
-        },
-        {
-          "pk":"0125",
-          "prefixolinha": "1 0665",
-          "codigolinha": "9428",
-          "tarifa": "00001-TABELA1-URBANO - R$ 4,40",
-          "origem": "00005-METRÔ BARRA FUNDA",
-          "destino": "00006-EST.MENDES/VL.NATAL",
-          "status": "1",
-          "outrasAcoes":['editar','visualizar']
-        },
-        {
-          "pk":"0126",
-          "prefixolinha": "1 1133",
-          "codigolinha": "32094",
-          "tarifa": "00001-TABELA1-URBANO - R$ 4,40",
-          "origem": "00003-TERMINAL GRAJAÚ",
-          "destino": "00001-METRÔ SANTANA",
-          "status": "2",
-          "outrasAcoes":['editar','visualizar']
-        }
-      ]
-    }
-    return returnData
-  }
 
     /*******************************************************************************
    * @name setFilters
@@ -397,5 +352,25 @@ export class LinhasComponent {
           break;
         }
     }
-}
+  }
+
+      /*******************************************************************************
+     * @name setColProperties
+     * @description Seta as demais propriedades das colunas
+     * @author   Serviços | Diego Bezerra
+     * @since       2024
+     * @version v1
+     *******************************************************************************/
+      setColProperties() {
+        this.itemsColumns.forEach(col => {
+            if (
+                col.property === 'outrasAcoes' &&
+                col.icons &&
+                col.icons.length >= 0
+            ) {
+                col.icons[0].action = this.editLinha.bind(this); //editar
+                //col.icons[1].action = this.view.bind(this); //visualizar
+            }
+        });
+    }
 }
