@@ -1,63 +1,58 @@
 <po-page-default [p-title]="title" [p-breadcrumb]="breadcrumb">
-    <p class="po-font-text-large text-color-gray">
-        {{ subtitle }}
-    </p>
-    <form [formGroup]="validadorForm" class="po-row po-pl-0">
-        <div
-            class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2 po-mt-1">
-            <po-input
-                formControlName="codigo"
-                class="po-lg-4"
-                name="codigo"
-                p-label="Código*"
-                [p-show-required]="true"
-                p-placeholder="000004"
-                [p-maxlength]="6">
-            </po-input>
+	<p class="po-font-text-large text-color-gray">
+		{{ subtitle }}
+	</p>
+	<form [formGroup]="validadorForm" class="po-row po-pl-0">
+		<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2 po-mt-1">
+			<po-input
+				formControlName="codigo"
+				class="po-lg-4"
+				name="codigo"
+				p-label="Código*"
+				[p-show-required]="true"
+				p-placeholder="000004"
+				[p-maxlength]="6">
+			</po-input>
 
-            <po-input
-                formControlName="descricao"
-                class="po-lg-8"
-                name="descricao"
-                p-label="Descrição*"
-                [p-show-required]="true"
-                p-placeholder="Descrição da tarifa">
-            </po-input>
-        </div>
-    </form>
-    <div class="po-row po-mt-4" style="justify-content: flex-end">
-        <div class="po-pull-right">
-            <po-button
-                p-label="Cancelar"
-                p-kind="tertiary"
-                (p-click)="modalCancel.open()">
-            </po-button>
-            <po-button
-                *ngIf="isVisibleBtn"
-                class="po-ml-1"
-                p-label="Salvar e incluir novo"
-                (p-click)="saveValidador(true)"
-                p-kind="secondary"
-                [p-disabled]="!validadorForm.valid">
-            </po-button>
-            <po-button
-                class="po-ml-1"
-                p-label="Salvar"
-                (p-click)="saveValidador(false)"
-                p-kind="primary"
-                [p-disabled]="!validadorForm.valid">
-            </po-button>
-        </div>
-    </div>
+			<po-input
+				formControlName="descricao"
+				class="po-lg-8"
+				name="descricao"
+				p-label="Descrição*"
+				[p-show-required]="true"
+				p-placeholder="Descrição da tarifa">
+			</po-input>
+		</div>
+	</form>
+	<div class="po-row po-mt-4" style="justify-content: flex-end">
+		<div class="po-pull-right">
+			<po-button p-label="Cancelar" p-kind="tertiary" (p-click)="modalCancel.open()"> </po-button>
+			<po-button
+				*ngIf="isVisibleBtn"
+				class="po-ml-1"
+				p-label="Salvar e incluir novo"
+				(p-click)="saveValidador(true)"
+				p-kind="secondary"
+				[p-disabled]="!validadorForm.valid">
+			</po-button>
+			<po-button
+				class="po-ml-1"
+				p-label="Salvar"
+				(p-click)="saveValidador(false)"
+				p-kind="primary"
+				[p-disabled]="!validadorForm.valid">
+			</po-button>
+		</div>
+	</div>
 </po-page-default>
 
 <po-modal
-    #modalCancel
-    p-title="Cancelar"
-    [p-primary-action]="confirmCancel"
-    [p-secondary-action]="exitCancel"
-    [p-hide-close]="true">
-    Deseja realmente sair? Irá perder todos os dados não salvos</po-modal
+	#modalCancel
+	p-title="Cancelar"
+	[p-primary-action]="confirmCancel"
+	[p-secondary-action]="exitCancel"
+	[p-hide-close]="true">
+	Deseja realmente sair? Irá perder todos os dados não salvos</po-modal
 >
 
 <po-loading-overlay [hidden]="!isShowLoading"></po-loading-overlay>

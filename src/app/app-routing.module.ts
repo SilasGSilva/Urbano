@@ -23,100 +23,99 @@ import { DetSecoesComponent } from './cadastros/secoes/det-secoes/det-secoes.com
 import { ViewSecoesComponent } from './cadastros/secoes/view-secoes/view-secoes.component';
 
 const routes: Routes = [
-    {
-        path: '',
-        loadChildren: () =>
-            import('./nav-menu/nav-menu.module').then(m => m.NavMenuModule),
-    },
-    // ##### MOTORISTA #####
+	{
+		path: '',
+		loadChildren: () => import('./nav-menu/nav-menu.module').then(m => m.NavMenuModule),
+	},
+	// ##### MOTORISTA #####
 
-    { path: 'motorista', component: MotoristaComponent },
-    {
-        path: 'motorista/detMotorista/:acao/:filial/:id',
-        component: DetMotoristaComponent,
-    },
-    { path: 'motorista/detMotorista/:acao', component: DetMotoristaComponent },
-    {
-        path: 'motorista/viewMotorista/:acao/:filial/:id',
-        component: ViewMotoristaComponent,
-    },
-    // ##### LOCALIDADE #####
-    { path: 'localidades', component: LocalidadesComponent },
-    {
-        path: 'localidades/detLocalidades/:acao',
-        component: DetLocalidadesComponent,
-    },
-    {
-        path: 'localidades/detLocalidades/:acao/:id',
-        component: DetLocalidadesComponent,
-    },
-    {
-        path: 'localidades/viewLocalidades/:acao/:id',
-        component: ViewLocalidadesComponent,
-    },
+	{ path: 'motorista', component: MotoristaComponent },
+	{
+		path: 'motorista/detMotorista/:acao/:filial/:id',
+		component: DetMotoristaComponent,
+	},
+	{ path: 'motorista/detMotorista/:acao', component: DetMotoristaComponent },
+	{
+		path: 'motorista/viewMotorista/:acao/:filial/:id',
+		component: ViewMotoristaComponent,
+	},
+	// ##### LOCALIDADE #####
+	{ path: 'localidades', component: LocalidadesComponent },
+	{
+		path: 'localidades/detLocalidades/:acao',
+		component: DetLocalidadesComponent,
+	},
+	{
+		path: 'localidades/detLocalidades/:acao/:id',
+		component: DetLocalidadesComponent,
+	},
+	{
+		path: 'localidades/viewLocalidades/:acao/:id',
+		component: ViewLocalidadesComponent,
+	},
 
-    // ##### FORMAS DE PAGAMENTO #####
-    { path: 'formas-de-pagamento', component: FormasDePagamentoComponent },
-    {
-        path: 'formas-de-pagamento/det-forma-pagamento/:acao',
-        component: DetFormaPagamentoComponent,
-    },
-    {
-        path: 'formas-de-pagamento/det-forma-pagamento/:acao/:id',
-        component: DetFormaPagamentoComponent,
-    },
+	// ##### FORMAS DE PAGAMENTO #####
+	{ path: 'formas-de-pagamento', component: FormasDePagamentoComponent },
+	{
+		path: 'formas-de-pagamento/det-forma-pagamento/:acao',
+		component: DetFormaPagamentoComponent,
+	},
+	{
+		path: 'formas-de-pagamento/det-forma-pagamento/:acao/:id',
+		component: DetFormaPagamentoComponent,
+	},
 
-    // ##### TARIFAS #####
-    { path: 'tarifas', component: TarifasComponent },
-    {
-        path: 'tarifas/detTarifas/:acao/:filial/:pk',
-        component: DetTarifasComponent,
-    },
-    { path: 'tarifas/detTarifas/:acao', component: DetTarifasComponent },
-    {
-        path: 'tarifas/viewTarifas/:filial/:pk',
-        component: ViewTarifasComponent,
-    },
-    { path: 'validadores', component: ValidadoresComponent },
-    {
-        path: 'validadores/detValidadores/:acao/:filial/:pk',
-        component: DetValidadoresComponent,
-    },
-    {
-        path: 'validadores/detValidadores/:acao',
-        component: DetValidadoresComponent,
-    },
+	// ##### TARIFAS #####
+	{ path: 'tarifas', component: TarifasComponent },
+	{
+		path: 'tarifas/detTarifas/:acao/:filial/:pk',
+		component: DetTarifasComponent,
+	},
+	{ path: 'tarifas/detTarifas/:acao', component: DetTarifasComponent },
+	{
+		path: 'tarifas/viewTarifas/:filial/:pk',
+		component: ViewTarifasComponent,
+	},
+	{ path: 'validadores', component: ValidadoresComponent },
+	{
+		path: 'validadores/detValidadores/:acao/:filial/:pk',
+		component: DetValidadoresComponent,
+	},
+	{
+		path: 'validadores/detValidadores/:acao',
+		component: DetValidadoresComponent,
+	},
 
-    { path: 'roletas', component: RoletasComponent },
-    {
-        path: 'roletas/detRoletas/:acao/:filial/:pk',
-        component: DetRoletasComponent,
-    },
-    { path: 'roletas/detRoletas/:acao', component: DetRoletasComponent },
+	{ path: 'roletas', component: RoletasComponent },
+	{
+		path: 'roletas/detRoletas/:acao/:filial/:pk',
+		component: DetRoletasComponent,
+	},
+	{ path: 'roletas/detRoletas/:acao', component: DetRoletasComponent },
 
-    { path: 'pedagios', component: PedagiosComponent },
-    {
-        path: 'pedagios/detPedagios/:acao/:filial/:pk',
-        component: DetPedagiosComponent,
-    },
-    { path: 'pedagios/detPedagios/:acao', component: DetPedagiosComponent },
-    {
-        path: 'pedagios/viewPedagios/:filial/:pk',
-        component: ViewPedagiosComponent,
-    },
+	{ path: 'pedagios', component: PedagiosComponent },
+	{
+		path: 'pedagios/detPedagios/:acao/:filial/:pk',
+		component: DetPedagiosComponent,
+	},
+	{ path: 'pedagios/detPedagios/:acao', component: DetPedagiosComponent },
+	{
+		path: 'pedagios/viewPedagios/:filial/:pk',
+		component: ViewPedagiosComponent,
+	},
 
-    // ##### SEÇÕES #####
-    { path: 'secoes', component: SecoesComponent },
-    {
-        path: 'secoes/detSecoes/:acao/:filial/:pk',
-        component: DetSecoesComponent,
-    },
-    { path: 'secoes/detSecoes/:acao', component: DetSecoesComponent },
-    { path: 'secoes/viewSecoes/:filial/:pk', component: ViewSecoesComponent },
+	// ##### SEÇÕES #####
+	{ path: 'secoes', component: SecoesComponent },
+	{
+		path: 'secoes/detSecoes/:acao/:filial/:pk',
+		component: DetSecoesComponent,
+	},
+	{ path: 'secoes/detSecoes/:acao', component: DetSecoesComponent },
+	{ path: 'secoes/viewSecoes/:filial/:pk', component: ViewSecoesComponent },
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule],
+	imports: [RouterModule.forRoot(routes)],
+	exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

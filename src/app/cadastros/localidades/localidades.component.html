@@ -1,90 +1,81 @@
-<po-page-default
-    p-title="Localidades"
-    [p-breadcrumb]="breadcrumb"
-    [p-actions]="actions">
-    <!-- Grid-->
-    <!-- Combo de Local -->
-    <po-combo
-        #filterLocal
-        name="local"
-        class="po-lg-4 po-pl-0"
-        p-label="Local"
-        [p-filter-service]="localComboService"
-        [p-filter-params]="filtroLocal"
-        (p-change)="setFilters($event)"
-        p-clean="true"
-        p-placeholder="Selecionar"
-        [p-sort]="true">
-        <ng-template p-combo-option-template let-option>
-            <div class="po-row">
-                <div class="po-sm-10 po-md-9 po-lg-11">
-                    <div class="po-font-text-large-bold">
-                        {{ option.label }}
-                    </div>
-                    <div class="po-font-text-smaller po-ml-1">
-                        Código: {{ option.value }}
-                    </div>
-                </div>
-            </div>
-        </ng-template>
-    </po-combo>
+<po-page-default p-title="Localidades" [p-breadcrumb]="breadcrumb" [p-actions]="actions">
+	<!-- Grid-->
+	<!-- Combo de Local -->
+	<po-combo
+		#filterLocal
+		name="local"
+		class="po-lg-4 po-pl-0"
+		p-label="Local"
+		[p-filter-service]="localComboService"
+		[p-filter-params]="filtroLocal"
+		(p-change)="setFilters($event)"
+		p-clean="true"
+		p-placeholder="Selecionar"
+		[p-sort]="true">
+		<ng-template p-combo-option-template let-option>
+			<div class="po-row">
+				<div class="po-sm-10 po-md-9 po-lg-11">
+					<div class="po-font-text-large-bold">
+						{{ option.label }}
+					</div>
+					<div class="po-font-text-smaller po-ml-1">Código: {{ option.value }}</div>
+				</div>
+			</div>
+		</ng-template>
+	</po-combo>
 
-    <!-- Combo de Município -->
-    <po-combo
-        #filterMuni
-        name="municipio"
-        class="po-lg-4 po-pl-1"
-        p-label="Município"
-        [p-filter-service]="municipioComboService"
-        [p-filter-params]="filtroMuni"
-        (p-change)="setFilters($event)"
-        p-placeholder="Selecionar"
-        p-clean="true"
-        [p-sort]="true">
-        <ng-template p-combo-option-template let-option>
-            <div class="po-row">
-                <div class="po-sm-10 po-md-9 po-lg-11">
-                    <div class="po-font-text-large-bold">
-                        {{ option.label }}
-                    </div>
-                    <div class="po-font-text-smaller po-ml-1">
-                        Código: {{ option.value }}
-                    </div>
-                    <div class="po-font-text-smaller po-ml-1">
-                        UF: {{ option.desc }}
-                    </div>
-                </div>
-            </div>
-        </ng-template>
-    </po-combo>
+	<!-- Combo de Município -->
+	<po-combo
+		#filterMuni
+		name="municipio"
+		class="po-lg-4 po-pl-1"
+		p-label="Município"
+		[p-filter-service]="municipioComboService"
+		[p-filter-params]="filtroMuni"
+		(p-change)="setFilters($event)"
+		p-placeholder="Selecionar"
+		p-clean="true"
+		[p-sort]="true">
+		<ng-template p-combo-option-template let-option>
+			<div class="po-row">
+				<div class="po-sm-10 po-md-9 po-lg-11">
+					<div class="po-font-text-large-bold">
+						{{ option.label }}
+					</div>
+					<div class="po-font-text-smaller po-ml-1">Código: {{ option.value }}</div>
+					<div class="po-font-text-smaller po-ml-1">UF: {{ option.desc }}</div>
+				</div>
+			</div>
+		</ng-template>
+	</po-combo>
 
-    <!-- Combo de Status -->
-    <po-combo
-        #cmbStatus
-        name="status"
-        class="po-lg-4 po-pl-1"
-        p-label="Staus"
-        [p-options]="listStatus"
-        p-clean="true"
-        (p-change)="setFilters($event)"
-        p-placeholder="Selecionar">
-    </po-combo>
+	<!-- Combo de Status -->
+	<po-combo
+		#cmbStatus
+		name="status"
+		class="po-lg-4 po-pl-1"
+		p-label="Staus"
+		[p-options]="listStatus"
+		p-clean="true"
+		(p-change)="setFilters($event)"
+		p-placeholder="Selecionar">
+	</po-combo>
 
-    <!-- Tabela com itens de localidades -->
-    <po-table
-        class="po-md-12 po-pl-0 po-pt-2"
-        [p-columns]="itemsColumns"
-        [p-items]="listLocalidade"
-        p-sort="true"
-        (p-sort-by)="sortTable($event)"
-        p-hide-columns-manager="true"
-        p-striped="true"
-        p-hide-text-overflow
-        p-actions-right="true"
-        (p-show-more)="actionShowMore()"
-        [p-show-more-disabled]="isShowMoreDisabled"
-        p-striped="true"
-        [p-height]="nHeightMonitor"
-        [p-loading]="isLoading">
-    </po-table>
+	<!-- Tabela com itens de localidades -->
+	<po-table
+		class="po-md-12 po-pl-0 po-pt-2"
+		[p-columns]="itemsColumns"
+		[p-items]="listLocalidade"
+		p-sort="true"
+		(p-sort-by)="sortTable($event)"
+		p-hide-columns-manager="true"
+		p-striped="true"
+		p-hide-text-overflow
+		p-actions-right="true"
+		(p-show-more)="actionShowMore()"
+		[p-show-more-disabled]="isShowMoreDisabled"
+		p-striped="true"
+		[p-height]="nHeightMonitor"
+		[p-loading]="isLoading">
+	</po-table>
 </po-page-default>

@@ -12,11 +12,11 @@ export class ApiService {
 	// private apiUrl = 'http://138.219.88.134:8084/rest/';
 	private apiUrl = 'http://localhost:12173/rest/';
 
-	constructor(private http: HttpClient) { }
+	constructor(private http: HttpClient) {}
 
 	/**
-	* header padrão
-	*/
+	 * header padrão
+	 */
 	private optionsHeader: HttpHeaders = new HttpHeaders({
 		'Content-Type': 'application/json;text/plain',
 		Authorization: 'Basic YWRtaW46MTIzNA==',
@@ -74,7 +74,6 @@ export class ApiService {
 	delete<T>(endpoint: string): Observable<T> {
 		const url = `${this.apiUrl}/${endpoint}`;
 		return this.http.delete<T>(url).pipe(
-
 			catchError(error => {
 				return this.handleError(error);
 			})
