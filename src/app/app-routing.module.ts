@@ -18,6 +18,9 @@ import { DetRoletasComponent } from './cadastros/roletas/det-roletas/det-roletas
 import { PedagiosComponent } from './cadastros/pedagios/pedagios.component';
 import { DetPedagiosComponent } from './cadastros/pedagios/det-pedagios/det-pedagios.component';
 import { ViewPedagiosComponent } from './cadastros/pedagios/view-pedagios/view-pedagios.component';
+import { SecoesComponent } from './cadastros/secoes/secoes.component';
+import { DetSecoesComponent } from './cadastros/secoes/det-secoes/det-secoes.component';
+import { ViewSecoesComponent } from './cadastros/secoes/view-secoes/view-secoes.component';
 
 const routes: Routes = [
     {
@@ -25,8 +28,9 @@ const routes: Routes = [
         loadChildren: () =>
             import('./nav-menu/nav-menu.module').then(m => m.NavMenuModule),
     },
+    // ##### MOTORISTA #####
+
     { path: 'motorista', component: MotoristaComponent },
-    { path: 'localidades', component: LocalidadesComponent },
     {
         path: 'motorista/detMotorista/:acao/:filial/:id',
         component: DetMotoristaComponent,
@@ -36,6 +40,8 @@ const routes: Routes = [
         path: 'motorista/viewMotorista/:acao/:filial/:id',
         component: ViewMotoristaComponent,
     },
+    // ##### LOCALIDADE #####
+    { path: 'localidades', component: LocalidadesComponent },
     {
         path: 'localidades/detLocalidades/:acao',
         component: DetLocalidadesComponent,
@@ -44,11 +50,12 @@ const routes: Routes = [
         path: 'localidades/detLocalidades/:acao/:id',
         component: DetLocalidadesComponent,
     },
-
     {
         path: 'localidades/viewLocalidades/:acao/:id',
         component: ViewLocalidadesComponent,
     },
+
+    // ##### FORMAS DE PAGAMENTO #####
     { path: 'formas-de-pagamento', component: FormasDePagamentoComponent },
     {
         path: 'formas-de-pagamento/det-forma-pagamento/:acao',
@@ -58,6 +65,8 @@ const routes: Routes = [
         path: 'formas-de-pagamento/det-forma-pagamento/:acao/:id',
         component: DetFormaPagamentoComponent,
     },
+
+    // ##### TARIFAS #####
     { path: 'tarifas', component: TarifasComponent },
     {
         path: 'tarifas/detTarifas/:acao/:filial/:pk',
@@ -95,6 +104,15 @@ const routes: Routes = [
         path: 'pedagios/viewPedagios/:filial/:pk',
         component: ViewPedagiosComponent,
     },
+
+    // ##### SEÇÕES #####
+    { path: 'secoes', component: SecoesComponent },
+    {
+        path: 'secoes/detSecoes/:acao/:filial/:pk',
+        component: DetSecoesComponent,
+    },
+    { path: 'secoes/detSecoes/:acao', component: DetSecoesComponent },
+    { path: 'secoes/viewSecoes/:filial/:pk', component: ViewSecoesComponent },
 ];
 
 @NgModule({

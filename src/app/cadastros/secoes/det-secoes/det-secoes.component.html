@@ -1,0 +1,131 @@
+<po-page-default [p-title]="title" [p-breadcrumb]="breadcrumb">
+  <p class="po-font-text-large text-color-gray">
+    {{ subtitle }}
+  </p>
+  <form [formGroup]="secaoForm" class="po-row po-pl-0">
+    <div
+      class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2 po-mt-1">
+      <po-input
+        formControlName="codigo"
+        class="po-lg-4"
+        name="codigo"
+        p-label="Código*"
+        [p-show-required]="true"
+        p-placeholder="000004"
+        [p-maxlength]="6">
+      </po-input>
+
+      <po-input
+        formControlName="descricao"
+        class="po-lg-8"
+        name="descricao"
+        p-label="Descrição*"
+        [p-show-required]="true"
+        p-placeholder="Descrição da tarifa"
+        [p-maxlength]="30">
+      </po-input>
+    </div>
+
+    <div
+      class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2 po-mt-1">
+      <po-lookup
+        class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+        formControlName="origem"
+        p-label="Origem*"
+        name="origem"
+        [p-field-format]="['codLocal', 'local']"
+        p-field-value="codLocal"
+        [p-columns]="columnsPoLookUpOrigem"
+        [p-filter-service]="poLookUpOrigem"
+        [p-filter-params]="filterParamOrigem"
+        [p-hide-columns-manager]="true"
+        [p-literals]="literalsPoLookUpOrigem"></po-lookup>
+
+      <po-lookup
+        class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+        formControlName="destino"
+        p-label="Destino*"
+        name="destino"
+        [p-field-format]="['codLocal', 'local']"
+        p-field-value="codLocal"
+        [p-columns]="columnsPoLookUpDestino"
+        [p-filter-service]="poLookUpDestino"
+        [p-filter-params]="filterParamDestino"
+        [p-hide-columns-manager]="true"
+        [p-literals]="literalsPoLookUpDestino"></po-lookup>
+      <po-radio-group
+        class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+        #sentidoRadioGroup
+        formControlName="sentido"
+        name="sentido"
+        p-label="Sentido*"
+        [p-options]="[
+          { label: 'Ida', value: 'ida' },
+          { label: 'Volta', value: 'volta' }
+        ]">
+      </po-radio-group>
+    </div>
+    <div class="po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2">
+      <po-lookup
+        class="po-xl-8 po-lg-8 po-md-12 po-sm-12"
+        formControlName="associarLinhas"
+        p-label="Associar Linhas*"
+        name="associarLinhas"
+        [p-field-format]="['codLinha', 'linhas']"
+        p-field-value="codLinha"
+        [p-columns]="columnsPoLookUpAssociarLinhas"
+        [p-filter-service]="poLookUpAssociarLinhas"
+        [p-filter-params]="filterParamAssociarLinhas"
+        [p-hide-columns-manager]="true"
+        [p-multiple]="true"
+        [p-literals]="literalsPoLookUpAssociarLinhas"></po-lookup>
+      <po-radio-group
+        class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+        #statusRadioGroup
+        formControlName="status"
+        name="status"
+        p-label="Status*"
+        [p-options]="[
+          { label: 'Ativa', value: 1 },
+          { label: 'Inativa', value: 2 }
+        ]">
+      </po-radio-group>
+    </div>
+  </form>
+
+  <div class="po-row po-mt-4" style="justify-content: flex-end">
+    <div class="po-pull-right">
+      <po-button
+        p-label="Cancelar"
+        p-kind="tertiary"
+        (p-click)="modalCancel.open()">
+      </po-button>
+      <po-button
+        *ngIf="isVisibleBtn"
+        class="po-ml-1"
+        p-label="Salvar e incluir outra"
+        (p-click)="saveSecao(true)"
+        p-kind="secondary"
+        [p-disabled]="!secaoForm.valid">
+      </po-button>
+      <po-button
+        class="po-ml-1"
+        p-label="Salvar"
+        (p-click)="saveSecao(false)"
+        p-kind="primary"
+        [p-disabled]="!secaoForm.valid">
+      </po-button>
+    </div>
+  </div>
+</po-page-default>
+
+<po-modal
+  #modalCancel
+  p-title="Cancelar"
+  [p-primary-action]="confirmCancel"
+  [p-secondary-action]="exitCancel"
+  [p-hide-close]="true">
+  Deseja realmente sair? Irá perder todos os dados não salvos</po-modal
+>
+
+<po-loading-overlay [hidden]="!isShowLoading"></po-loading-overlay>

@@ -25,6 +25,9 @@ import { DetRoletasComponent } from './cadastros/roletas/det-roletas/det-roletas
 import { PedagiosComponent } from './cadastros/pedagios/pedagios.component';
 import { DetPedagiosComponent } from './cadastros/pedagios/det-pedagios/det-pedagios.component';
 import { ViewPedagiosComponent } from './cadastros/pedagios/view-pedagios/view-pedagios.component';
+import { SecoesComponent } from './cadastros/secoes/secoes.component';
+import { DetSecoesComponent } from './cadastros/secoes/det-secoes/det-secoes.component';
+import { ViewSecoesComponent } from './cadastros/secoes/view-secoes/view-secoes.component';
 
 @NgModule({
     declarations: [
@@ -49,6 +52,10 @@ import { ViewPedagiosComponent } from './cadastros/pedagios/view-pedagios/view-p
         DetPedagiosComponent,
         ViewPedagiosComponent,
     ],
+    SecoesComponent,
+    DetSecoesComponent,
+    ViewSecoesComponent,
+  ],
     imports: [
         BrowserModule,
         AppRoutingModule,
