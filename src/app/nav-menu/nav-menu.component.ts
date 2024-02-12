@@ -35,7 +35,7 @@ export class NavMenuComponent {
                     action: this.navigate.bind(this, '/formas-de-pagamento'),
                 },
                 {
-                    label: 'Ped·gio',
+                    label: 'Ped√°gio',
                     action: this.navigate.bind(this, '/pedagios'),
                 },
                 {
@@ -43,7 +43,7 @@ export class NavMenuComponent {
                     action: this.navigate.bind(this, '/tarifas'),
                 },
                 { label: 'Linhas' },
-                { label: 'Sessıes' },
+                { label: 'Sess√µes' },
                 {
                     label: 'Validadores',
                     action: this.navigate.bind(this, '/validadores'),
