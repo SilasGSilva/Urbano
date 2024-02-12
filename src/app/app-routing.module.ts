@@ -15,6 +15,9 @@ import { ValidadoresComponent } from './cadastros/validadores/validadores.compon
 import { DetValidadoresComponent } from './cadastros/validadores/det-validadores/det-validadores.component';
 import { RoletasComponent } from './cadastros/roletas/roletas.component';
 import { DetRoletasComponent } from './cadastros/roletas/det-roletas/det-roletas.component';
+import { PedagiosComponent } from './cadastros/pedagios/pedagios.component';
+import { DetPedagiosComponent } from './cadastros/pedagios/det-pedagios/det-pedagios.component';
+import { ViewPedagiosComponent } from './cadastros/pedagios/view-pedagios/view-pedagios.component';
 
 const routes: Routes = [
     {
@@ -41,6 +44,7 @@ const routes: Routes = [
         path: 'localidades/detLocalidades/:acao/:id',
         component: DetLocalidadesComponent,
     },
+
     {
         path: 'localidades/viewLocalidades/:acao/:id',
         component: ViewLocalidadesComponent,
@@ -80,6 +84,17 @@ const routes: Routes = [
         component: DetRoletasComponent,
     },
     { path: 'roletas/detRoletas/:acao', component: DetRoletasComponent },
+
+    { path: 'pedagios', component: PedagiosComponent },
+    {
+        path: 'pedagios/detPedagios/:acao/:filial/:pk',
+        component: DetPedagiosComponent,
+    },
+    { path: 'pedagios/detPedagios/:acao', component: DetPedagiosComponent },
+    {
+        path: 'pedagios/viewPedagios/:filial/:pk',
+        component: ViewPedagiosComponent,
+    },
 ];
 
 @NgModule({

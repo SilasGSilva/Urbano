@@ -22,6 +22,9 @@ import { ValidadoresComponent } from './cadastros/validadores/validadores.compon
 import { DetValidadoresComponent } from './cadastros/validadores/det-validadores/det-validadores.component';
 import { RoletasComponent } from './cadastros/roletas/roletas.component';
 import { DetRoletasComponent } from './cadastros/roletas/det-roletas/det-roletas.component';
+import { PedagiosComponent } from './cadastros/pedagios/pedagios.component';
+import { DetPedagiosComponent } from './cadastros/pedagios/det-pedagios/det-pedagios.component';
+import { ViewPedagiosComponent } from './cadastros/pedagios/view-pedagios/view-pedagios.component';
 
 @NgModule({
     declarations: [
@@ -42,6 +45,9 @@ import { DetRoletasComponent } from './cadastros/roletas/det-roletas/det-roletas
         DetValidadoresComponent,
         RoletasComponent,
         DetRoletasComponent,
+        PedagiosComponent,
+        DetPedagiosComponent,
+        ViewPedagiosComponent,
     ],
     imports: [
         BrowserModule,
