@@ -1,81 +1,74 @@
-<po-page-default
-    p-title="Tarifas"
-    [p-breadcrumb]="breadcrumb"
-    [p-actions]="actions">
-    <!-- Grid-->
-    <!-- Combo de tarifa -->
-    <po-combo
-        #tarifaFilterCombo
-        name="tarifa"
-        class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
-        p-label="Tarifa"
-        [p-filter-service]="tarifaComboService"
-        [p-filter-params]="tarifaFilter"
-        (p-change)="setFilters(); clearFilter('tarifa')"
-        p-clean="true"
-        p-placeholder="Selecionar"
-        [p-sort]="true">
-        <ng-template p-combo-option-template let-option>
-            <div class="po-row">
-                <div class="po-sm-10 po-md-9 po-lg-11">
-                    <div class="po-font-text-large-bold">
-                        {{ option.label }}
-                    </div>
-                    <div class="po-font-text-smaller po-ml-1">
-                        Código: {{ option.value }}
-                    </div>
-                </div>
-            </div>
-        </ng-template>
-    </po-combo>
+<po-page-default p-title="Tarifas" [p-breadcrumb]="breadcrumb" [p-actions]="actions">
+	<!-- Grid-->
+	<!-- Combo de tarifa -->
+	<po-combo
+		#tarifaFilterCombo
+		name="tarifa"
+		class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
+		p-label="Tarifa"
+		[p-filter-service]="tarifaComboService"
+		[p-filter-params]="tarifaFilter"
+		(p-change)="setFilters(); clearFilter('tarifa')"
+		p-clean="true"
+		p-placeholder="Selecionar"
+		[p-sort]="true">
+		<ng-template p-combo-option-template let-option>
+			<div class="po-row">
+				<div class="po-sm-10 po-md-9 po-lg-11">
+					<div class="po-font-text-large-bold">
+						{{ option.label }}
+					</div>
+					<div class="po-font-text-smaller">Código: {{ option.codigo }}</div>
+				</div>
+			</div>
+		</ng-template>
+	</po-combo>
 
-    <po-combo
-        #orgaoConcessorFilterCombo
-        name="orgaoConcessor"
-        class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
-        p-label="Órgão concessor"
-        [p-filter-service]="orgaoConcessorComboService"
-        [p-filter-params]="orgaoConcessorFilter"
-        (p-change)="setFilters(); clearFilter('orgaoConcessor')"
-        p-clean="true"
-        p-placeholder="Selecionar"
-        [p-sort]="true">
-        <ng-template p-combo-option-template let-option>
-            <div class="po-row">
-                <div class="po-sm-10 po-md-9 po-lg-11">
-                    <div class="po-font-text-large-bold">
-                        {{ option.label }}
-                    </div>
-                    <div class="po-font-text-smaller po-ml-1">
-                        Código: {{ option.value }}
-                    </div>
-                </div>
-            </div>
-        </ng-template>
-    </po-combo>
+	<po-combo
+		#orgaoConcessorFilterCombo
+		name="orgaoConcessor"
+		class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
+		p-label="Órgão concessor"
+		[p-filter-service]="orgaoConcessorComboService"
+		[p-filter-params]="orgaoConcessorFilter"
+		(p-change)="setFilters(); clearFilter('orgaoConcessor')"
+		p-clean="true"
+		p-placeholder="Selecionar"
+		[p-sort]="true">
+		<ng-template p-combo-option-template let-option>
+			<div class="po-row">
+				<div class="po-sm-10 po-md-9 po-lg-11">
+					<div class="po-font-text-large-bold">
+						{{ option.label }}
+					</div>
+					<div class="po-font-text-smaller po-ml-1">Código: {{ option.value }}</div>
+				</div>
+			</div>
+		</ng-template>
+	</po-combo>
 
-    <po-datepicker-range
-        #vigenciafilterRange
-        name="vigencia"
-        class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
-        p-label="Vigência"
-        (p-change)="setRangeFilter($event)"></po-datepicker-range>
+	<po-datepicker-range
+		#vigenciafilterRange
+		name="vigencia"
+		class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
+		p-label="Vigência"
+		(p-change)="setFilters($event)"></po-datepicker-range>
 
-    <!-- Tabela com itens de localidades -->
-    <po-table
-        class="po-md-12 po-pl-0 po-pt-2"
-        [p-columns]="columns"
-        [p-items]="listTarifas"
-        p-sort="true"
-        (p-sort-by)="sortTable($event)"
-        p-hide-columns-manager="true"
-        p-striped="true"
-        p-hide-text-overflow
-        p-actions-right="true"
-        (p-show-more)="actionShowMore()"
-        [p-show-more-disabled]="isShowMoreDisabled"
-        p-striped="true"
-        [p-height]="nHeightMonitor"
-        [p-loading]="isLoading">
-    </po-table>
+	<!-- Tabela com itens de localidades -->
+	<po-table
+		class="po-md-12 po-pl-0 po-pt-2"
+		[p-columns]="columns"
+		[p-items]="listTarifas"
+		p-sort="true"
+		(p-sort-by)="sortTable($event)"
+		p-hide-columns-manager="true"
+		p-striped="true"
+		p-hide-text-overflow
+		p-actions-right="true"
+		(p-show-more)="actionShowMore()"
+		[p-show-more-disabled]="isShowMoreDisabled"
+		p-striped="true"
+		[p-height]="nHeightMonitor"
+		[p-loading]="isLoading">
+	</po-table>
 </po-page-default>
