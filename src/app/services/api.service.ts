@@ -10,7 +10,7 @@ import { VldFormStruct } from './gtpgenerics.struct';
 })
 export class ApiService {
 	// private apiUrl = 'http://138.219.88.134:8084/rest/';
-	private apiUrl = 'http://localhost:12173/rest/';
+	private apiUrl = 'http://138.219.88.134:8084/rest/';
 
 	constructor(private http: HttpClient) {}
 
