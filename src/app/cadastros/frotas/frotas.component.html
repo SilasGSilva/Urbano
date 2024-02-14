@@ -1,14 +1,14 @@
-<po-page-default p-title="Seções" [p-breadcrumb]="breadcrumb" [p-actions]="actions">
+<po-page-default p-title="Frotas" [p-breadcrumb]="breadcrumb" [p-actions]="actions">
 	<!-- Grid-->
-	<!-- Combo de seção -->
+	<!-- Combo de prefixo de veículo -->
 	<po-combo
-		#secaoFilterCombo
-		name="secao"
+		#prefixoFilterCombo
+		name="prefixo"
 		class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
-		p-label="Seção"
-		[p-filter-service]="secaoComboService"
-		[p-filter-params]="secaoFilter"
-		(p-change)="setFilters(); clearFilter('secao')"
+		p-label="Prefixo veículo"
+		[p-filter-service]="prefixoComboService"
+		[p-filter-params]="prefixoFilter"
+		(p-change)="setFilters(); clearFilter('prefixo')"
 		p-clean="true"
 		p-placeholder="Selecionar"
 		[p-sort]="true">
@@ -38,7 +38,7 @@
 			<div class="po-row">
 				<div class="po-sm-10 po-md-9 po-lg-11">
 					<div class="po-font-text-large-bold">{{ option.label }}</div>
-					<div class="po-font-text-smaller po-ml-1>"Código: {{ option.value }}</div>
+					<div class="po-font-text-smaller po-ml-1">Código: {{ option.value }}</div>
 				</div>
 			</div>
 		</ng-template>
@@ -60,7 +60,7 @@
 			<div class="po-row">
 				<div class="po-sm-10 po-md-9 po-lg-11">
 					<div class="po-font-text-large-bold">{{ option.label }}</div>
-					<div class="po-font-text-smaller po-ml-1>Código: {{ option.value }}</div>
+					<div class="po-font-text-smaller po-ml-1">Código: {{ option.value }}</div>
 				</div>
 			</div>
 		</ng-template>

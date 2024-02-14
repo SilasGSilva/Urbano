@@ -30,6 +30,7 @@ import { DetSecoesComponent } from './cadastros/secoes/det-secoes/det-secoes.com
 import { ViewSecoesComponent } from './cadastros/secoes/view-secoes/view-secoes.component';
 import { LinhasComponent } from './cadastros/linhas/linhas.component';
 import { DetLinhaComponent } from './cadastros/linhas/det-linha/det-linha.component';
+import { FrotasComponent } from './cadastros/frotas/frotas.component';
 
 @NgModule({
 	declarations: [
@@ -58,6 +59,7 @@ import { DetLinhaComponent } from './cadastros/linhas/det-linha/det-linha.compon
 		ViewSecoesComponent,
 		LinhasComponent,
 		DetLinhaComponent,
+  FrotasComponent,
 	],
 	imports: [
 		BrowserModule,
