@@ -78,6 +78,8 @@ const routes: Routes = [
 		path: 'tarifas/viewTarifas/:filial/:pk',
 		component: ViewTarifasComponent,
 	},
+
+	// ##### VALIDADORES #####
 	{ path: 'validadores', component: ValidadoresComponent },
 	{
 		path: 'validadores/detValidadores/:acao/:filial/:pk',
@@ -88,6 +90,7 @@ const routes: Routes = [
 		component: DetValidadoresComponent,
 	},
 
+	// ##### TARIFAS #####
 	{ path: 'roletas', component: RoletasComponent },
 	{
 		path: 'roletas/detRoletas/:acao/:filial/:pk',
@@ -95,6 +98,7 @@ const routes: Routes = [
 	},
 	{ path: 'roletas/detRoletas/:acao', component: DetRoletasComponent },
 
+	// ##### PEDÁGIOS #####
 	{ path: 'pedagios', component: PedagiosComponent },
 	{
 		path: 'pedagios/detPedagios/:acao/:filial/:pk',
@@ -106,7 +110,7 @@ const routes: Routes = [
 		component: ViewPedagiosComponent,
 	},
 
-	// ##### SEÃ‡Ã•ES #####
+	// ##### SEÇÕES #####
 	{ path: 'secoes', component: SecoesComponent },
 	{
 		path: 'secoes/detSecoes/:acao/:filial/:pk',
@@ -115,13 +119,13 @@ const routes: Routes = [
 	{ path: 'secoes/detSecoes/:acao', component: DetSecoesComponent },
 	{ path: 'secoes/viewSecoes/:filial/:pk', component: ViewSecoesComponent },
 
+	// ##### LINHAS #####
 	{ path: 'linhas', component: LinhasComponent },
 	{ path: 'linhas/det-linha/:acao', component: DetLinhaComponent },
 ];
 
 @NgModule({
-
 	imports: [RouterModule.forRoot(routes)],
 	exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
