@@ -12,7 +12,8 @@ export class NavMenuComponent {
 	constructor(
 		private _router: Router,
 		public appComponent: AppComponent
-	) {}
+	) { }
+
 
 	public readonly logoTotvs: string = '/assets/icon-totvs.svg';
 	public pageName: string = '';
@@ -34,19 +35,16 @@ export class NavMenuComponent {
 					label: 'Formas de pagamento',
 					action: this.navigate.bind(this, '/formas-de-pagamento'),
 				},
-				{
-					label: 'Pedágio',
-					action: this.navigate.bind(this, '/pedagios'),
-				},
+				{ label: 'Pedágio', action: this.navigate.bind(this, '/pedagio'), },
 				{
 					label: 'Tarifas',
 					action: this.navigate.bind(this, '/tarifas'),
 				},
-				{ label: 'Linhas' },
 				{
-					label: 'Sessões',
-					action: this.navigate.bind(this, '/secoes'),
+					label: 'Linhas',
+					action: this.navigate.bind(this, '/linhas')
 				},
+				{ label: 'Seções', action: this.navigate.bind(this, '/secoes'), },
 				{
 					label: 'Validadores',
 					action: this.navigate.bind(this, '/validadores'),
@@ -64,7 +62,6 @@ export class NavMenuComponent {
 			icon: 'po-icon po-icon-steering-wheel',
 			subItems: [],
 		},
-
 		{
 			label: 'Financeiro',
 			shortLabel: 'Financeiro',
@@ -75,9 +72,9 @@ export class NavMenuComponent {
 
 	/*******************************************************************************
 	 * @name navigate
-	 * @description função chamada para navegar pra tela escolhida no menu
-	 * @param newRoute: string - nome da rota qual será navigada
-	 * @author   Serviços | Breno Curtolo
+	 * @description funÃ§Ã£o chamada para navegar pra tela escolhida no menu
+	 * @param newRoute: string - nome da rota qual serÃ¡ navigada
+	 * @author   ServiÃ§os | Breno Curtolo
 	 * @since    2024
 	 * @version  v1
 	 *******************************************************************************/

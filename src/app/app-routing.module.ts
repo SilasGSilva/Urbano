@@ -21,6 +21,8 @@ import { ViewPedagiosComponent } from './cadastros/pedagios/view-pedagios/view-p
 import { SecoesComponent } from './cadastros/secoes/secoes.component';
 import { DetSecoesComponent } from './cadastros/secoes/det-secoes/det-secoes.component';
 import { ViewSecoesComponent } from './cadastros/secoes/view-secoes/view-secoes.component';
+import { LinhasComponent } from './cadastros/linhas/linhas.component';
+import { DetLinhaComponent } from './cadastros/linhas/det-linha/det-linha.component';
 
 const routes: Routes = [
 	{
@@ -104,7 +106,7 @@ const routes: Routes = [
 		component: ViewPedagiosComponent,
 	},
 
-	// ##### SEÇÕES #####
+	// ##### SEÃ‡Ã•ES #####
 	{ path: 'secoes', component: SecoesComponent },
 	{
 		path: 'secoes/detSecoes/:acao/:filial/:pk',
@@ -112,10 +114,14 @@ const routes: Routes = [
 	},
 	{ path: 'secoes/detSecoes/:acao', component: DetSecoesComponent },
 	{ path: 'secoes/viewSecoes/:filial/:pk', component: ViewSecoesComponent },
+
+	{ path: 'linhas', component: LinhasComponent },
+	{ path: 'linhas/det-linha/:acao', component: DetLinhaComponent },
 ];
 
 @NgModule({
+
 	imports: [RouterModule.forRoot(routes)],
 	exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
