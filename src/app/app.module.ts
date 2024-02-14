@@ -31,6 +31,8 @@ import { ViewSecoesComponent } from './cadastros/secoes/view-secoes/view-secoes.
 import { LinhasComponent } from './cadastros/linhas/linhas.component';
 import { DetLinhaComponent } from './cadastros/linhas/det-linha/det-linha.component';
 import { FrotasComponent } from './cadastros/frotas/frotas.component';
+import { DetFrotasComponent } from './cadastros/frotas/det-frotas/det-frotas.component';
+import { ViewFrotasComponent } from './cadastros/frotas/view-frotas/view-frotas.component';
 
 @NgModule({
 	declarations: [
@@ -60,6 +62,8 @@ import { FrotasComponent } from './cadastros/frotas/frotas.component';
 		LinhasComponent,
 		DetLinhaComponent,
   FrotasComponent,
+  DetFrotasComponent,
+  ViewFrotasComponent,
 	],
 	imports: [
 		BrowserModule,
