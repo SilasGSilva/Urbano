@@ -1,28 +1,28 @@
 import { Component, ViewChild } from '@angular/core';
-import { 
-	FormBuilder, 
-	FormGroup, 
-	Validators 
+import {
+	FormBuilder,
+	FormGroup,
+	Validators
 } from '@angular/forms';
-import { 
-	PoBreadcrumb, 
-	PoComboComponent, 
-	PoRadioGroupOption 
+import {
+	PoBreadcrumb,
+	PoComboComponent,
+	PoRadioGroupOption
 } from '@po-ui/ng-components';
-import { 
-	ListStatus, 
-	linhaForm 
+import {
+	ListStatus,
+	linhaForm
 } from './det-linha.struct';
-import { 
-	ActivatedRoute, 
-	Router 
+import {
+	ActivatedRoute,
+	Router
 } from '@angular/router';
-import { 
-	PoLookupColumn, 
-	PoNotificationService 
+import {
+	PoLookupColumn,
+	PoNotificationService
 } from '@po-ui/ng-components';
-import { 
-	localidadeComboService 
+import {
+	LocalidadeComboService
   } from 'src/app/services/adaptors/wsurbano-adapter.service';
 import { LocalidadeLookupService } from 'src/app/services/lookup-filter.service';
 import { FwProtheusModel } from 'src/app/services/models/fw-protheus.model';
@@ -56,7 +56,7 @@ export class DetLinhaComponent {
 
 	@ViewChild('origemFilterCombo',{static:true})
 	classificacaofiscalFilterCombo!: PoComboComponent
-	
+
 	listForm!:FormGroup;
 	public isShowLoading: boolean = false;
     public editView: boolean = false;
@@ -97,7 +97,7 @@ export class DetLinhaComponent {
 		public poNotification: PoNotificationService,
 		private _fwModel:FwProtheusModel,
 		private _poNotification: PoNotificationService,
-		public localidadeComboService: localidadeComboService,
+		public localidadeComboService: LocalidadeComboService,
 
 	){
 		// Ação
@@ -105,9 +105,9 @@ export class DetLinhaComponent {
 		// PK do modelo
 		this.pk = this._activatedRoute.snapshot.params['pk'];
 	}
-	
+
 	ngOnInit(){
-		
+
 		switch(this.action){
 			case 'editar':
 				this.editView = true;
@@ -147,32 +147,32 @@ export class DetLinhaComponent {
 	createForm():any{
 		const linha: linhaForm = {} as linhaForm;
 		this.linhaForm = this._formBuilder.group({
-			
+
 			prefixo:[
-				linha.prefixo, 
+				linha.prefixo,
 				Validators.compose([Validators.required])
 			],
 			codlinha:[
 				linha.codlinha
 			],
 			descricao:[
-				linha.descricao, 
+				linha.descricao,
 				Validators.compose([Validators.required])
 			],
 			origem:[
-				linha.origem, 
+				linha.origem,
 				Validators.compose([Validators.required])
 			],
 			destino:[
-				linha.destino, 
+				linha.destino,
 				Validators.compose([Validators.required])
 			],
 			orgaoregulamentador:[
-				linha.orgaoregulamentador, 
+				linha.orgaoregulamentador,
 				Validators.compose([Validators.required])
 			],
 			tarifa:[
-				linha.tarifa, 
+				linha.tarifa,
 				Validators.compose([Validators.required])
 			],
 			pedagio:[
@@ -182,18 +182,18 @@ export class DetLinhaComponent {
 				linha.classificacaofiscal
 			],
 			kmdalinha:[
-				linha.kmdalinha, 
+				linha.kmdalinha,
 				Validators.compose([Validators.required])
 			],
 			categoria:[
 				linha.categoria
 			],
 			status:[
-				linha.status, 
+				linha.status,
 				Validators.compose([Validators.required])
 			]
- 
-	
+
+
 		})
 	}
 
@@ -212,7 +212,7 @@ export class DetLinhaComponent {
         this._fwModel.setVirtualField(true);
         this._fwModel.get(params).subscribe({
             next: (data: any) => {
-				
+
                 this.breadcrumb.items[2].label = `${FindValueByName(
                     data.models[0].fields,
                     'GI1_COD'
@@ -224,12 +224,12 @@ export class DetLinhaComponent {
                         data.models[0].fields,
                         'GI1_DESCRI'
                     ),
-					descricao:  FindValueByName(data.models[0].fields, 'GI1_DESCRI') 
+					descricao:  FindValueByName(data.models[0].fields, 'GI1_DESCRI')
 								+ '-'
-								+  FindValueByName(data.models[0].fields, 'GI1_COD'),    
-										
+								+  FindValueByName(data.models[0].fields, 'GI1_COD'),
+
 					/**
-					 * 			
+					 *
 					origem:.......
 					destino: .......
 					orgaoregulamentador: ......
@@ -239,9 +239,9 @@ export class DetLinhaComponent {
 					kmdalinha: ........
 					categoria: ........
 					status: ........
-							
+
 					*/
-    
+
                 });
             },
             error: (err: any) => {
@@ -251,7 +251,7 @@ export class DetLinhaComponent {
                 this.changeLoading();
             },
         });
-		
+
 	}
 
 	/*******************************************************************************
@@ -354,7 +354,7 @@ export class DetLinhaComponent {
 					'Linha alterada com sucesso!'
 				);
 			}, 1000);
-      
+
         }
     }
 	setFilters(){
