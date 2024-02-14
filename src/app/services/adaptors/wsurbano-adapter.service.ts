@@ -61,6 +61,25 @@ export class LocalidadePoLookUpService implements PoComboOption {
 	value: string = '';
 	desc: string = '';
 }
+export class PrefixoVeiculoFrotasComboStruct implements PoComboOption {
+	label: string = '';
+	value: string = '';
+}
+
+export class PlacaFrotasComboStruct implements PoComboOption {
+	label: string = '';
+	value: string = '';
+}
+
+export class LocalFrotasComboStruct implements PoComboOption {
+	label: string = '';
+	value: string = '';
+}
+
+export class StatusFrotasComboStruct implements PoComboOption {
+	label: string = '';
+	value: string = '';
+}
 
 export class ComboLocalidadeStruct {
 	label: string;
@@ -647,9 +666,9 @@ export class ValorComboService implements PoComboFilter {
 	}
 }
 
-// ##### TELA DE SEÃ‡Ã•ES #####
+// ##### TELA DE SEÇÕES #####
 
-// ##### COMBO SEÃ‡Ã•ES #####
+// ##### COMBO SEÇÕES #####
 @Injectable({
 	providedIn: 'root',
 })
@@ -1176,6 +1195,284 @@ export class poLookUpAssociarLinhas implements PoLookupFilter {
 					itemReturn.codLinha = resource.models[0].fields.find(field => field.id == 'GI1_COD').value;
 					itemReturn.linhas = resource.models[0].fields.find(field => field.id == 'GI1_DESCRI').value;
 				});
+				return itemReturn;
+			})
+		);
+	}
+}
+
+// ##### TELA DE FROTAS #####
+
+// ##### COMBO PREFIXO VEÍCULO | FROTAS #####
+@Injectable({
+	providedIn: 'root',
+})
+export class PrefixoVeiculoFrotasComboService implements PoComboFilter {
+	private endpoint: string = 'FRETAMENTOURBANO/local';
+
+	constructor(private apiService: ApiService) {}
+
+	getFilteredData(params: any, filterParams?: any): Observable<PrefixoVeiculoFrotasComboStruct[]> {
+		let httpParams = new HttpParams();
+		let filter: string = '';
+		if (filterParams) {
+			filter = filterParams;
+		}
+
+		if (params.value != '') {
+			filter =
+				" AND (UPPER(GI1_COD) LIKE UPPER('%" +
+				params.value +
+				"%') OR " +
+				" UPPER(GI1_DESCRI) LIKE UPPER('%" +
+				params.value +
+				"%') ) ";
+		}
+		httpParams = httpParams.append('filter', filter);
+
+		return this.apiService.get(this.endpoint, httpParams).pipe(
+			map((response: any) => {
+				const items: PrefixoVeiculoFrotasComboStruct[] = [];
+				let hasNext = true;
+
+				response.Localidade.forEach((resource: any) => {
+					let itemReturn: PrefixoVeiculoFrotasComboStruct = new PrefixoVeiculoFrotasComboStruct();
+
+					itemReturn.value = resource.codLocal;
+					itemReturn.label = resource.descLocal;
+
+					items.push(itemReturn);
+
+					if (params.page * params.pageSize >= response.total) {
+						hasNext = false;
+					}
+				});
+				return items;
+			})
+		);
+	}
+
+	getObjectByValue(value: string | number, filterParams?: any): Observable<PoComboOption> {
+		let params = new HttpParams();
+
+		let filter: string = ``;
+
+		params = params.append('FILTER', filter);
+
+		return this.apiService.get(this.endpoint, params).pipe(
+			map((response: any) => {
+				let itemReturn = new PrefixoVeiculoFrotasComboStruct();
+
+				itemReturn.value = response.codLocal;
+				itemReturn.label = response.descLocal;
+
+				return itemReturn;
+			})
+		);
+	}
+}
+
+// ##### COMBO PLACA | FROTAS #####
+@Injectable({
+	providedIn: 'root',
+})
+export class PlacaFrotasComboService implements PoComboFilter {
+	private endpoint: string = 'FRETAMENTOURBANO/local';
+
+	constructor(private apiService: ApiService) {}
+
+	getFilteredData(params: any, filterParams?: any): Observable<PlacaFrotasComboStruct[]> {
+		let httpParams = new HttpParams();
+		let filter: string = '';
+		if (filterParams) {
+			filter = filterParams;
+		}
+
+		if (params.value != '') {
+			filter =
+				" AND (UPPER(GI1_COD) LIKE UPPER('%" +
+				params.value +
+				"%') OR " +
+				" UPPER(GI1_DESCRI) LIKE UPPER('%" +
+				params.value +
+				"%') ) ";
+		}
+		httpParams = httpParams.append('filter', filter);
+
+		return this.apiService.get(this.endpoint, httpParams).pipe(
+			map((response: any) => {
+				const items: PlacaFrotasComboStruct[] = [];
+				let hasNext = true;
+
+				response.Localidade.forEach((resource: any) => {
+					let itemReturn: PlacaFrotasComboStruct = new PlacaFrotasComboStruct();
+
+					itemReturn.value = resource.codLocal;
+					itemReturn.label = resource.descLocal;
+
+					items.push(itemReturn);
+
+					if (params.page * params.pageSize >= response.total) {
+						hasNext = false;
+					}
+				});
+				return items;
+			})
+		);
+	}
+
+	getObjectByValue(value: string | number, filterParams?: any): Observable<PoComboOption> {
+		let params = new HttpParams();
+
+		let filter: string = ``;
+
+		params = params.append('FILTER', filter);
+
+		return this.apiService.get(this.endpoint, params).pipe(
+			map((response: any) => {
+				let itemReturn = new PlacaFrotasComboStruct();
+
+				itemReturn.value = response.codLocal;
+				itemReturn.label = response.descLocal;
+
+				return itemReturn;
+			})
+		);
+	}
+}
+
+// ##### COMBO LOCAL | FROTAS #####
+@Injectable({
+	providedIn: 'root',
+})
+export class LocalFrotasComboService implements PoComboFilter {
+	private endpoint: string = 'FRETAMENTOURBANO/local';
+
+	constructor(private apiService: ApiService) {}
+
+	getFilteredData(params: any, filterParams?: any): Observable<LocalFrotasComboStruct[]> {
+		let httpParams = new HttpParams();
+		let filter: string = '';
+		if (filterParams) {
+			filter = filterParams;
+		}
+
+		if (params.value != '') {
+			filter =
+				" AND (UPPER(GI1_COD) LIKE UPPER('%" +
+				params.value +
+				"%') OR " +
+				" UPPER(GI1_DESCRI) LIKE UPPER('%" +
+				params.value +
+				"%') ) ";
+		}
+		httpParams = httpParams.append('filter', filter);
+
+		return this.apiService.get(this.endpoint, httpParams).pipe(
+			map((response: any) => {
+				const items: LocalFrotasComboStruct[] = [];
+				let hasNext = true;
+
+				response.Localidade.forEach((resource: any) => {
+					let itemReturn: LocalFrotasComboStruct = new LocalFrotasComboStruct();
+
+					itemReturn.value = resource.codLocal;
+					itemReturn.label = resource.descLocal;
+
+					items.push(itemReturn);
+
+					if (params.page * params.pageSize >= response.total) {
+						hasNext = false;
+					}
+				});
+				return items;
+			})
+		);
+	}
+
+	getObjectByValue(value: string | number, filterParams?: any): Observable<PoComboOption> {
+		let params = new HttpParams();
+
+		let filter: string = ``;
+
+		params = params.append('FILTER', filter);
+
+		return this.apiService.get(this.endpoint, params).pipe(
+			map((response: any) => {
+				let itemReturn = new LocalFrotasComboStruct();
+
+				itemReturn.value = response.codLocal;
+				itemReturn.label = response.descLocal;
+
+				return itemReturn;
+			})
+		);
+	}
+}
+
+// ##### COMBO STATUS | FROTAS #####
+@Injectable({
+	providedIn: 'root',
+})
+export class StatusFrotasComboService implements PoComboFilter {
+	private endpoint: string = 'FRETAMENTOURBANO/local';
+
+	constructor(private apiService: ApiService) {}
+
+	getFilteredData(params: any, filterParams?: any): Observable<StatusFrotasComboStruct[]> {
+		let httpParams = new HttpParams();
+		let filter: string = '';
+		if (filterParams) {
+			filter = filterParams;
+		}
+
+		if (params.value != '') {
+			filter =
+				" AND (UPPER(GI1_COD) LIKE UPPER('%" +
+				params.value +
+				"%') OR " +
+				" UPPER(GI1_DESCRI) LIKE UPPER('%" +
+				params.value +
+				"%') ) ";
+		}
+		httpParams = httpParams.append('filter', filter);
+
+		return this.apiService.get(this.endpoint, httpParams).pipe(
+			map((response: any) => {
+				const items: StatusFrotasComboStruct[] = [];
+				let hasNext = true;
+
+				response.Localidade.forEach((resource: any) => {
+					let itemReturn: StatusFrotasComboStruct = new StatusFrotasComboStruct();
+
+					itemReturn.value = resource.codLocal;
+					itemReturn.label = resource.descLocal;
+
+					items.push(itemReturn);
+
+					if (params.page * params.pageSize >= response.total) {
+						hasNext = false;
+					}
+				});
+				return items;
+			})
+		);
+	}
+
+	getObjectByValue(value: string | number, filterParams?: any): Observable<PoComboOption> {
+		let params = new HttpParams();
+
+		let filter: string = ``;
+
+		params = params.append('FILTER', filter);
+
+		return this.apiService.get(this.endpoint, params).pipe(
+			map((response: any) => {
+				let itemReturn = new StatusFrotasComboStruct();
+
+				itemReturn.value = response.codLocal;
+				itemReturn.label = response.descLocal;
+
 				return itemReturn;
 			})
 		);
