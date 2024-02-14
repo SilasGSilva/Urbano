@@ -110,6 +110,21 @@ export class LinhasComponent {
 	public editar(item: any) {
 		this._router.navigate(['./det-linha', 'editar', item], { relativeTo: this._activedRoute });
 	}
+
+
+	/*******************************************************************************
+     * @name visualizar
+     * @description Redireciona para a página de visualização
+     * @author    Serviços | Diego Bezerra
+     * @since     2024
+     * @version   v1
+     *******************************************************************************/
+	visualizar(item: any) {
+		this._router.navigate(['./viewLinhas', 'visualizar', item.pk], {
+			relativeTo: this._activedRoute,
+		});
+	}
+
 	/*******************************************************************************
 	 * @name actionShowMore
 	 * @description Função responsável permitir a carga dos dados ao clicar em
@@ -318,7 +333,7 @@ export class LinhasComponent {
 		this.itemsColumns.forEach(col => {
 			if (col.property === 'outrasAcoes' && col.icons && col.icons.length >= 0) {
 				col.icons[0].action = this.editLinha.bind(this); //editar
-				//col.icons[1].action = this.view.bind(this); //visualizar
+				col.icons[1].action = this.visualizar.bind(this); //visualizar
 			}
 		});
 	}

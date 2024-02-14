@@ -23,6 +23,7 @@ import { DetSecoesComponent } from './cadastros/secoes/det-secoes/det-secoes.com
 import { ViewSecoesComponent } from './cadastros/secoes/view-secoes/view-secoes.component';
 import { LinhasComponent } from './cadastros/linhas/linhas.component';
 import { DetLinhaComponent } from './cadastros/linhas/det-linha/det-linha.component';
+import { ViewLinhasComponent } from './cadastros/linhas/view-linhas/view-linhas.component';
 
 const routes: Routes = [
 	{
@@ -122,6 +123,11 @@ const routes: Routes = [
 	// ##### LINHAS #####
 	{ path: 'linhas', component: LinhasComponent },
 	{ path: 'linhas/det-linha/:acao', component: DetLinhaComponent },
+	{ path: 'linhas/det-linha/:acao/:id', component:DetLinhaComponent },
+    {
+        path: 'linhas/viewLinhas/:acao/:id',
+        component: ViewLinhasComponent,
+    },
 ];
 
 @NgModule({

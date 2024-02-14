@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-const endpoint = 'http://localhost:12173/rest/FRETAMENTOURBANO/';
+const endpoint = 'http://138.219.88.134:8084/rest/FRETAMENTOURBANO/';
 
 @Injectable({
 	providedIn: 'root',

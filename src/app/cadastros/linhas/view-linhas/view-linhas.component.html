@@ -1,0 +1,36 @@
+<po-page-default
+    p-title="{{ titulo }}"
+    [p-breadcrumb]="breadcrumb"
+    [p-actions]="actions">
+
+    <po-loading-overlay
+        [p-screen-lock]="true"
+        [hidden]="isHideLoadingTela"
+        p-text="Carregando localidade">
+    </po-loading-overlay>
+
+    <po-dynamic-view [p-fields]="colunaDados" [p-value]="viewLinhas">
+    </po-dynamic-view>
+
+    <div style="margin-top: 1em;">
+        <po-divider
+        p-border-width="100%"
+        p-label="Seções da linha"
+        >
+    </po-divider>
+    </div>
+
+
+    <po-table
+        
+        class="po-md-12 po-pl-0 po-pt-2"
+        [p-columns]="itemsColumns"
+        [p-items]="listLinhas"
+        p-sort="true"
+        p-hide-columns-manager="true"
+        p-striped="true"
+        p-hide-text-overflow
+    >
+
+</po-table>
+</po-page-default>
