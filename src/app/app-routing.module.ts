@@ -24,6 +24,8 @@ import { ViewSecoesComponent } from './cadastros/secoes/view-secoes/view-secoes.
 import { LinhasComponent } from './cadastros/linhas/linhas.component';
 import { DetLinhaComponent } from './cadastros/linhas/det-linha/det-linha.component';
 import { FrotasComponent } from './cadastros/frotas/frotas.component';
+import { DetFrotasComponent } from './cadastros/frotas/det-frotas/det-frotas.component';
+import { ViewFrotasComponent } from './cadastros/frotas/view-frotas/view-frotas.component';
 
 const routes: Routes = [
 	{
@@ -124,14 +126,14 @@ const routes: Routes = [
 	{ path: 'linhas', component: LinhasComponent },
 	{ path: 'linhas/det-linha/:acao', component: DetLinhaComponent },
 
-  // ##### FROTA #####
+	// ##### FROTA #####
 	{ path: 'frota', component: FrotasComponent },
-	// {
-	// 	path: 'frota/detFrota/:acao/:filial/:pk',
-	// 	component: DetFrotasComponent,
-	// },
-	// { path: 'frota/detFrota/:acao', component: DetFrotasComponent },
-	// { path: 'frota/viewFrota/:filial/:pk', component: ViewFrotasComponent },
+	{
+		path: 'frota/detFrota/:acao/:filial/:pk',
+		component: DetFrotasComponent,
+	},
+	{ path: 'frota/detFrota/:acao', component: DetFrotasComponent },
+	{ path: 'frota/viewFrota/:filial/:pk', component: ViewFrotasComponent },
 ];
 
 @NgModule({

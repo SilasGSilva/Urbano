@@ -72,7 +72,7 @@ export class FrotasComponent {
 		{
 			label: 'Incluir',
 			action: () => {
-				this._router.navigate(['frotas/detFrotas/incluir']);
+				this._router.navigate(['frota/detFrota/incluir']);
 			},
 		},
 	];
@@ -291,7 +291,7 @@ export class FrotasComponent {
 	 * @version  v1
 	 *******************************************************************************/
 	editFrota(event: any) {
-		this._router.navigate(['frotas/detFrotas', 'editar', btoa(event.pk), event.pk]);
+		this._router.navigate(['frota/detFrota', 'editar', btoa(event.pk), event.pk]);
 	}
 
 	/*******************************************************************************
@@ -303,6 +303,6 @@ export class FrotasComponent {
 	 * @version  v1
 	 *******************************************************************************/
 	viewFrota(event: any) {
-		this._router.navigate(['frotas/viewFrotas', btoa(event.pk), event.pk]);
+		this._router.navigate(['frota/viewFrota', btoa(event.pk), event.pk]);
 	}
 }

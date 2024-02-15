@@ -1,1 +1,481 @@
-<p>det-frotas works!</p>
+<po-page-default [p-title]="title" [p-breadcrumb]="breadcrumb">
+	<p class="po-font-text-large text-color-gray">
+		{{ subtitle }}
+	</p>
+	<po-tabs>
+		<po-tab [p-active]="true" p-label="Dados gerais">
+			<form [formGroup]="dadosGeraisForm" class="po-row po-pl-0">
+				<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2 po-mt-1">
+					<po-number
+						formControlName="prefixo"
+						class="po-lg-4"
+						name="prefixo"
+						p-label="Prefixo*"
+						[p-show-required]="true"
+						p-placeholder="000004"
+						[p-maxlength]="6">
+					</po-number>
+
+					<po-input
+						formControlName="placa"
+						class="po-lg-4"
+						name="placa"
+						p-label="Placa*"
+						[p-show-required]="true"
+						p-placeholder="Digite a placa"
+						[p-maxlength]="30">
+					</po-input>
+
+					<po-input
+						formControlName="marca"
+						class="po-lg-4"
+						name="marca"
+						p-label="Marca / Modelo / Versão*"
+						[p-show-required]="true"
+						p-placeholder="Digite a placa"
+						[p-maxlength]="30">
+					</po-input>
+				</div>
+
+				<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2 po-mt-1">
+					<po-number
+						formControlName="anoFabricacao"
+						class="po-lg-4"
+						name="anoFabricacao"
+						p-label="Ano fabricação*"
+						[p-show-required]="true"
+						p-placeholder="2020"
+						[p-maxlength]="4">
+					</po-number>
+
+					<po-number
+						formControlName="anoModelo"
+						class="po-lg-4"
+						name="anoModelo"
+						p-label="Ano modelo*"
+						[p-show-required]="true"
+						p-placeholder="2020"
+						[p-maxlength]="4">
+					</po-number>
+
+					<po-combo
+						#categoriaCombo
+						formControlName="categoria"
+						name="categoria"
+						class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+						p-label="Categoria*"
+						[p-filter-service]="categoriaComboService"
+						[p-filter-params]="categoriaFilter"
+						p-placeholder="Selecionar"
+						[p-sort]="true">
+						<ng-template p-combo-option-template let-option>
+							<div class="po-row">
+								<div class="po-sm-10 po-md-9 po-lg-11">
+									<div class="po-font-text-large-bold">{{ option.label }}</div>
+									<div class="po-font-text-smaller po-ml-1">Código: {{ option.value }}</div>
+								</div>
+							</div>
+						</ng-template>
+					</po-combo>
+				</div>
+
+				<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2 po-mt-1">
+					<po-combo
+						#localCombo
+						formControlName="local"
+						name="local"
+						class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+						p-label="Local*"
+						[p-filter-service]="localComboService"
+						[p-filter-params]="localFilter"
+						p-placeholder="Selecionar"
+						[p-sort]="true">
+						<ng-template p-combo-option-template let-option>
+							<div class="po-row">
+								<div class="po-sm-10 po-md-9 po-lg-11">
+									<div class="po-font-text-large-bold">{{ option.label }}</div>
+									<div class="po-font-text-smaller po-ml-1">Código: {{ option.value }}</div>
+								</div>
+							</div>
+						</ng-template>
+					</po-combo>
+
+					<po-input
+						formControlName="nChassi"
+						class="po-lg-4"
+						name="nChassi"
+						p-label="Nº do chassi*"
+						[p-show-required]="true"
+						p-placeholder="000004"
+						[p-maxlength]="30">
+					</po-input>
+
+					<po-number
+						formControlName="codRenavam"
+						class="po-lg-4"
+						name="codRenavam"
+						p-label="Código Renavam*"
+						[p-show-required]="true"
+						p-placeholder="000004"
+						[p-maxlength]="30">
+					</po-number>
+				</div>
+
+				<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pr-0 po-pb-2 po-mt-1">
+					<po-combo
+						#validadorCombo
+						formControlName="validador"
+						name="validador"
+						class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
+						p-label="Validador"
+						[p-filter-service]="validadorComboService"
+						[p-filter-params]="validadorFilter"
+						p-clean="true"
+						p-placeholder="Selecionar"
+						[p-sort]="true">
+						<ng-template p-combo-option-template let-option>
+							<div class="po-row">
+								<div class="po-sm-10 po-md-9 po-lg-11">
+									<div class="po-font-text-large-bold">{{ option.label }}</div>
+									<div class="po-font-text-smaller po-ml-1">Código: {{ option.value }}</div>
+								</div>
+							</div>
+						</ng-template>
+					</po-combo>
+
+					<po-combo
+						#roletaCombo
+						formControlName="roleta"
+						name="roleta"
+						class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+						p-label="Roleta"
+						[p-filter-service]="roletaComboService"
+						[p-filter-params]="roletaFilter"
+						p-clean="true"
+						p-placeholder="Selecionar"
+						[p-sort]="true">
+						<ng-template p-combo-option-template let-option>
+							<div class="po-row">
+								<div class="po-sm-10 po-md-9 po-lg-11">
+									<div class="po-font-text-large-bold">{{ option.label }}</div>
+									<div class="po-font-text-smaller po-ml-1">Código: {{ option.value }}</div>
+								</div>
+							</div>
+						</ng-template>
+					</po-combo>
+
+					<po-radio-group
+						formControlName="statusVeiculo"
+						name="statusVeiculo"
+						class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+						p-label="Status do veículo*"
+						[p-options]="[
+							{ label: 'Ativo', value: '1' },
+							{ label: 'Inativo', value: '2' }
+						]">
+					</po-radio-group>
+				</div>
+
+				<p class="po-font-text-large text-color-gray">
+					{{ textAditional }}
+				</p>
+
+				<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2 po-mt-1">
+					<po-combo
+						#configPortasCombo
+						formControlName="configPortas"
+						name="configPortas"
+						class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+						p-label="Configuração de portas*"
+						[p-options]="[
+							{ label: 'Lado esquerdo', value: 'esquerdo' },
+							{ label: 'Lado direito', value: 'direito' },
+							{ label: 'Ambos', value: 'ambos' }
+						]"
+						p-placeholder="Selecionar">
+					</po-combo>
+
+					<po-combo
+						#portasEsquerdaCombo
+						formControlName="portasEsquerda"
+						name="portasEsquerda"
+						class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+						p-label="Nº de portas (lado esquerdo)*"
+						[p-options]="[{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }]"
+						p-placeholder="Selecionar">
+					</po-combo>
+
+					<po-combo
+						#portasDireitaCombo
+						formControlName="portasDireita"
+						name="portasDireita"
+						class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+						p-label="Nº de portas (lado direito)*"
+						[p-options]="[{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }]"
+						p-placeholder="Selecionar">
+					</po-combo>
+				</div>
+
+				<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2 po-mt-1">
+					<po-number
+						formControlName="lotacaoSentado"
+						class="po-lg-2 po-lg-2 po-md-6 po-sm-12"
+						name="lotacaoSentado"
+						p-label="Lotação sentado*"
+						[p-show-required]="true"
+						p-placeholder="80"
+						[p-maxlength]="3">
+					</po-number>
+
+					<po-number
+						formControlName="lotacaoEmPe"
+						class="po-lg-2 po-lg-2 po-md-6 po-sm-12"
+						name="lotacaoEmPe"
+						p-label="Lotação em pé*"
+						[p-show-required]="true"
+						p-placeholder="40"
+						[p-maxlength]="3">
+					</po-number>
+
+					<po-combo
+						#portasEsquerdaCombo
+						formControlName="caracteristicaRoleta"
+						name="caracteristicaRoleta"
+						class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+						p-label="Característica da roleta*"
+						[p-options]="[
+							{ label: 'Frente', value: 'frente' },
+							{ label: 'Meio', value: 'meio' },
+							{ label: 'Selecionada', value: 'selecionada' }
+						]"
+						p-placeholder="Selecionar">
+					</po-combo>
+
+					<po-number
+						formControlName="metragemChassi"
+						class="po-lg-4 po-lg-4 po-md-12 po-sm-12"
+						name="metragemChassi"
+						p-label="Metragem do chassi*"
+						[p-show-required]="true"
+						p-placeholder="40"
+						[p-maxlength]="3">
+					</po-number>
+				</div>
+
+				<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2 po-mt-1">
+					<po-radio-group
+						class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+						formControlName="acessibilidade"
+						name="acessibilidade"
+						p-label="Possui acessibilidade?*"
+						[p-options]="[
+							{ label: 'Sim', value: '1' },
+							{ label: 'Não', value: '2' }
+						]">
+					</po-radio-group>
+
+					<po-radio-group
+						class="po-xl-4 po-lg-4 po-md-12 po-sm-12"
+						formControlName="postoCobrador"
+						name="postoCobrador"
+						p-label="Possui posto de cobrador?*"
+						[p-options]="[
+							{ label: 'Sim', value: '1' },
+							{ label: 'Não', value: '2' }
+						]">
+					</po-radio-group>
+				</div>
+			</form>
+
+			<div class="po-row po-mt-4" style="justify-content: flex-end">
+				<div class="po-pull-right">
+					<po-button p-label="Cancelar" p-kind="tertiary" (p-click)="modalCancel.open()"> </po-button>
+					<po-button
+						*ngIf="isVisibleBtn"
+						class="po-ml-1"
+						p-label="Salvar e incluir outra"
+						(p-click)="saveVeiculo(true)"
+						p-kind="secondary"
+						[p-disabled]="!dadosGeraisForm.valid">
+					</po-button>
+					<po-button
+						class="po-ml-1"
+						p-label="Salvar"
+						(p-click)="saveVeiculo(false)"
+						p-kind="primary"
+						[p-disabled]="!dadosGeraisForm.valid">
+					</po-button>
+				</div>
+			</div>
+		</po-tab>
+		<po-tab p-label="Documentos">
+			<div *ngIf="editView">
+				<div class="po-row" style="justify-content: space-between">
+					<p class="po-font-text-large text-color-gray">Documentos</p>
+					<div class="row po-pl-0 po-mt-2 po-md-12">
+						<po-button
+							p-label="Incluir documento"
+							p-kind="tertiary"
+							p-icon="po-icon po-icon-plus"
+							(p-click)="modalDocument.open()"></po-button>
+					</div>
+				</div>
+				<po-table
+					class="po-md-12 po-pl-0 po-pt-2"
+					[p-columns]="columnsTable"
+					[p-items]="listTable"
+					p-sort="true"
+					(p-sort-by)="sortTable($event)"
+					p-hide-columns-manager="true"
+					p-striped="true"
+					p-hide-text-overflow
+					p-actions-right="true"
+					p-striped="true"
+					[p-height]="nHeightMonitor">
+				</po-table>
+			</div>
+			<div *ngIf="!editView" class="row po-pl-0 po-mt-2 po-md-12">
+				<po-button
+					p-label="Incluir documento"
+					p-kind="tertiary"
+					p-icon="po-icon po-icon-plus"
+					(p-click)="modalDocument.open()"></po-button>
+			</div>
+		</po-tab>
+	</po-tabs>
+</po-page-default>
+
+<po-modal
+	#modalCancel
+	p-title="Cancelar"
+	[p-primary-action]="confirmCancel"
+	[p-secondary-action]="exitCancel"
+	[p-hide-close]="true">
+	Deseja realmente sair? Irá perder todos os dados não salvos</po-modal
+>
+
+<po-modal #modalDocument p-title="Documentos" [p-hide-close]="true">
+	<form [formGroup]="documentForm" class="po-row po-pl-0">
+		<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2">
+			<po-combo
+				#tipoDocumentoCombo
+				formControlName="tipoDocumento"
+				name="tipoDocumento"
+				class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+				p-label="Tipo de documento*"
+				[p-filter-service]="tipoDocumentoComboService"
+				[p-filter-params]="tipoDocumentoFilter"
+				p-clean="true"
+				p-placeholder="Selecionar"
+				[p-sort]="true">
+				<ng-template p-combo-option-template let-option>
+					<div class="po-row">
+						<div class="po-sm-10 po-md-9 po-lg-11">
+							<div class="po-font-text-large-bold">{{ option.label }}</div>
+							<div class="po-font-text-smaller po-ml-1">Código: {{ option.value }}</div>
+						</div>
+					</div>
+				</ng-template>
+			</po-combo>
+			<po-input
+				formControlName="nomeDocumento"
+				class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+				name="nomeDocumento"
+				p-label="Nome do documento*"
+				[p-show-required]="true"
+				p-placeholder="Digite">
+			</po-input>
+		</div>
+
+		<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2">
+			<po-number
+				formControlName="nmrDocumento"
+				class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+				name="nmrDocumento"
+				p-label="Nº do documento*"
+				[p-show-required]="true"
+				p-placeholder="Digite">
+			</po-number>
+			<po-datepicker
+				class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+				formControlName="dataEmissao"
+				name="dataEmissao"
+				p-label="Data de emissão"></po-datepicker>
+		</div>
+
+		<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2">
+			<po-combo
+				#tipoToletanciaCombo
+				formControlName="tipoTolerancia"
+				name="tipoTolerancia"
+				class="po-xl-3 po-lg-3 po-md-6 po-sm-12"
+				p-label="Tipo de tolerancia*"
+				[p-options]="[
+					{ label: 'Dia', value: 'dia' },
+					{ label: 'Mês', value: 'mes' },
+					{ label: 'Ano', value: 'ano' },
+					{ label: 'Indeterminado', value: 'Indeterminado' }
+				]"
+				p-placeholder="Selecionar">
+			</po-combo>
+			<po-input
+				formControlName="tempoTolerancia"
+				class="po-xl-3 po-lg-3 po-md-6 po-sm-12"
+				name="tempoTolerancia"
+				p-label="Tempo de tolerância*"
+				p-pattern="^([0-9]?[0-9])$"
+				p-placeholder="12"
+				p-error-pattern="Digite um horário válido, por exemplo: 12"
+				[p-show-required]="true"
+				p-placeholder="Digite">
+			</po-input>
+
+			<po-combo
+				#tipoVigenciaCombo
+				formControlName="tipoVigencia"
+				name="tipoVigencia"
+				class="po-xl-3 po-lg-3 po-md-6 po-sm-12"
+				p-label="Tipo de vigência*"
+				[p-options]="[
+					{ label: 'Dia', value: 'dia' },
+					{ label: 'Mês', value: 'mes' },
+					{ label: 'Ano', value: 'ano' },
+					{ label: 'Indeterminado', value: 'Indeterminado' }
+				]"
+				p-placeholder="Selecionar">
+			</po-combo>
+			<po-input
+				formControlName="tempoVigencia"
+				class="po-xl-3 po-lg-3 po-md-6 po-sm-12"
+				name="tipoVigencia"
+				p-pattern="^([0-9]?[0-9])$"
+				p-placeholder="12"
+				p-error-pattern="Digite um horário válido, por exemplo: 12"
+				p-label="Tempo de vigência*"
+				[p-show-required]="true"
+				p-placeholder="Digite">
+			</po-input>
+
+			<po-upload
+				#poUpload
+				class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-mt-1"
+				[p-auto-upload]="autoUpload"
+				[p-drag-drop]="true"
+				[p-drag-drop-height]="320"
+				[p-hide-send-button]="false"
+				[p-multiple]="false"
+				[p-url]="host"
+				(p-error)="onError()"
+				(p-success)="onSuccess()"
+				(p-upload)="uploadFiles($event)">
+			</po-upload>
+		</div>
+	</form>
+	<po-modal-footer>
+		<po-button p-label="Cancelar" p-kind="tertiary" (p-click)="modalDocument.close()"> </po-button>
+		<po-button p-label="Incluir" p-kind="primary" (p-click)="incluirDocumento()" [p-disabled]="!documentForm.valid">
+		</po-button>
+	</po-modal-footer>
+</po-modal>
+
+<po-loading-overlay [hidden]="!isShowLoading"></po-loading-overlay>
