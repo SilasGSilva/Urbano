@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { PoBreadcrumb, PoComboComponent, PoPageAction, PoTableColumn, PoTableColumnSort } from '@po-ui/ng-components';
-import { OrgaoConcessorComboService, TarifaComboService } from 'src/app/services/adaptors/wsurbano-adapter.service';
 import { ColumnsTariffs, TariffsModel } from './tarifas.struct';
 import { HttpParams } from '@angular/common/http';
 import { FwProtheusModel, Resource } from 'src/app/services/models/fw-protheus.model';
@@ -17,36 +16,17 @@ import { ComboFilial } from '../motorista/motorista.struct';
 	providers: [TarifasComboService, OrgaoConcedenteComboService],
 })
 export class TarifasComponent {
-	@ViewChild('tarifaFilterCombo', { static: true })
-	tarifaFilterCombo!: ComboFilial;
-
-	@ViewChild('orgaoConcessorFilterCombo', { static: true })
-	orgaoConcessorFilterCombo!: PoComboComponent;
-
-	@ViewChild('vigenciafilterRange', { static: true })
-	vigenciafilterRange!: PoDatepickerRangeBaseComponent;
-
-	constructor(
-		public tarifaComboService: TarifasComboService,
-		public orgaoConcessorComboService: OrgaoConcedenteComboService,
-		private _fwModel: FwProtheusModel,
-		private _utilsService: UtilsService,
-		private _router: Router
-	) {
-		this.setColProperties();
-	}
-
 	//Declaração de variaveis
+	filters: string = '';
 	tarifaFilter: string = '';
 	orgaoConcessorFilter: string = '';
 
-	filters: string = '';
 	isLoading: boolean = false;
 	resetFilters: boolean = false;
 	isShowMoreDisabled: boolean = false;
 
-	nNextPage: number = 1;
 	nTotal: number = 0;
+	nNextPage: number = 1;
 	nPageSize: number = 10;
 	nRegIndex: number = 1;
 	nHeightMonitor: number = window.innerHeight * (window.innerHeight > 850 ? 0.6 : 0.6);
@@ -73,6 +53,19 @@ export class TarifasComponent {
 	public breadcrumb: PoBreadcrumb = {
 		items: [{ label: 'Fretamento Urbano', link: '/' }, { label: 'Tarifas' }],
 	};
+
+	@ViewChild('tarifaFilterCombo', { static: true }) tarifaFilterCombo!: ComboFilial;
+	@ViewChild('orgaoConcessorFilterCombo', { static: true }) orgaoConcessorFilterCombo!: PoComboComponent;
+	@ViewChild('vigenciafilterRange', { static: true }) vigenciafilterRange!: PoDatepickerRangeBaseComponent;
+	constructor(
+		public tarifaComboService: TarifasComboService,
+		public orgaoConcessorComboService: OrgaoConcedenteComboService,
+		private _fwModel: FwProtheusModel,
+		private _utilsService: UtilsService,
+		private _router: Router
+	) {
+		this.setColProperties();
+	}
 
 	ngOnInit() {
 		this.getTarifas();
@@ -214,11 +207,12 @@ export class TarifasComponent {
 		this._fwModel.setEndPoint('GTPU002/');
 
 		this._fwModel.setVirtualField(true);
+		this._fwModel.setFirstLevel(true);
 		this._fwModel.get(params).subscribe(() => {
 			this._fwModel.resources.forEach((resource: Resource) => {
 				let tariffs = new TariffsModel();
 				tariffs.pk = resource.pk;
-
+				tariffs.filial = resource.getModel('H6SMASTER').getValue('H6S_FILIAL');
 				tariffs.codTariff = resource.getModel('H6SMASTER').getValue('H6S_CODIGO');
 				tariffs.labelTariff =
 					resource.getModel('H6SMASTER').getValue('H6S_CODIGO') +
@@ -313,7 +307,7 @@ export class TarifasComponent {
 	 * @version  v1
 	 *******************************************************************************/
 	editTariff(event: any) {
-		this._router.navigate(['tarifas/detTarifas', 'editar', btoa(event.pk), event.pk]);
+		this._router.navigate(['tarifas/detTarifas', 'editar', btoa(event.filial), event.pk]);
 	}
 
 	/*******************************************************************************
