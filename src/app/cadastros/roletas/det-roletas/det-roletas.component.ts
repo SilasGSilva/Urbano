@@ -3,15 +3,16 @@ import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PoModalComponent, PoNotificationService, PoBreadcrumb, PoModalAction } from '@po-ui/ng-components';
-import { FindValueByName } from 'src/app/services/functions/util.function';
+import { ChangeUndefinedToEmpty, FindValueByName } from 'src/app/services/functions/util.function';
 import { FwProtheusModel } from 'src/app/services/models/fw-protheus.model';
-import { RoletaForm, RoletaStruct } from './det-roletas.struct';
+import { RoletaForm } from './det-roletas.struct';
+import { ValidaNotificacao } from 'src/app/services/functions/validateForm';
 
 @Component({
 	selector: 'app-det-roletas',
 	templateUrl: './det-roletas.component.html',
 	styleUrls: ['./det-roletas.component.css'],
-	providers: [RoletaStruct],
+	providers: [],
 })
 export class DetRoletasComponent {
 	@ViewChild('modalCancel', { static: false })
@@ -26,18 +27,11 @@ export class DetRoletasComponent {
 	public editView: boolean = false;
 	public isVisibleBtn: boolean = false;
 
-	public action: string = '';
 	public pk: string = '';
-	public description: string = '';
-	public filial: string = '';
 	public title: string = '';
+	public action: string = '';
+	public filial: string = '';
 	public subtitle: string = '';
-	public orgaoConcessor: string = '';
-	public formasDePagamento: string = '';
-	public vigenciaStartFilter: string = '';
-	public vigenciaEndFilter: string = '';
-	public filterParamOrgaoConcessor: string = '';
-	public filterParamFormasDePagamento: string = '';
 
 	nHeightMonitor: number = window.innerHeight * 0.5;
 
@@ -46,18 +40,18 @@ export class DetRoletasComponent {
 		private _router: Router,
 		private _formBuilder: FormBuilder,
 		private _fwModel: FwProtheusModel,
-		private _poNotification: PoNotificationService,
-		private _structRoleta: RoletaStruct
+		private _poNotification: PoNotificationService
 	) {
 		this.action = this._activedRoute.snapshot.params['acao'];
 		this.pk = this._activedRoute.snapshot.params['pk'];
+		this.createForm();
 	}
 
 	public breadcrumb: PoBreadcrumb = {
 		items: [
 			{ label: 'Fretamento Urbano', link: '/' },
-			{ label: 'Cadastrar Roletas', link: '/roletas' },
-			{ label: 'Incluir roleta', link: '' },
+			{ label: 'Roletas', link: '/roletas' },
+			{ label: '', link: '' },
 		],
 	};
 
@@ -97,8 +91,6 @@ export class DetRoletasComponent {
 				this.filial = atob(this._activedRoute.snapshot.params['filial']);
 				this.title = 'Editar roleta';
 				this.subtitle = 'Edite as informações da roleta:';
-				this.getRoleta();
-
 				break;
 			case 'incluir':
 				this.title = 'Incluir roleta';
@@ -107,7 +99,7 @@ export class DetRoletasComponent {
 				this.breadcrumb.items[2].label = 'Incluir roleta';
 				break;
 		}
-
+		this.breadcrumb.items[2].label = this.title;
 		//Criando o formulario
 		this.createForm();
 
@@ -128,7 +120,8 @@ export class DetRoletasComponent {
 	createForm(): any {
 		const roleta: RoletaForm = {} as RoletaForm;
 		this.roletaForm = this._formBuilder.group({
-			codigo: [roleta.codigo, Validators.compose([Validators.required])],
+			codigo: [roleta.codigo],
+			identificador: [roleta.identificador, Validators.compose([Validators.required])],
 			descricao: [roleta.descricao, Validators.compose([Validators.required])],
 		});
 	}
@@ -145,18 +138,19 @@ export class DetRoletasComponent {
 		this.changeLoading();
 		let params = new HttpParams();
 		this._fwModel.reset();
-		this._fwModel.setEndPoint('GTPA001/' + this.pk);
+		this._fwModel.setEndPoint('GTPU006/' + this.pk);
 		this._fwModel.setVirtualField(true);
 		this._fwModel.get(params).subscribe({
 			next: (data: any) => {
 				this.breadcrumb.items[2].label = `${FindValueByName(
 					data.models[0].fields,
-					'GI1_COD'
-				)} - ${FindValueByName(data.models[0].fields, 'GI1_DESCRI')}`;
+					'H6Z_CODID'
+				)} - ${FindValueByName(data.models[0].fields, 'H6Z_DESCR')}`;
 
 				this.roletaForm.patchValue({
-					codigo: FindValueByName(data.models[0].fields, 'GI1_COD'),
-					descricao: FindValueByName(data.models[0].fields, 'GI1_DESCRI'),
+					codigo: FindValueByName(data.models[0].fields, 'H6Z_CODIGO'),
+					identificador: FindValueByName(data.models[0].fields, 'H6Z_CODID'),
+					descricao: FindValueByName(data.models[0].fields, 'H6Z_DESCR'),
 				});
 			},
 			error: (err: any) => {
@@ -178,50 +172,65 @@ export class DetRoletasComponent {
 	 * @since    2024
 	 * @version  v1
 	 *******************************************************************************/
-	saveRoleta(stay: boolean) {
-		if (!this.editView) {
-			//nova roleta
-			this.changeLoading();
-			setTimeout(() => {
-				this.changeLoading();
-				if (!stay) {
-					this.roletaForm.patchValue({
-						codigo: '',
-						descricao: '',
-						valor: '',
-						orgaoConcessor: '',
-						vigencia: '',
-						formasDePagamento: '',
-					});
-					this._router.navigate(['roletas']);
-				} else {
-					this.roletaForm.patchValue({
-						codigo: '',
-						descricao: '',
-						valor: '',
-						orgaoConcessor: '',
-						vigencia: '',
-						formasDePagamento: '',
-					});
-				}
-				this._poNotification.success('Roleta criada com sucesso!');
-			}, 1000);
-		} else {
-			//editar roletas
-			this.changeLoading();
-			setTimeout(() => {
-				this.roletaForm.patchValue({
-					codigo: '',
-					descricao: '',
-					valor: '',
-					orgaoConcessor: '',
-					vigencia: '',
-					formasDePagamento: '',
+	saveRoleta(isSaveNew: boolean) {
+		let isSubmitable: boolean = this.roletaForm.valid;
+		this.changeLoading();
+		if (isSubmitable) {
+			this._fwModel.reset();
+			this._fwModel.setModelId('GTPU006');
+			this._fwModel.setEndPoint('GTPU006/');
+			this._fwModel.AddModel('H6ZMASTER', 'FIELDS');
+
+			this._fwModel.getModel('H6ZMASTER').addField('H6Z_CODID'); // IDENTIFICADOR
+			this._fwModel.getModel('H6ZMASTER').addField('H6Z_DESCR'); // DESCRIÇÃO
+
+			this._fwModel
+				.getModel('H6ZMASTER')
+				.setValue('H6Z_CODID', ChangeUndefinedToEmpty(this.roletaForm.value.identificador));
+			this._fwModel
+				.getModel('H6ZMASTER')
+				.setValue('H6Z_DESCR', ChangeUndefinedToEmpty(this.roletaForm.value.descricao));
+			if (this.editView) {
+				this._fwModel.operation = 4;
+				this._fwModel.setEndPoint('GTPU006/' + this.pk);
+
+				this._fwModel.put().subscribe({
+					next: () => {
+						this._poNotification.success('Roleta atualizada com sucesso');
+						this.close();
+						this.changeLoading();
+					},
+					error: error => {
+						this._poNotification.error(error.error.errorMessage);
+						this._fwModel.reset();
+						this.changeLoading();
+					},
 				});
-				this.changeLoading();
-				this._router.navigate(['roletas']);
-				this._poNotification.success('Roleta alterada com sucesso!');
-			}, 1000);
+			} else {
+				this._fwModel.operation = 3;
+				this._fwModel.post().subscribe({
+					next: () => {
+						if (isSaveNew) {
+							this._fwModel.reset();
+							this.roletaForm.reset();
+						} else {
+							this.close();
+						}
+					},
+					error: error => {
+						this._poNotification.error(error.error.errorMessage);
+						this._fwModel.reset();
+						this.changeLoading();
+					},
+					complete: () => {
+						this.changeLoading();
+						this._poNotification.success('Roleta criada com sucesso!');
+					},
+				});
+			}
+		} else {
+			this._poNotification.error(ValidaNotificacao(this.roletaForm));
+			this.changeLoading();
 		}
 	}
 
@@ -239,5 +248,16 @@ export class DetRoletasComponent {
 		} else {
 			this.isShowLoading = true;
 		}
+	}
+
+	/*******************************************************************************
+	 * @name close
+	 * @description Função responsável por redirecionar para a tela de tarifas
+	 * @author	    Serviços | Breno Gomes
+	 * @since		2024
+	 * @version     v1
+	 *******************************************************************************/
+	close() {
+		this._router.navigate(['roletas']);
 	}
 }

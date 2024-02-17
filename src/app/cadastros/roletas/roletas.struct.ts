@@ -33,6 +33,7 @@ export const ColumnsRoletas: Array<PoTableColumn> = [
 export class RoletasModel {
 	pk: string = '';
 	codRoleta: string = '';
+	identificador: string = '';
 	descRoleta: string = '';
 	labelRoleta: string = '';
 	outrasAcoes?: Array<string>;

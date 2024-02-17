@@ -91,7 +91,7 @@ const routes: Routes = [
 		component: DetValidadoresComponent,
 	},
 
-	// ##### TARIFAS #####
+	// ##### ROLETAS #####
 	{ path: 'roletas', component: RoletasComponent },
 	{
 		path: 'roletas/detRoletas/:acao/:filial/:pk',
@@ -123,11 +123,11 @@ const routes: Routes = [
 	// ##### LINHAS #####
 	{ path: 'linhas', component: LinhasComponent },
 	{ path: 'linhas/det-linha/:acao', component: DetLinhaComponent },
-	{ path: 'linhas/det-linha/:acao/:id', component:DetLinhaComponent },
-    {
-        path: 'linhas/viewLinhas/:acao/:id',
-        component: ViewLinhasComponent,
-    },
+	{ path: 'linhas/det-linha/:acao/:id', component: DetLinhaComponent },
+	{
+		path: 'linhas/viewLinhas/:acao/:id',
+		component: ViewLinhasComponent,
+	},
 ];
 
 @NgModule({
