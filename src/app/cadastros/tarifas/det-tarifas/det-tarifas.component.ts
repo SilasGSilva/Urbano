@@ -10,7 +10,7 @@ import {
 	PoModalComponent,
 	PoNotificationService,
 } from '@po-ui/ng-components';
-import { ColumnsHistorico, FormaPagamentoForm, Historico, TarifaForm } from './det-tarifas.struct';
+import { ColumnsHistorico, Historico, TarifaForm } from './det-tarifas.struct';
 import { HttpParams } from '@angular/common/http';
 import { FwProtheusModel } from 'src/app/services/models/fw-protheus.model';
 import { ChangeUndefinedToEmpty, FindValueByName, MakeDate } from 'src/app/services/functions/util.function';
@@ -186,8 +186,8 @@ export class DetTarifasComponent {
 					.items.forEach(item => {
 						let detHistorico = {} as Historico;
 						detHistorico.valorTarifa = item.getValue('H6T_VALOR');
-						(detHistorico.dataIniVigencia = MakeDate(item.getValue('H6T_DTINIV'), 'yyyy-mm-dd')),
-							(detHistorico.dataFimVigencia = MakeDate(item.getValue('H6T_DTFIMV'), 'yyyy-mm-dd'));
+						detHistorico.dataIniVigencia = MakeDate(item.getValue('H6T_DTINIV'), 'yyyy-mm-dd');
+						detHistorico.dataFimVigencia = MakeDate(item.getValue('H6T_DTFIMV'), 'yyyy-mm-dd');
 						this.itemsHistorico = [...this.itemsHistorico, detHistorico];
 					});
 
