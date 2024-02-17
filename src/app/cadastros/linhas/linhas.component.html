@@ -11,9 +11,10 @@
         class="po-lg-3 po-pl-0"
         p-label="Prefixo Linha"
         p-placeholder="Selecionar"
-        [p-filter-service]="localidadeComboService"
+        [p-filter-service]="prefixoComboService"
+        [p-filter-params]="filterPrefixo"
         p-clean="true"
-        (p-change)="setFilters()"
+        (p-change)="setFilters($event)"
     >
     <ng-template p-combo-option-template let-option>
         <div class="po-row">
@@ -31,9 +32,10 @@
         name="comboorigem"
         class="po-lg-3 po-pl-0"
         p-label="Origem"
-        [p-filter-service]="localidadeComboService"
+        [p-filter-service]="origemComboService"
+        [p-filter-params]="filterOrigem"
         p-placeholder="Selecionar"
-        (p-change)="setFilters()"
+        (p-change)="setFilters($event)"
         p-clean="true"
     >
         <ng-template p-combo-option-template let-option>
@@ -58,8 +60,9 @@
         class="po-lg-3 po-pl-0"
         p-label="Destino"
         p-placeholder="Selecionar"
-        [p-filter-service]="localidadeComboService"
-        (p-change)="setFilters()"
+        [p-filter-service]="destinoComboService"
+        [p-filter-params]="filterDestino"
+        (p-change)="setFilters($event)"
         p-clean="true"
     >
         <ng-template p-combo-option-template let-option>
@@ -79,7 +82,7 @@
         p-label="Status"
         [p-options]="listStatus"
         p-placeholder="Selecionar"
-        (p-change)="setFilters()"
+        (p-change)="setFilters($event)"
         p-clean="true"
     >
     </po-combo>

@@ -1,4 +1,7 @@
-import { Component, ViewChild } from '@angular/core';
+import {
+	Component,
+	ViewChild
+} from '@angular/core';
 import {
 	PoBreadcrumb,
 	PoComboComponent,
@@ -7,17 +10,37 @@ import {
 	PoTableAction,
 	PoTableColumn,
 } from '@po-ui/ng-components';
-import { CollumnsLinhas, LinhasModel, ListStatus } from './linha.struct';
-import { HttpParams } from '@angular/common/http';
-import { ActivatedRoute, Router } from '@angular/router';
-import { comboFormService, LocalidadeComboService } from 'src/app/services/adaptors/wsurbano-adapter.service';
-import { FwProtheusModel, Resource } from 'src/app/services/models/fw-protheus.model';
+import {
+	CollumnsLinhas,
+	LinhasModel,
+	ListStatus
+} from './linha.struct';
+import {
+	HttpParams
+} from '@angular/common/http';
+import {
+	ActivatedRoute,
+	Router
+} from '@angular/router';
+import {
+	DestinoComboService,
+	OrigemComboService,
+	PrefixoComboService
+} from 'src/app/services/adaptors/wsurbano-adapter.service';
+import {
+	FwProtheusModel,
+	Resource
+} from 'src/app/services/models/fw-protheus.model';
 
 @Component({
 	selector: 'app-linhas',
 	templateUrl: './linhas.component.html',
 	styleUrls: ['./linhas.component.css'],
-	providers: [LocalidadeComboService],
+	providers: [
+		PrefixoComboService,
+		OrigemComboService,
+		DestinoComboService
+	],
 })
 export class LinhasComponent {
 	@ViewChild('prefixoFilterCombo', { static: true })
@@ -36,7 +59,9 @@ export class LinhasComponent {
 		private _router: Router,
 		private _activedRoute: ActivatedRoute,
 		private _fwModel: FwProtheusModel,
-		public localidadeComboService: LocalidadeComboService
+		public prefixoComboService: PrefixoComboService,
+		public origemComboService: OrigemComboService,
+		public destinoComboService: DestinoComboService
 	) {
 		this.setColProperties();
 	}
@@ -48,9 +73,8 @@ export class LinhasComponent {
 	public filters: string = '';
 	public filterPrefixo: string = '';
 	public filterOrigem: string = '';
-	public filtroDestino: string = '';
-	public filtroStatus: string = '';
-	public resetFilters: boolean = false;
+	public filterDestino: string = '';
+	public filterStatus: string = '';
 
 	nNextPage: number = 1;
 	nPageSize: number = 10;
@@ -80,13 +104,12 @@ export class LinhasComponent {
 			label: 'editar',
 		},
 		{
-			action: this.deleteLinha.bind(this),
+			action: this.visualizar.bind(this),
 			icon: 'po-icon po-icon-eye',
 			label: 'Visualizar',
 		},
 	];
 
-	public deleteLinha(linha: any) {}
 	// Lista de status
 	public listStatus: Array<PoSelectOption> = ListStatus;
 
@@ -102,23 +125,24 @@ export class LinhasComponent {
 		this.getLinhas();
 	}
 
-	// Abre tela que permite realizar a inclusão de uma linha
+	/*******************************************************************************
+	 * @name incluir
+	 * @description Abre tela que permite realizar a inclusão de uma linha
+	 * @author    Serviços | Diego Bezerra
+	 * @since     2024
+	 * @version   v1
+	 *******************************************************************************/
 	public incluir() {
 		this._router.navigate(['./det-linha', 'incluir'], { relativeTo: this._activedRoute });
 	}
 
-	public editar(item: any) {
-		this._router.navigate(['./det-linha', 'editar', item], { relativeTo: this._activedRoute });
-	}
-
-
 	/*******************************************************************************
-     * @name visualizar
-     * @description Redireciona para a página de visualização
-     * @author    Serviços | Diego Bezerra
-     * @since     2024
-     * @version   v1
-     *******************************************************************************/
+	 * @name visualizar
+	 * @description Redireciona para a página de visualização
+	 * @author    Serviços | Diego Bezerra
+	 * @since     2024
+	 * @version   v1
+	 *******************************************************************************/
 	visualizar(item: any) {
 		this._router.navigate(['./viewLinhas', 'visualizar', item.pk], {
 			relativeTo: this._activedRoute,
@@ -167,25 +191,29 @@ export class LinhasComponent {
 					params = params.append('STARTINDEX', this.nRegIndex.toString());
 				}
 		}
-		this._fwModel.setEndPoint('GTPA001/');
 
+		this._fwModel.setEndPoint('GTPU003/');
 		this._fwModel.setVirtualField(true);
 		this._fwModel.get(params).subscribe(() => {
 			this._fwModel.resources.forEach((resource: Resource) => {
 				let linhas = new LinhasModel();
 				linhas.pk = resource.pk;
 
-				linhas.prefixolinha = resource.getModel('GI1MASTER').getValue('GI1_COD');
-				linhas.descricao = 'Descricao teste asdf asdf asdf asdf asdf fdsa';
+				linhas.prefixolinha = resource.getModel('H6VMASTER').getValue('H6V_PREFIX');
+				linhas.codigolinha = resource.getModel('H6VMASTER').getValue('H6V_CODLIN');
+				linhas.descricao = resource.getModel('H6VMASTER').getValue('H6V_DESCRI');
+				linhas.tarifa = resource.getModel('H6VMASTER').getValue('H6V_TARIDE');
 				linhas.origem =
-					resource.getModel('GI1MASTER').getValue('GI1_COD') +
+					resource.getModel('H6VMASTER').getValue('H6V_ORIGEM') +
 					' - ' +
-					resource.getModel('GI1MASTER').getValue('GI1_DESCRI');
+					resource.getModel('H6VMASTER').getValue('H6V_ORIDES');
 
 				linhas.destino =
-					resource.getModel('GI1MASTER').getValue('GI1_COD') +
+					resource.getModel('H6VMASTER').getValue('H6V_DESTIN') +
 					' - ' +
-					resource.getModel('GI1MASTER').getValue('GI1_DESCRI');
+					resource.getModel('H6VMASTER').getValue('H6V_DESTDE');
+
+				linhas.status = resource.getModel('H6VMASTER').getValue('H6V_STATUS')
 
 				linhas.outrasAcoes = ['editar', 'visualizar'];
 
@@ -201,13 +229,13 @@ export class LinhasComponent {
 	/*******************************************************************************
 	 * @name editLinha
 	 * @description Função responsável por acessar a tela de edição, ao utilizar o botão
-	 *  Editar
+	 * Editar
 	 * @author   Serviços | Diego Bezerra
 	 * @since    2024
 	 * @version  v1
 	 *******************************************************************************/
 	editLinha(item: any) {
-		this._router.navigate(['./det-linha', 'editar', item], { relativeTo: this._activedRoute });
+		this._router.navigate(['./det-linha', 'editar', item.pk], { relativeTo: this._activedRoute });
 	}
 
 	/*******************************************************************************
@@ -234,26 +262,6 @@ export class LinhasComponent {
 		}
 	}
 
-	public genarateLinhas(data: Array<any>): Array<LinhasModel> {
-		let returnData: Array<LinhasModel> = [];
-
-		data.forEach(linha => {
-			let data = new LinhasModel();
-			data.pk = linha.pk;
-			data.prefixolinha = linha.prefixolinha;
-			data.codigolinha = linha.codigolinha;
-			data.descricao = linha.descricao;
-			data.tarifa = linha.tarifa;
-			data.origem = linha.origem;
-			data.destino = linha.destino;
-			data.status = linha.status;
-			data.outrasAcoes = linha.outrasAcoes;
-			returnData.push(data);
-		});
-
-		return returnData;
-	}
-
 	/*******************************************************************************
 	 * @name setFilters
 	 * @description função chamada ao alterar o valor dos campos po-combo para
@@ -262,64 +270,139 @@ export class LinhasComponent {
 	 * @since    2024
 	 * @version  v1
 	 *******************************************************************************/
-	setFilters() {
-		this.listLinhas = [];
+	setFilters(event: any) {
 
+		this.listLinhas = [];
 		this.filters = '';
 		this.isShowMoreDisabled = false;
-		this.resetFilters = false;
 
-		//filtros
-		if (this.prefixoFilterCombo !== undefined && this.prefixoFilterCombo.selectedOption !== undefined) {
-			if (this.filters != '') {
-				this.filters += ' AND ';
-			}
-			this.filters += " GI1_COD = '" + this.prefixoFilterCombo.selectedOption.value + "' ";
-		}
-		if (this.origemFilterCombo !== undefined && this.origemFilterCombo.selectedOption !== undefined) {
-			if (this.filters != '') {
-				this.filters += ' AND ';
-			}
-			this.filters += " GI1_COD = '" + this.origemFilterCombo.selectedOption.value + "' ";
-		}
-		if (this.destinoFilterCombo !== undefined && this.destinoFilterCombo.selectedOption !== undefined) {
-			if (this.filters != '') {
-				this.filters += ' AND ';
-			}
-			this.filters += " GI1_COD = '" + this.origemFilterCombo.selectedOption.value + "' ";
-		}
-		if (this.statusFilterCombo.selectedOption !== undefined) {
-			if (this.filters != '') {
-				this.filters += ' AND ';
-			}
-			this.filters += "GI1_STATUS = '" + this.statusFilterCombo.selectedOption + "' ";
-		}
+		if (event == undefined) {
+			this.filterPrefixo = '';
+			this.filterOrigem = '';
+			this.filterDestino = '';
+		} else {
+			//filtros
+			if (this.prefixoFilterCombo !== undefined && this.prefixoFilterCombo.selectedOption !== undefined) {
+				if (this.filterOrigem != '') {
+					this.filterOrigem += (
+						" AND (UPPER(H6V_PREFIX) LIKE UPPER('" +
+						this.prefixoFilterCombo.selectedOption.value +
+						"') AND UPPER(H6V_DESCRI) LIKE UPPER('" +
+						this.prefixoFilterCombo.selectedOption.label + "'))"
+					);
+				} else {
+					this.filterOrigem = (
+						"UPPER(H6V_PREFIX) LIKE UPPER('" +
+						this.prefixoFilterCombo.selectedOption.value +
+						"') AND UPPER(H6V_DESCRI) LIKE UPPER('" +
+						this.prefixoFilterCombo.selectedOption.label + "')"
+					);
+				}
 
+				if (this.filterDestino != '') {
+					this.filterDestino += (
+						" AND (UPPER(H6V_PREFIX) LIKE UPPER('" +
+						this.prefixoFilterCombo.selectedOption.value +
+						"') AND UPPER(H6V_DESCRI) LIKE UPPER('" +
+						this.prefixoFilterCombo.selectedOption.label + "'))"
+					);
+				} else {
+					this.filterDestino = (
+						"UPPER(H6V_PREFIX) LIKE UPPER('" +
+						this.prefixoFilterCombo.selectedOption.value +
+						"') AND UPPER(H6V_DESCRI) LIKE UPPER('" +
+						this.prefixoFilterCombo.selectedOption.label + "')"
+					);
+				}
+
+				if (this.filters != '') {
+					this.filters += ' AND ';
+				}
+				this.filters += " H6V_PREFIX = '" + this.prefixoFilterCombo.selectedOption.value + "' ";
+			}
+
+			if (this.origemFilterCombo !== undefined && this.origemFilterCombo.selectedOption !== undefined) {
+				if (this.filterPrefixo != '') {
+					this.filterPrefixo += (
+						" AND (UPPER(H6V_ORIGEM) LIKE UPPER('" +
+						this.origemFilterCombo.selectedOption.value +
+						"') AND UPPER(H6V_ORIDES) LIKE UPPER('" +
+						this.origemFilterCombo.selectedOption.label + "'))"
+					);
+				} else {
+					this.filterPrefixo = (
+						"UPPER(H6V_ORIGEM) LIKE UPPER('" +
+						this.origemFilterCombo.selectedOption.value +
+						"') AND UPPER(H6V_ORIDES) LIKE UPPER('" +
+						this.origemFilterCombo.selectedOption.label + "')"
+					);
+				}
+
+				if (this.filterDestino != '') {
+					this.filterDestino += (
+						" AND (UPPER(H6V_ORIGEM) LIKE UPPER('" +
+						this.origemFilterCombo.selectedOption.value +
+						"') AND UPPER(H6V_ORIDES) LIKE UPPER('" +
+						this.origemFilterCombo.selectedOption.label + "'))"
+					);
+				} else {
+					this.filterDestino = (
+						"UPPER(H6V_ORIGEM) LIKE UPPER('" +
+						this.origemFilterCombo.selectedOption.value +
+						"') AND UPPER(H6V_ORIDES) LIKE UPPER('" +
+						this.origemFilterCombo.selectedOption.label + "')"
+					);
+				}
+
+				if (this.filters != '') {
+					this.filters += ' AND ';
+				}
+				this.filters += " H6V_ORIGEM = '" + this.origemFilterCombo.selectedOption.value + "' ";
+			}
+
+			if (this.destinoFilterCombo !== undefined && this.destinoFilterCombo.selectedOption !== undefined) {
+				if (this.filterPrefixo != '') {
+					this.filterPrefixo += " AND (UPPER(H6V_DESTIN) LIKE UPPER('" +
+						this.destinoFilterCombo.selectedOption.value +
+						"') AND UPPER(H6V_DESTDE) LIKE UPPER('" +
+						this.destinoFilterCombo.selectedOption.label + "'))"
+				} else {
+					this.filterPrefixo = (
+						"UPPER(H6V_DESTIN) LIKE UPPER('" +
+						this.destinoFilterCombo.selectedOption.value +
+						"') AND UPPER(H6V_DESTDE) LIKE UPPER('" +
+						this.destinoFilterCombo.selectedOption.label + "')"
+					);
+				}
+
+				if (this.filterOrigem != '') {
+					this.filterOrigem += " AND (UPPER(H6V_DESTIN) LIKE UPPER('" +
+						this.destinoFilterCombo.selectedOption.value +
+						"') AND UPPER(H6V_DESTDE) LIKE UPPER('" +
+						this.destinoFilterCombo.selectedOption.label + "'))"
+				} else {
+					this.filterOrigem = (
+						"UPPER(H6V_DESTIN) LIKE UPPER('" +
+						this.destinoFilterCombo.selectedOption.value +
+						"') AND UPPER(H6V_DESTDE) LIKE UPPER('" +
+						this.destinoFilterCombo.selectedOption.label + "')"
+					);
+				}
+
+				if (this.filters != '') {
+					this.filters += ' AND ';
+				}
+				this.filters += " H6V_DESTIN = '" + this.destinoFilterCombo.selectedOption.value + "' ";
+			}
+
+			if (this.statusFilterCombo.selectedOption !== undefined) {
+				if (this.filters != '') {
+					this.filters += ' AND ';
+				}
+				this.filters += "H6V_STATUS = '" + this.statusFilterCombo.selectedOption.value + "' ";
+			}
+		}
 		this.getLinhas();
-	}
-	/*******************************************************************************
-	 * @name clearFilter
-	 * @description função chamada ao alterar o valor dos campos po-combo
-	 * @param filer: string - nome do filtro clicado para saber qual limpar
-	 * @author   Serviços | Diego Bezerra
-	 * @since    2024
-	 * @version  v1
-	 *******************************************************************************/
-	clearFilter(filter: string = '') {
-		switch (filter) {
-			case 'prefixo': {
-				break;
-			}
-			case 'origem': {
-				break;
-			}
-			case 'destino': {
-				break;
-			}
-			case 'status': {
-				break;
-			}
-		}
 	}
 
 	/*******************************************************************************

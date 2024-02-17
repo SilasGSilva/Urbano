@@ -1,132 +1,163 @@
-import { Component, OnInit } from '@angular/core';
 import {
-  PoBreadcrumb,
-  PoDynamicViewField,
-  PoNotificationService,
-  PoPage,
-  PoPageAction,
-  PoTableColumn,
+	Component,
+	OnInit,
+} from '@angular/core';
+import {
+	PoBreadcrumb,
+	PoDynamicViewField,
+	PoNotificationService,
+	PoPageAction,
+	PoTableColumn,
 } from '@po-ui/ng-components';
-import { ColunasDadosViewLinhas, SecaoModel, secoesLinha } from './view-linhas.struct';
-import { FwProtheusModel } from 'src/app/services/models/fw-protheus.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+	ColunasDadosViewLinhas,
+	SecaoModel,
+	secoesLinha
+} from './view-linhas.struct';
+import {
+	FwProtheusModel
+} from 'src/app/services/models/fw-protheus.model';
+import {
+	ActivatedRoute,
+	Router
+} from '@angular/router';
+import {
+	ApiService
+} from 'src/app/services/api.service';
+import {
+	HttpClient,
+	HttpParams
+} from '@angular/common/http';
 
 @Component({
-  selector: 'app-view-linhas',
-  templateUrl: './view-linhas.component.html',
-  styleUrls: ['./view-linhas.component.css']
+	selector: 'app-view-linhas',
+	templateUrl: './view-linhas.component.html',
+	styleUrls: ['./view-linhas.component.css']
 })
-export class ViewLinhasComponent implements OnInit{
-  viewLinhas = {};
-  titulo: string = '';
-  isHideLoadingTela: boolean = true;
-  colunaDados: Array<PoDynamicViewField> = ColunasDadosViewLinhas;
-  pkLinha:string = ''
-  actions: Array<PoPageAction> = [
-    {
-      label: 'Editar',
-      action: () =>{
-        this.editar();
-      }
-    },{
-      label: 'Fechar',
-      action: ()=>{
-        this.close()
-      }
-    }
-  ]
-  public breadcrumb: PoBreadcrumb = {
-    items: [
-        { label: 'Fretamento Urbano', link: '/' },
-        { label: 'Linhas', link: '/linhas' },
-        { label: '' },
-    ],
-  };
-  public itemsColumns: Array<PoTableColumn> = secoesLinha;
-  public listLinhas: Array<SecaoModel> = []
-  constructor(
-    public poNotification: PoNotificationService,
-    private fwModel: FwProtheusModel,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {
+export class ViewLinhasComponent implements OnInit {
+	viewLinhas = {};
+	titulo: string = '';
+	pkLinha: string = ''
+	isHideLoadingTela: boolean = true;
+	colunaDados: Array<PoDynamicViewField> = ColunasDadosViewLinhas;
+	filters: string = ''
+	actions: Array<PoPageAction> = [
+		{
+			label: 'Editar',
+			action: () => {
+				this.editar();
+			}
+		}, {
+			label: 'Fechar',
+			action: () => {
+				this.close()
+			}
+		}
+	]
+	public breadcrumb: PoBreadcrumb = {
+		items: [
+			{ label: 'Fretamento Urbano', link: '/' },
+			{ label: 'Linhas', link: '/linhas' },
+			{ label: '' },
+		],
+	};
+	public itemsColumns: Array<PoTableColumn> = secoesLinha;
+	public listLinhas: Array<SecaoModel> = []
+	constructor(
+		public poNotification: PoNotificationService,
+		private fwModel: FwProtheusModel,
+		private route: ActivatedRoute,
+		private router: Router,
+		private http: HttpClient
+	) {
+		this.pkLinha = this.route.snapshot.params['id'];
+	}
+	ngOnInit() {
+		this.getLinha();
+	}
+	async getLinha() {
+		let params = new HttpParams();
+		let apiService = new ApiService(this.http)
+		let endpoint: string = ''
 
-  }
-  ngOnInit() {
-    this.getLinha();
-  }
-  async getLinha(){
-    // Dados exemplo para os dados da view, que virão do cadastro de linhas
-    let headerData = {
-      prefixo: '1 0123',
-      codLinha: '12345',
-      descLinha: '145 - PQ. DOM PEDRO II',
-      origem: '00001 - METRÔ SANTANA',
-      destino: '00002 - PQ. DOM PEDRO II',
-      orgao: 'SPTRANS',
-      tarifa: '00001 - TABELA 1 - URBANO',
-      pedagio: '-',
-      tipoServico: '00001 - ISENTO PIS COFINS URBANO',
-      km: '10',
-      categoria: '00003 - URBANO',
-      statusLinha: 'Stiva'
-    }
-    
-    let secao1 = new SecaoModel();
-    let secao2 = new SecaoModel();
+		this.isHideLoadingTela = false;
 
-    this.isHideLoadingTela = false;
-    this.fwModel.reset();
-    this.fwModel.setEndPoint('GTPA001/' + this.pkLinha);
-    this.fwModel.setVirtualField(true);
+		this.fwModel.reset();
+		this.fwModel.setEndPoint('GTPU003/' + this.pkLinha);
+		this.fwModel.setVirtualField(true);
+		this.fwModel.get().subscribe({
+			next: () => {
+				const codigo = this.fwModel.getModel('H6VMASTER').getValue('H6V_CODIGO')
+				this.viewLinhas = {
+					prefixo: this.fwModel.getModel('H6VMASTER').getValue('H6V_PREFIX'),
+					codLinha: this.fwModel.getModel('H6VMASTER').getValue('H6V_CODLIN'),
+					descLinha: this.fwModel.getModel('H6VMASTER').getValue('H6V_DESCRI'),
+					origem: this.fwModel.getModel('H6VMASTER').getValue('H6V_ORIDES'),
+					destino: this.fwModel.getModel('H6VMASTER').getValue('H6V_DESTDE'),
+					orgao: this.fwModel.getModel('H6VMASTER').getValue('H6V_ORGDES'),
+					tarifa: this.fwModel.getModel('H6VMASTER').getValue('H6V_TARIDE'),
+					pedagio: this.fwModel.getModel('H6VMASTER').getValue('H6V_PEDAGI'),
+					tipoServico: this.fwModel.getModel('H6VMASTER').getValue('H6V_CLSFIS'),
+					km: this.fwModel.getModel('H6VMASTER').getValue('H6V_KMLINH') + 'KM',
+					categoria: this.fwModel.getModel('H6VMASTER').getValue('H6V_CATEGO'),
+					statusLinha: this.fwModel.getModel('H6VMASTER').getValue('H6V_STATUS'),
+				};
 
-    this.fwModel.get().subscribe({
-      next:()=>{
+				this.filters = "AND H6X_CODLIN ='" + codigo + "'"
+				params = params.append('FILTER', this.filters)
+				endpoint = 'FRETAMENTOURBANO/secoes'
 
-        this.viewLinhas = headerData
-       
-        // Obter dados das seções da linha, se houver. 
-        /**
-         * foreach......
-         */
-        secao1.ida = '00004 - TERMINAL GRAJAÚ X METRÔ SANTANA'
-        secao1.volta = '00005 - PQ. DOM PETRO II X TERMINAL GRAJAÚ'
-        this.listLinhas = [...this.listLinhas, secao1]
-        secao2.ida = '00005 - PQ. DOM PETRO II X TERMINAL GRAJAÚ'
-        secao2.volta = '00004 - TERMINAL GRAJAÚ X METRÔ SANTANA'
-        this.listLinhas = [...this.listLinhas, secao2]
-      },error:error =>{
+				apiService.get(endpoint, params).subscribe((data: any) => {
+					if (data.Secoes) {
+						data.Secoes.forEach((secaoData: any) => {
+							let secao = new SecaoModel();
 
-      }, complete:()=>{
-        this.isHideLoadingTela = true
-      }
-    })
-  }
+							if (secaoData.Secao.Sentido != '2') {
+								secao.ida = secaoData.Secao.Items[0].CodLinha + ' - ' + secaoData.Secao.Items[0].DescLinha
+							} else {
+								secao.volta = secaoData.Secao.Items[0].CodLinha + ' - ' + secaoData.Secao.Items[0].DescLinha
+							}
 
-  /*******************************************************************************
- * @name editar
- * @description Redireciona para a página de edição
- * @author   Serviços | Diego Bezerra
- * @since       2024
- * @version v1
- *******************************************************************************/
-  editar() {
-    this.router.navigateByUrl(
-        `linhas/det-linha/editar/${this.pkLinha}`
-    );
-  }
+							this.listLinhas.push(secao);
+						})
+					}
+				});
+			},
+			error: error => {
+				this.poNotification.error(error.error.errorMessage);
+				this.fwModel.reset();
+			},
+			complete: () => {
+				this.isHideLoadingTela = true;
+			},
+		});
 
-  /*******************************************************************************
- * @name close
- * @description Redireciona para a página incial de linhas
- * @author   Serviços | Diego Bezerra
- * @since       2024
- * @version v1
- *******************************************************************************/
-  close() {
-    this.fwModel.reset();
-    this.router.navigate(['./linhas']);
-  }
+	}
+
+	/*******************************************************************************
+   * @name editar
+   * @description Redireciona para a página de edição
+   * @author   Serviços | Diego Bezerra
+   * @since       2024
+   * @version v1
+   *******************************************************************************/
+	editar() {
+		this.router.navigateByUrl(
+			`linhas/det-linha/editar/${this.pkLinha}`
+		);
+	}
+
+	/*******************************************************************************
+   * @name close
+   * @description Redireciona para a página incial de linhas
+   * @author   Serviços | Diego Bezerra
+   * @since       2024
+   * @version v1
+   *******************************************************************************/
+	close() {
+		this.fwModel.reset();
+		this.router.navigate(['./linhas']);
+	}
 }
 
 

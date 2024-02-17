@@ -1,4 +1,8 @@
-import { Component, ViewChild } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	ViewChild
+} from '@angular/core';
 import {
 	FormBuilder,
 	FormGroup,
@@ -7,9 +11,12 @@ import {
 import {
 	PoBreadcrumb,
 	PoComboComponent,
-	PoRadioGroupOption
+	PoRadioGroupOption,
+	PoSelectOption
 } from '@po-ui/ng-components';
 import {
+	ClassificaoFiscal,
+	ListPedagio,
 	ListStatus,
 	linhaForm
 } from './det-linha.struct';
@@ -18,64 +25,67 @@ import {
 	Router
 } from '@angular/router';
 import {
-	PoLookupColumn,
 	PoNotificationService
 } from '@po-ui/ng-components';
 import {
-	LocalidadeComboService
-  } from 'src/app/services/adaptors/wsurbano-adapter.service';
-import { LocalidadeLookupService } from 'src/app/services/lookup-filter.service';
-import { FwProtheusModel } from 'src/app/services/models/fw-protheus.model';
-import { VldFormStruct } from 'src/app/services/gtpgenerics.struct';
-import { ApiService } from 'src/app/services/api.service';
-import { isNullOrUndefined } from 'src/app/services/functions/util.function';
-import { HttpParams } from '@angular/common/http';
-import { FindValueByName } from 'src/app/services/functions/util.function';
+	CategoriaComboService,
+	LocalidadeComboService,
+	OrgaoRegulamentadorComboService,
+	PagarComboService
+} from 'src/app/services/adaptors/wsurbano-adapter.service';
+import {
+	FwProtheusModel
+} from 'src/app/services/models/fw-protheus.model';
+import {
+	HttpParams
+} from '@angular/common/http';
+import {
+	ChangeUndefinedToEmpty,
+	FindValueByName
+} from 'src/app/services/functions/util.function';
+import {
+	ValidaNotificacao
+} from 'src/app/services/functions/validateForm';
 
 @Component({
-  selector: 'app-det-linha',
-  templateUrl: './det-linha.component.html',
-  styleUrls: ['./det-linha.component.css'],
-  providers:[LocalidadeLookupService]
+	selector: 'app-det-linha',
+	templateUrl: './det-linha.component.html',
+	styleUrls: ['./det-linha.component.css'],
+	providers: [
+		LocalidadeComboService,
+		OrgaoRegulamentadorComboService,
+		PagarComboService,
+		CategoriaComboService
+	]
 })
-export class DetLinhaComponent {
-	@ViewChild('origemFilterCombo',{static:true})
+export class DetLinhaComponent implements OnInit {
+	@ViewChild('origemFilterCombo', { static: true })
 	origemFilterCombo!: PoComboComponent
 
-	@ViewChild('origemFilterCombo',{static:true})
+	@ViewChild('origemFilterCombo', { static: true })
 	destinoFilterCombo!: PoComboComponent
 
-	@ViewChild('origemFilterCombo',{static:true})
+	@ViewChild('origemFilterCombo', { static: true })
 	orgaoregulamentadorFilterCombo!: PoComboComponent
 
-	@ViewChild('origemFilterCombo',{static:true})
+	@ViewChild('origemFilterCombo', { static: true })
 	tarifaFilterCombo!: PoComboComponent
 
-	@ViewChild('origemFilterCombo',{static:true})
+	@ViewChild('origemFilterCombo', { static: true })
 	pedagioFilterCombo!: PoComboComponent
 
-	@ViewChild('origemFilterCombo',{static:true})
+	@ViewChild('origemFilterCombo', { static: true })
 	classificacaofiscalFilterCombo!: PoComboComponent
 
-	listForm!:FormGroup;
-	public isShowLoading: boolean = false;
-    public editView: boolean = false;
-    public isVisibleBtn: boolean = false;
-	public filial: string = '';
+	public editView: boolean = false;
+	public isVisibleBtn: boolean = false;
 
-    public action: string = '';
-    public pk: string = '';
+	public action: string = '';
+	public pk: string = '';
 	public title: string = '';
 	public isLoadingBtn: boolean = false;
 	isHideLoadingTela: boolean = true;
 	listStatus: PoRadioGroupOption[] = ListStatus;
-	editItem:any = '';
-
-	public readonly LookupColumns: Array<PoLookupColumn> = [
-        { property: 'codigo', label: 'Prefixo' },
-        { property: 'descricao', label: 'Município' },
-		{ property: 'tipolocalidade', label: 'Tipo de localidade' }
-    ];
 
 	public breadcrumb: PoBreadcrumb = {
 		items: [
@@ -84,36 +94,34 @@ export class DetLinhaComponent {
 			{ label: 'Incluir Linha' }]
 	};
 
-	public linhaForm!: FormGroup
+	public linhaForm!: FormGroup;
+	public ListPedagio: Array<PoSelectOption> = ListPedagio;
+	public ListClassificacao: Array<PoSelectOption> = ClassificaoFiscal;
 	public filterParams: string = ""
 
 	constructor(
 		private _activatedRoute: ActivatedRoute,
 		private _router: Router,
 		private _formBuilder: FormBuilder,
-		public localidadeLookupService:LocalidadeLookupService,
-		private fwModel: FwProtheusModel,
-		private apiService: ApiService,
-		public poNotification: PoNotificationService,
-		private _fwModel:FwProtheusModel,
+		private _fwModel: FwProtheusModel,
 		private _poNotification: PoNotificationService,
-		public localidadeComboService: LocalidadeComboService,
-
-	){
+		public origemComboService: LocalidadeComboService,
+		public destinoComboService: LocalidadeComboService,
+		public orgaoRegulamentador: OrgaoRegulamentadorComboService,
+		public tarifaComboService: PagarComboService,
+		public categoriaComboService: CategoriaComboService
+	) {
 		// Ação
 		this.action = this._activatedRoute.snapshot.params['acao'];
 		// PK do modelo
-		this.pk = this._activatedRoute.snapshot.params['pk'];
+		this.pk = this._activatedRoute.snapshot.params['id'];
 	}
 
-	ngOnInit(){
+	ngOnInit() {
 
-		switch(this.action){
+		switch (this.action) {
 			case 'editar':
 				this.editView = true;
-				// this.filial = atob(
-				// 	this._activatedRoute.snapshot.params['filial']
-				// );
 				this.title = 'Editar linha'
 				this.breadcrumb.items[2].label = 'Editar linha';
 				this.getLinha();
@@ -128,14 +136,14 @@ export class DetLinhaComponent {
 		this.createForm();
 
 		if (this.pk != undefined) {
-            //Edição, faz a carga dos valores
-            this.getLinha();
-        } else {
-            //Inclusão, seta o status como ativo
-            this.linhaForm.patchValue({
-                status: '1',
-            });
-        }
+			//Edição, faz a carga dos valores
+			this.getLinha();
+		} else {
+			//Inclusão, seta o status como ativo
+			this.linhaForm.patchValue({
+				status: '1',
+			});
+		}
 	}
 	/*******************************************************************************
    * @name createForm
@@ -144,56 +152,54 @@ export class DetLinhaComponent {
    * @since    2024
    * @version  v1
    *******************************************************************************/
-	createForm():any{
+	createForm(): any {
 		const linha: linhaForm = {} as linhaForm;
 		this.linhaForm = this._formBuilder.group({
 
-			prefixo:[
+			prefixo: [
 				linha.prefixo,
 				Validators.compose([Validators.required])
 			],
-			codlinha:[
+			codlinha: [
 				linha.codlinha
 			],
-			descricao:[
+			descricao: [
 				linha.descricao,
 				Validators.compose([Validators.required])
 			],
-			origem:[
+			origem: [
 				linha.origem,
 				Validators.compose([Validators.required])
 			],
-			destino:[
+			destino: [
 				linha.destino,
 				Validators.compose([Validators.required])
 			],
-			orgaoregulamentador:[
+			orgaoregulamentador: [
 				linha.orgaoregulamentador,
 				Validators.compose([Validators.required])
 			],
-			tarifa:[
+			tarifa: [
 				linha.tarifa,
 				Validators.compose([Validators.required])
 			],
-			pedagio:[
+			pedagio: [
 				linha.pedagio
 			],
-			classificacaofiscal:[
+			classificacaofiscal: [
 				linha.classificacaofiscal
 			],
-			kmdalinha:[
+			kmdalinha: [
 				linha.kmdalinha,
 				Validators.compose([Validators.required])
 			],
-			categoria:[
+			categoria: [
 				linha.categoria
 			],
-			status:[
+			status: [
 				linha.status,
 				Validators.compose([Validators.required])
 			]
-
-
 		})
 	}
 
@@ -205,69 +211,45 @@ export class DetLinhaComponent {
    * @version  v1
    *******************************************************************************/
 	getLinha() {
-		this.changeLoading();
-        let params = new HttpParams();
-        this._fwModel.reset();
-        this._fwModel.setEndPoint('GTPA001/' + this.pk);
-        this._fwModel.setVirtualField(true);
-        this._fwModel.get(params).subscribe({
-            next: (data: any) => {
+		this.isHideLoadingTela = false;
 
-                this.breadcrumb.items[2].label = `${FindValueByName(
-                    data.models[0].fields,
-                    'GI1_COD'
-                )} - ${FindValueByName(data.models[0].fields, 'GI1_DESCRI')}`;
+		let params = new HttpParams();
+		this._fwModel.reset();
+		this._fwModel.setEndPoint('GTPU003/' + this.pk);
+		this._fwModel.setVirtualField(true);
+		this._fwModel.get(params).subscribe({
+			next: (data: any) => {
 
-                this.linhaForm.patchValue({
-                    prefixo: FindValueByName(data.models[0].fields, 'GI1_COD'),
-                    codlinha: FindValueByName(
-                        data.models[0].fields,
-                        'GI1_DESCRI'
-                    ),
-					descricao:  FindValueByName(data.models[0].fields, 'GI1_DESCRI')
-								+ '-'
-								+  FindValueByName(data.models[0].fields, 'GI1_COD'),
+				this.breadcrumb.items[2].label = `${FindValueByName(
+					data.models[0].fields,
+					'H6V_CODIGO'
+				)} - ${FindValueByName(data.models[0].fields, 'H6V_DESCRI')}`;
 
-					/**
-					 *
-					origem:.......
-					destino: .......
-					orgaoregulamentador: ......
-					tarifa: .......
-					pedagio: .......
-					classificacaofiscal: ........
-					kmdalinha: ........
-					categoria: ........
-					status: ........
-
-					*/
-
-                });
-            },
-            error: (err: any) => {
-                this._poNotification.error(err.errorMessage);
-            },
-            complete: () => {
-                this.changeLoading();
-            },
-        });
+				this.linhaForm.patchValue({
+					prefixo: FindValueByName(data.models[0].fields, 'H6V_PREFIX'),
+					codlinha: FindValueByName(data.models[0].fields, 'H6V_CODLIN'),
+					descricao: FindValueByName(data.models[0].fields, 'H6V_DESCRI'),
+					origem: FindValueByName(data.models[0].fields, 'H6V_ORIGEM'),
+					destino: FindValueByName(data.models[0].fields, 'H6V_DESTIN'),
+					orgaoregulamentador: FindValueByName(data.models[0].fields, 'H6V_ORGAO'),
+					tarifa: FindValueByName(data.models[0].fields, 'H6V_TARIFA'),
+					pedagio: FindValueByName(data.models[0].fields, 'H6V_PEDAGI'),
+					classificacaofiscal: FindValueByName(data.models[0].fields, 'H6V_CLSFIS'),
+					kmdalinha: FindValueByName(data.models[0].fields, 'H6V_KMLINH'),
+					categoria: FindValueByName(data.models[0].fields, 'H6V_CATEGO'),
+					status: FindValueByName(data.models[0].fields, 'H6V_STATUS'),
+				});
+			},
+			error: (err: any) => {
+				this._poNotification.error(err.errorMessage);
+				this._fwModel.reset();
+			},
+			complete: () => {
+				this.isHideLoadingTela = true;
+			},
+		});
 
 	}
-
-	/*******************************************************************************
-   * @name changeLoading
-   * @description Altera o estado da variãvel de controle do loader
-   * @author   Serviços | Diego Bezerra
-   * @since    2024
-   * @version  v1
-   *******************************************************************************/
-	changeLoading() {
-        if (this.isShowLoading) {
-            this.isShowLoading = false;
-        } else {
-            this.isShowLoading = true;
-        }
-    }
 
 	/*******************************************************************************
    * @name onClickCancel
@@ -277,9 +259,9 @@ export class DetLinhaComponent {
    * @version  v1
    *******************************************************************************/
 	onClickCancel(): void {
-        this.fwModel.reset();
-        this._router.navigate(['./linhas']);
-    }
+		this._fwModel.reset();
+		this._router.navigate(['./linhas']);
+	}
 
 	/*******************************************************************************
    * @name saveLinha
@@ -289,75 +271,123 @@ export class DetLinhaComponent {
    * @since    2024
    * @version  v1
    *******************************************************************************/
-	saveLinha(stay: boolean) {
-        if (!this.editView) {
-            //nova tarifa
-            this.changeLoading();
-            setTimeout(() => {
-                this.changeLoading();
-                if (!stay) {
-                    this.linhaForm.patchValue({
-                        prefixo: '',
-                        codlinha: '',
-                        descricao: '',
-                        origem: '',
-                        destino: '',
-                        orgaoregulamentador: '',
-						tarifa: '',
-						pedagio: '',
-						classificacaofiscal: '',
-						kmdalinha: '',
-						categoria: '',
-						status: ''
-                    });
-                    this._router.navigate(['linhas']);
-                } else {
-					this.fwModel.reset();
-					this.linhaForm.reset();
-                    this.linhaForm.patchValue({
-                        prefixo: '',
-                        codlinha: '',
-                        descricao: '',
-                        origem: '',
-                        destino: '',
-                        orgaoregulamentador: '',
-						tarifa: '',
-						pedagio: '',
-						classificacaofiscal: '',
-						kmdalinha: '',
-						categoria: '',
-						status: '1'
-                    });
-                }
-                this._poNotification.success('Linha criada com sucesso!');
-            }, 1000);
-        } else {
-			this.changeLoading();
-			setTimeout(() => {
-				this.linhaForm.patchValue({
-					prefixo: '',
-					codlinha: '',
-					descricao: '',
-					origem: '',
-					destino: '',
-					orgaoregulamentador: '',
-					tarifa: '',
-					pedagio: '',
-					classificacaofiscal: '',
-					kmdalinha: '',
-					categoria: '',
-					status: ''
-				});
-				this.changeLoading();
-				this._router.navigate(['linhas']);
-				this._poNotification.success(
-					'Linha alterada com sucesso!'
-				);
-			}, 1000);
+	saveLinha(stay: boolean): void {
+		const isSubmitable: boolean = this.linhaForm.valid;
 
-        }
-    }
-	setFilters(){
-		return ''
+		if (isSubmitable) {
+			this.isLoadingBtn = true;
+
+			this._fwModel.reset();
+			this._fwModel.setModelId('GTPU003');
+			this._fwModel.setEndPoint('GTPU003/')
+			this._fwModel.AddModel('H6VMASTER', 'FIELDS');
+
+			//Adiciona Campos
+			this._fwModel.getModel('H6VMASTER').addField('H6V_PREFIX');
+			this._fwModel.getModel('H6VMASTER').addField('H6V_CODLIN');
+			this._fwModel.getModel('H6VMASTER').addField('H6V_DESCRI');
+			this._fwModel.getModel('H6VMASTER').addField('H6V_ORIGEM');
+			this._fwModel.getModel('H6VMASTER').addField('H6V_DESTIN');
+			this._fwModel.getModel('H6VMASTER').addField('H6V_ORGAO');
+			this._fwModel.getModel('H6VMASTER').addField('H6V_TARIFA');
+			this._fwModel.getModel('H6VMASTER').addField('H6V_PEDAGI');
+			this._fwModel.getModel('H6VMASTER').addField('H6V_CLSFIS');
+			this._fwModel.getModel('H6VMASTER').addField('H6V_KMLINH');
+			this._fwModel.getModel('H6VMASTER').addField('H6V_CATEGO');
+			this._fwModel.getModel('H6VMASTER').addField('H6V_STATUS');
+
+			//Seta valor para os campos
+			this._fwModel
+				.getModel('H6VMASTER')
+				.setValue('H6V_PREFIX', ChangeUndefinedToEmpty(this.linhaForm.value.prefixo.toUpperCase()));
+			this._fwModel
+				.getModel('H6VMASTER')
+				.setValue('H6V_CODLIN', ChangeUndefinedToEmpty(this.linhaForm.value.codlinha.toUpperCase()));
+			this._fwModel
+				.getModel('H6VMASTER')
+				.setValue('H6V_DESCRI', ChangeUndefinedToEmpty(this.linhaForm.value.descricao.toUpperCase()));
+			this._fwModel
+				.getModel('H6VMASTER')
+				.setValue('H6V_ORIGEM', ChangeUndefinedToEmpty(this.linhaForm.value.origem.toUpperCase()));
+			this._fwModel
+				.getModel('H6VMASTER')
+				.setValue('H6V_DESTIN', ChangeUndefinedToEmpty(this.linhaForm.value.destino.toUpperCase()));
+			this._fwModel
+				.getModel('H6VMASTER')
+				.setValue('H6V_ORGAO', ChangeUndefinedToEmpty(this.linhaForm.value.orgaoregulamentador.toUpperCase()));
+			this._fwModel
+				.getModel('H6VMASTER')
+				.setValue('H6V_TARIFA', ChangeUndefinedToEmpty(this.linhaForm.value.tarifa.toUpperCase()));
+			this._fwModel
+				.getModel('H6VMASTER')
+				.setValue('H6V_PEDAGI', ChangeUndefinedToEmpty(this.linhaForm.value.pedagio.toUpperCase()));
+			this._fwModel
+				.getModel('H6VMASTER')
+				.setValue('H6V_CLSFIS', ChangeUndefinedToEmpty(this.linhaForm.value.classificacaofiscal.toUpperCase()));
+			this._fwModel
+				.getModel('H6VMASTER')
+				.setValue('H6V_KMLINH', ChangeUndefinedToEmpty(this.linhaForm.value.kmdalinha.toUpperCase()));
+			this._fwModel
+				.getModel('H6VMASTER')
+				.setValue('H6V_CATEGO', ChangeUndefinedToEmpty(this.linhaForm.value.categoria.toUpperCase()));
+			this._fwModel
+				.getModel('H6VMASTER')
+				.setValue('H6V_STATUS', ChangeUndefinedToEmpty(this.linhaForm.value.status.toUpperCase()));
+
+			if (this.action == 'incluir') {
+				this._fwModel.operation = 3;
+				this._fwModel.post().subscribe({
+					next: () => {
+						this._poNotification.success('Linha cadastra com sucesso!');
+						if (stay) {
+							this._fwModel.reset();
+							this.linhaForm.reset();
+							this.linhaForm.patchValue({
+								status: '1',
+							});
+						} else {
+							this.onClickCancel();
+							this._fwModel.reset()
+						}
+					},
+					error: error => {
+						this._poNotification.error(error.error.errorMessage);
+						this._fwModel.reset();
+					},
+					complete: () => {
+						this.isLoadingBtn = false;
+						this.isHideLoadingTela = true;
+					},
+				});
+			} else {
+				this._fwModel.operation = 4;
+				this._fwModel.setEndPoint('GTPU003/' + this.pk);
+
+				this._fwModel.put().subscribe({
+					next: () => {
+						this._poNotification.success('Linha alterada com sucesso!');
+						if (stay) {
+							this.title = 'Incluir linha';
+							this.isVisibleBtn = true;
+							this.breadcrumb.items[2].label = 'Incluir linha';
+							this._fwModel.reset();
+							this.linhaForm.reset();
+							this.linhaForm.patchValue({
+								status: '1',
+							});
+						} else {
+							this.onClickCancel();
+							this._fwModel.reset()
+						}
+					},
+					error: error => {
+						this._poNotification.error(error.error.errorMessage);
+						this._fwModel.reset();
+					},
+				});
+			}
+		} else {
+			this._poNotification.error(ValidaNotificacao(this.linhaForm));
+		}
 	}
 }
