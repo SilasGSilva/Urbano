@@ -1,7 +1,7 @@
 <po-page-default
     [p-title] = "title"
     [p-breadcrumb]="breadcrumb"
-   
+
 >
 
 <form [formGroup]="linhaForm" class="po-row po-pl-0">
@@ -28,7 +28,7 @@
 
         >
         </po-input>
-        
+
         <po-input
             class="po-lg-8"
             name="descricao*"
@@ -42,9 +42,9 @@
 
         <po-combo
             #origemFilterCombo
-            class="po-lg-4" 
+            class="po-lg-4"
             name="origem"
-            formControlName="origem"  
+            formControlName="origem"
             p-label="Origem*"
             [p-filter-service]="localidadeComboService"
             p-placeholder="Selecionar"
@@ -57,18 +57,18 @@
                     <div class="po-font-text-large-bold">
                         {{ option.label + "-" + option.value }}
                     </div>
-                    <div class="po-font-text-smaller" style="margin-left:1em">
+                    <div class="po-font-text-smaller po-ml-1">
                         Prefixo: {{ option.label }}
                     </div>
-                    <div class="po-font-text-smaller" style="margin-left: 1em;">
+                    <div class="po-font-text-smaller po-ml-1">
                         Município: {{ option.value }}
                     </div>
-                    <div class="po-font-text-smaller" style="margin-left: 1em;">
+                    <div class="po-font-text-smaller po-ml-1">
                         Tipo: {{ option.desc }}
                     </div>
-        
+
                     </div>
-                    
+
                 </div>
             </ng-template>
 
@@ -76,9 +76,9 @@
 
         <po-combo
             #destinoFilterCombo
-            class="po-lg-4" 
+            class="po-lg-4"
             name="destino"
-            formControlName="destino"  
+            formControlName="destino"
             p-label="Destino*"
             [p-filter-service]="localidadeComboService"
             p-placeholder="Selecionar"
@@ -91,18 +91,18 @@
                     <div class="po-font-text-large-bold">
                         {{ option.label + "-" + option.value }}
                     </div>
-                    <div class="po-font-text-smaller" style="margin-left:1em">
+                    <div class="po-font-text-smaller po-ml-1">
                         Prefixo: {{ option.label }}
                     </div>
-                    <div class="po-font-text-smaller" style="margin-left: 1em;">
+                    <div class="po-font-text-smaller po-ml-1">
                         Município: {{ option.value }}
                     </div>
-                    <div class="po-font-text-smaller" style="margin-left: 1em;">
+                    <div class="po-font-text-smaller po-ml-1">
                         Tipo: {{ option.desc }}
                     </div>
-        
+
                     </div>
-                    
+
                 </div>
             </ng-template>
 
@@ -110,9 +110,9 @@
 
         <po-combo
             #orgaoregulamentadorFilterCombo
-            class="po-lg-4" 
+            class="po-lg-4"
             name="orgaoregulamentador"
-            formControlName="orgaoregulamentador"  
+            formControlName="orgaoregulamentador"
             p-label="Órgão regulamentador*"
             [p-filter-service]="localidadeComboService"
             p-placeholder="Selecionar"
@@ -125,18 +125,18 @@
                     <div class="po-font-text-large-bold">
                         {{ option.label + "-" + option.value }}
                     </div>
-                    <div class="po-font-text-smaller" style="margin-left:1em">
+                    <div class="po-font-text-smaller po-ml-1">
                         Prefixo: {{ option.label }}
                     </div>
-                    <div class="po-font-text-smaller" style="margin-left: 1em;">
+                    <div class="po-font-text-smaller po-ml-1">
                         Município: {{ option.value }}
                     </div>
-                    <div class="po-font-text-smaller" style="margin-left: 1em;">
+                    <div class="po-font-text-smaller po-ml-1">
                         Tipo: {{ option.desc }}
                     </div>
 
                     </div>
-                    
+
                 </div>
             </ng-template>
         </po-combo>
@@ -144,9 +144,9 @@
 
         <po-combo
             #tarifaFilterCombo
-            class="po-lg-4" 
+            class="po-lg-4"
             name="tarifa"
-            formControlName="tarifa"  
+            formControlName="tarifa"
             p-label="Tarifa*"
             [p-filter-service]="localidadeComboService"
             p-placeholder="Selecionar"
@@ -159,25 +159,25 @@
                         <div class="po-font-text-large-bold">
                             {{ option.label + "-" + option.value }}
                         </div>
-                        <div class="po-font-text-smaller" style="margin-left:1em">
+                        <div class="po-font-text-smaller po-ml-1">
                             Prefixo: {{ option.label }}
                         </div>
-                        <div class="po-font-text-smaller" style="margin-left: 1em;">
+                        <div class="po-font-text-smaller po-ml-1">
                             Município: {{ option.value }}
                         </div>
-                        <div class="po-font-text-smaller" style="margin-left: 1em;">
+                        <div class="po-font-text-smaller po-ml-1">
                             Tipo: {{ option.desc }}
                         </div>
                     </div>
                 </div>
             </ng-template>
         </po-combo>
-        
+
         <po-combo
             #pedagioFilterCombo
-            class="po-lg-4" 
+            class="po-lg-4"
             name="pedagio"
-            formControlName="pedagio"  
+            formControlName="pedagio"
             p-label="Pedagio"
             [p-filter-service]="localidadeComboService"
             p-placeholder="Selecionar"
@@ -190,13 +190,13 @@
                         <div class="po-font-text-large-bold">
                             {{ option.label + "-" + option.value }}
                         </div>
-                        <div class="po-font-text-smaller" style="margin-left:1em">
+                        <div class="po-font-text-smaller po-ml-1">
                             Prefixo: {{ option.label }}
                         </div>
-                        <div class="po-font-text-smaller" style="margin-left: 1em;">
+                        <div class="po-font-text-smaller po-ml-1">
                             Município: {{ option.value }}
                         </div>
-                        <div class="po-font-text-smaller" style="margin-left: 1em;">
+                        <div class="po-font-text-smaller po-ml-1">
                             Tipo: {{ option.desc }}
                         </div>
                     </div>
@@ -206,9 +206,9 @@
 
         <po-combo
             #classificacaofiscalFilterCombo
-            class="po-lg-4" 
+            class="po-lg-4"
             name="classificacaofiscal"
-            formControlName="classificacaofiscal"  
+            formControlName="classificacaofiscal"
             p-label="Classificação fiscal"
             [p-filter-service]="localidadeComboService"
             p-placeholder="Selecionar"
@@ -221,13 +221,13 @@
                         <div class="po-font-text-large-bold">
                             {{ option.label + "-" + option.value }}
                         </div>
-                        <div class="po-font-text-smaller" style="margin-left:1em">
+                        <div class="po-font-text-smaller po-ml-1">
                             Prefixo: {{ option.label }}
                         </div>
-                        <div class="po-font-text-smaller" style="margin-left: 1em;">
+                        <div class="po-font-text-smaller po-ml-1">
                             Município: {{ option.value }}
                         </div>
-                        <div class="po-font-text-smaller" style="margin-left: 1em;">
+                        <div class="po-font-text-smaller po-ml-1">
                             Tipo: {{ option.desc }}
                         </div>
                     </div>
@@ -249,9 +249,9 @@
 
             <po-combo
                 #categoriaFilterCombo
-                class="po-lg-4" 
+                class="po-lg-4"
                 name="categoria"
-                formControlName="categoria"  
+                formControlName="categoria"
                 p-label="Categoria"
                 [p-filter-service]="localidadeComboService"
                 p-placeholder="Selecionar"
@@ -264,20 +264,20 @@
                             <div class="po-font-text-large-bold">
                                 {{ option.label + "-" + option.value }}
                             </div>
-                            <div class="po-font-text-smaller" style="margin-left:1em">
+                            <div class="po-font-text-smaller po-ml-1">
                                 Prefixo: {{ option.label }}
                             </div>
-                            <div class="po-font-text-smaller" style="margin-left: 1em;">
+                            <div class="po-font-text-smaller po-ml-1">
                                 Município: {{ option.value }}
                             </div>
-                            <div class="po-font-text-smaller" style="margin-left: 1em;">
+                            <div class="po-font-text-smaller po-ml-1">
                                 Tipo: {{ option.desc }}
                             </div>
                         </div>
                     </div>
                 </ng-template>
             </po-combo>
-        
+
             <po-radio-group
                 class="po-lg-3"
                 name="status"
@@ -285,38 +285,38 @@
                 formControlName="status"
                 [p-options]="listStatus"
                 [p-required]="true"
-                
+
             >
             </po-radio-group>
         </div>
         <!--Linha 4 com botões de ação-->
             <div class="po-pull-right">
 
-                <po-button 
+                <po-button
                     p-label="Cancelar"
                     (p-click)="onClickCancel()"
                     p-kind="tertiary"
                 >
                 </po-button>
-    
-                <po-button 
-                    class="po-ml-1" 
-                    p-label="Salvar e incluir novo" 
+
+                <po-button
+                    class="po-ml-1"
+                    p-label="Salvar e incluir novo"
                     p-kind="secondary"
                     [p-disabled]="!linhaForm.valid"
                     (p-click)="saveLinha(true)"
-                > 
+                >
                 </po-button>
-    
-                <po-button 
-                    class="po-ml-1" 
-                    p-label="Salvar" 
+
+                <po-button
+                    class="po-ml-1"
+                    p-label="Salvar"
                     p-kind="primary"
                     [p-disabled]="!linhaForm.valid"
                     (p-click)="saveLinha(false)"
-                > 
+                >
                 </po-button>
-    
+
             </div>
 
     </div>
