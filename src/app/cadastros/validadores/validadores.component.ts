@@ -23,7 +23,6 @@ export class ValidadoresComponent {
 	//Declaração de variaveis
 	filters: string = '';
 	isLoading: boolean = false;
-	resetFilters: boolean = false;
 	isShowMoreDisabled: boolean = false;
 
 	nNextPage: number = 1;
@@ -110,7 +109,7 @@ export class ValidadoresComponent {
 					params = params.append('STARTINDEX', this.nRegIndex.toString());
 				}
 		}
-		this._fwModel.setEndPoint('GTPA001/');
+		this._fwModel.setEndPoint('GTPU005/');
 
 		this._fwModel.setVirtualField(true);
 		this._fwModel.get(params).subscribe(() => {
@@ -118,14 +117,14 @@ export class ValidadoresComponent {
 				let validadores = new ValidadoresModel();
 				validadores.pk = resource.pk;
 
-				validadores.codValidador = resource.getModel('GI1MASTER').getValue('GI1_COD');
+				validadores.codValidador = resource.getModel('H6YMASTER').getValue('H6Y_CODID');
 
-				validadores.descValidador = resource.getModel('GI1MASTER').getValue('GI1_DESCRI');
+				validadores.descValidador = resource.getModel('H6YMASTER').getValue('H6Y_DESCR ');
 
 				validadores.labelValidador =
-					resource.getModel('GI1MASTER').getValue('GI1_COD') +
+					resource.getModel('H6YMASTER').getValue('H6Y_CODID') +
 					' - ' +
-					resource.getModel('GI1MASTER').getValue('GI1_DESCRI');
+					resource.getModel('H6YMASTER').getValue('H6Y_DESCR');
 
 				validadores.outrasAcoes = ['edit'];
 
