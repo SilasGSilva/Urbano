@@ -10,7 +10,7 @@
 				name="codigo"
 				p-label="Código*"
 				[p-show-required]="true"
-				p-placeholder="000004"
+				p-placeholder="Digite"
 				[p-maxlength]="30">
 			</po-input>
 
@@ -20,7 +20,8 @@
 				name="descricao"
 				p-label="Descrição*"
 				[p-show-required]="true"
-				p-placeholder="Descrição da tarifa">
+				p-placeholder="Digite"
+				[p-maxlength]="60">
 			</po-input>
 		</div>
 	</form>
@@ -33,14 +34,14 @@
 				p-label="Salvar e incluir novo"
 				(p-click)="saveValidador(true)"
 				p-kind="secondary"
-				[p-disabled]="!validadorForm.valid">
+			>
 			</po-button>
 			<po-button
 				class="po-ml-1"
 				p-label="Salvar"
 				(p-click)="saveValidador(false)"
 				p-kind="primary"
-				[p-disabled]="!validadorForm.valid">
+			>
 			</po-button>
 		</div>
 	</div>

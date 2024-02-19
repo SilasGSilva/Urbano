@@ -200,10 +200,11 @@ export class DetValidadoresComponent {
 					next: () => {
 						this._poNotification.success('Validador cadastro com sucesso!');
 						if (stay) {
+							this.changeLoading();
 							this._fwModel.reset();
 							this.validadorForm.reset();
 						} else {
-							this.onClickCancel();
+							this.onClickClose();
 							this._fwModel.reset();
 						}
 					},
@@ -222,13 +223,6 @@ export class DetValidadoresComponent {
 				this._fwModel.put().subscribe({
 					next: () => {
 						this._poNotification.success('Validador alterado com sucesso!');
-						if (stay) {
-							this._fwModel.reset();
-							this.validadorForm.reset();
-						} else {
-							this.onClickCancel();
-							this._fwModel.reset();
-						}
 					},
 					error: error => {
 						this._poNotification.error(error.error.errorMessage);
@@ -261,15 +255,15 @@ export class DetValidadoresComponent {
 	}
 
 	/*******************************************************************************
-	 * @name onClickCancel
+	 * @name onClickClose
 	 * @description Função responsavél por cancelar a ação e voltar para a tela
 	 * inicial de validadores.
 	 * @author   Serviços | Silas Gomes
 	 * @since       2024
 	 * @version v1
 	 *******************************************************************************/
-	onClickCancel(): void {
+	onClickClose(): void {
 		this._fwModel.reset();
-		this._router.navigate(['./validadores']);
+		this._router.navigate(['validadores']);
 	}
 }
