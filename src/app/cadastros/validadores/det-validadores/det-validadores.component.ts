@@ -1,11 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PoModalComponent, PoNotificationService, PoLookupColumn, PoBreadcrumb, PoModalAction } from '@po-ui/ng-components';
+import { PoModalComponent, PoNotificationService, PoBreadcrumb, PoModalAction } from '@po-ui/ng-components';
 import { FwProtheusModel } from 'src/app/services/models/fw-protheus.model';
 import { ValidadorForm, ValidadorStruct } from './det-validadores.struct';
 import { HttpParams } from '@angular/common/http';
-import { FindValueByName } from 'src/app/services/functions/util.function';
+import { ChangeUndefinedToEmpty, FindValueByName } from 'src/app/services/functions/util.function';
+import { ValidaNotificacao } from 'src/app/services/functions/validateForm';
 
 @Component({
 	selector: 'app-det-validadores',
@@ -32,12 +33,6 @@ export class DetValidadoresComponent {
 	public filial: string = '';
 	public title: string = '';
 	public subtitle: string = '';
-	public orgaoConcessor: string = '';
-	public formasDePagamento: string = '';
-	public vigenciaStartFilter: string = '';
-	public vigenciaEndFilter: string = '';
-	public filterParamOrgaoConcessor: string = '';
-	public filterParamFormasDePagamento: string = '';
 
 	nHeightMonitor: number = window.innerHeight * 0.5;
 
@@ -47,7 +42,6 @@ export class DetValidadoresComponent {
 		private _formBuilder: FormBuilder,
 		private _fwModel: FwProtheusModel,
 		private _poNotification: PoNotificationService,
-		private _structValidador: ValidadorStruct
 	) {
 		this.action = this._activedRoute.snapshot.params['acao'];
 		this.pk = this._activedRoute.snapshot.params['pk'];
@@ -145,18 +139,18 @@ export class DetValidadoresComponent {
 		this.changeLoading();
 		let params = new HttpParams();
 		this._fwModel.reset();
-		this._fwModel.setEndPoint('GTPA001/' + this.pk);
+		this._fwModel.setEndPoint('GTPU005/' + this.pk);
 		this._fwModel.setVirtualField(true);
 		this._fwModel.get(params).subscribe({
 			next: (data: any) => {
 				this.breadcrumb.items[2].label = `${FindValueByName(
 					data.models[0].fields,
-					'GI1_COD'
-				)} - ${FindValueByName(data.models[0].fields, 'GI1_DESCRI')}`;
+					'H6Y_CODID'
+				)} - ${FindValueByName(data.models[0].fields, 'H6Y_DESCR')}`;
 
 				this.validadorForm.patchValue({
-					codigo: FindValueByName(data.models[0].fields, 'GI1_COD'),
-					descricao: FindValueByName(data.models[0].fields, 'GI1_DESCRI'),
+					codigo: FindValueByName(data.models[0].fields, 'H6Y_CODID'),
+					descricao: FindValueByName(data.models[0].fields, 'H6Y_DESCR'),
 				});
 			},
 			error: (err: any) => {
@@ -178,50 +172,69 @@ export class DetValidadoresComponent {
 	 * @since    2024
 	 * @version  v1
 	 *******************************************************************************/
-	saveValidador(stay: boolean) {
-		if (!this.editView) {
-			//novo validador
-			this.changeLoading();
-			setTimeout(() => {
-				this.changeLoading();
-				if (!stay) {
-					this.validadorForm.patchValue({
-						codigo: '',
-						descricao: '',
-						valor: '',
-						orgaoConcessor: '',
-						vigencia: '',
-						formasDePagamento: '',
-					});
-					this._router.navigate(['validadores']);
-				} else {
-					this.validadorForm.patchValue({
-						codigo: '',
-						descricao: '',
-						valor: '',
-						orgaoConcessor: '',
-						vigencia: '',
-						formasDePagamento: '',
-					});
-				}
-				this._poNotification.success('Validador criado com sucesso!');
-			}, 1000);
-		} else {
-			//editar validador
-			this.changeLoading();
-			setTimeout(() => {
-				this.validadorForm.patchValue({
-					codigo: '',
-					descricao: '',
-					valor: '',
-					orgaoConcessor: '',
-					vigencia: '',
-					formasDePagamento: '',
+	saveValidador(stay: boolean) : void {
+		const isSubmitable: boolean = this.validadorForm.valid;
+
+		if (isSubmitable) {
+			
+			this._fwModel.reset();
+			this._fwModel.setModelId('GTPU005');
+			this._fwModel.setEndPoint('GTPU005/');
+			this._fwModel.AddModel('H6YMASTER', 'FIELDS');
+
+			// ADICIONA CAMPOS
+			this._fwModel.getModel('H6YMASTER').addField('H6Y_CODID');
+			this._fwModel.getModel('H6YMASTER').addField('H6Y_DESCR');
+
+			this._fwModel
+				.getModel('H6YMASTER')
+				.setValue('H6Y_CODID', ChangeUndefinedToEmpty(this.validadorForm.value.codigo.toUpperCase()));
+			
+			this._fwModel
+				.getModel('H6YMASTER')
+				.setValue('H6Y_DESCR', ChangeUndefinedToEmpty(this.validadorForm.value.descricao.toUpperCase()));
+
+			if (this.action == 'incluir') {
+				this._fwModel.operation = 3;
+				this._fwModel.post().subscribe({
+					next: () => {
+						this._poNotification.success('Validador cadastro com sucesso!');
+						if (stay) {
+							this.changeLoading();
+							this._fwModel.reset();
+							this.validadorForm.reset();
+						} else {
+							this.onClickClose();
+							this._fwModel.reset();
+						}
+					},
+					error: error => {
+						this._poNotification.error(error.error.errorMessage);
+						this._fwModel.reset();
+					},
+					complete: () => {
+						this.changeLoading();
+					},
 				});
-				this.changeLoading();
-				this._router.navigate(['validadores']);
-				this._poNotification.success('Validador alterado com sucesso!');
-			}, 1000);
+			} else {
+				this._fwModel.operation = 4;
+				this._fwModel.setEndPoint('GTPU005/' + this.pk);
+
+				this._fwModel.put().subscribe({
+					next: () => {
+						this._poNotification.success('Validador alterado com sucesso!');
+					},
+					error: error => {
+						this._poNotification.error(error.error.errorMessage);
+						this._fwModel.reset();
+					},
+					complete: () => {
+						this.changeLoading();
+					},
+				});
+			}
+		} else {
+			this._poNotification.error(ValidaNotificacao(this.validadorForm));
 		}
 	}
 
@@ -239,5 +252,18 @@ export class DetValidadoresComponent {
 		} else {
 			this.isShowLoading = true;
 		}
+	}
+
+	/*******************************************************************************
+	 * @name onClickClose
+	 * @description Função responsavél por cancelar a ação e voltar para a tela
+	 * inicial de validadores.
+	 * @author   Serviços | Silas Gomes
+	 * @since       2024
+	 * @version v1
+	 *******************************************************************************/
+	onClickClose(): void {
+		this._fwModel.reset();
+		this._router.navigate(['validadores']);
 	}
 }
