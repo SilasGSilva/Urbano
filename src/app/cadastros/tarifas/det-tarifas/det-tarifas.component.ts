@@ -242,10 +242,10 @@ export class DetTarifasComponent {
 	saveTarifa(isSaveNew: boolean, generateHistory?: boolean) {
 		this.changeLoading();
 		let isSubmitable: boolean = this.tarifaForm.valid;
-		this.dataIniVigencia = this.dataIniVigencia == '' ? this.tarifaForm.value.vigencia.start : this.dataIniVigencia;
-		this.dataFimVigencia = this.dataFimVigencia == '' ? this.tarifaForm.value.vigencia.end : this.dataFimVigencia;
 
 		if (isSubmitable) {
+			this.dataIniVigencia = this.dataIniVigencia == '' ? this.tarifaForm.value.vigencia.start : this.dataIniVigencia;
+			this.dataFimVigencia = this.dataFimVigencia == '' ? this.tarifaForm.value.vigencia.end : this.dataFimVigencia;
 			let formaPagSel: Array<any> =
 				this.formasDePagamento['disclaimers'].length > 0
 					? this.formasDePagamento['disclaimers']
