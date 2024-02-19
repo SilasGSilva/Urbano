@@ -16,6 +16,7 @@ import { FwProtheusModel } from 'src/app/services/models/fw-protheus.model';
 import { ChangeUndefinedToEmpty, FindValueByName, MakeDate } from 'src/app/services/functions/util.function';
 import { OrgaoConcedenteComboService } from 'src/app/services/combo-filter.service';
 import { FormaPagamentoComboService } from 'src/app/services/lookups.service';
+import { ValidaNotificacao } from 'src/app/services/functions/validateForm';
 @Component({
 	selector: 'app-det-tarifas',
 	templateUrl: './det-tarifas.component.html',
@@ -375,6 +376,9 @@ export class DetTarifasComponent {
 					},
 				});
 			}
+		} else {
+			this._poNotification.error(ValidaNotificacao(this.tarifaForm));
+			this.changeLoading();
 		}
 	}
 
