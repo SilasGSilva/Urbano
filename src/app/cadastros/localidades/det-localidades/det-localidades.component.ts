@@ -197,22 +197,18 @@ export class DetLocalidadesComponent implements OnInit {
 			// Seta valor para os campos
 			this.fwModel
 				.getModel('GI1MASTER')
-				.setValue('GI1_DESCRI', ChangeUndefinedToEmpty(this.localidadesForm.value.descricao.toUpperCase()));
+				.setValue('GI1_DESCRI', ChangeUndefinedToEmpty(this.localidadesForm.value.descricao));
+			this.fwModel.getModel('GI1MASTER').setValue('GI1_CEP', ChangeUndefinedToEmpty(this.localidadesForm.value.cep));
 			this.fwModel
 				.getModel('GI1MASTER')
-				.setValue('GI1_CEP', ChangeUndefinedToEmpty(this.localidadesForm.value.cep.toUpperCase()));
+				.setValue('GI1_ENDERE', ChangeUndefinedToEmpty(this.localidadesForm.value.endereco));
 			this.fwModel
 				.getModel('GI1MASTER')
-				.setValue('GI1_ENDERE', ChangeUndefinedToEmpty(this.localidadesForm.value.endereco.toUpperCase()));
+				.setValue('GI1_BAIRRO', ChangeUndefinedToEmpty(this.localidadesForm.value.bairro));
+			this.fwModel.getModel('GI1MASTER').setValue('GI1_UF', ChangeUndefinedToEmpty(this.localidadesForm.value.estado));
 			this.fwModel
 				.getModel('GI1MASTER')
-				.setValue('GI1_BAIRRO', ChangeUndefinedToEmpty(this.localidadesForm.value.bairro.toUpperCase()));
-			this.fwModel
-				.getModel('GI1MASTER')
-				.setValue('GI1_UF', ChangeUndefinedToEmpty(this.localidadesForm.value.estado.toUpperCase()));
-			this.fwModel
-				.getModel('GI1MASTER')
-				.setValue('GI1_CDMUNI', ChangeUndefinedToEmpty(this.localidadesForm.value.municipio.toUpperCase()));
+				.setValue('GI1_CDMUNI', ChangeUndefinedToEmpty(this.localidadesForm.value.municipio));
 
 			if (this.localidadesForm.value.tipoLocalidade) {
 				this.fwModel
