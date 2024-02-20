@@ -27,6 +27,9 @@ import { ViewLinhasComponent } from './cadastros/linhas/view-linhas/view-linhas.
 import { FrotasComponent } from './cadastros/frotas/frotas.component';
 import { DetFrotasComponent } from './cadastros/frotas/det-frotas/det-frotas.component';
 import { ViewFrotasComponent } from './cadastros/frotas/view-frotas/view-frotas.component';
+import { ProgramacaoLinhasComponent } from './operacional/programacao-linhas/programacao-linhas.component';
+import { DetProgramacaoLinhasComponent } from './operacional/programacao-linhas/det-programacao-linhas/det-programacao-linhas.component';
+import { ViewProgramacaoLinhasComponent } from './operacional/programacao-linhas/view-programacao-linhas/view-programacao-linhas.component';
 
 const routes: Routes = [
 	{
@@ -140,10 +143,19 @@ const routes: Routes = [
 	},
 	{ path: 'frota/detFrota/:acao', component: DetFrotasComponent },
 	{ path: 'frota/viewFrota/:filial/:pk', component: ViewFrotasComponent },
+
+	// ##### PROGRAMAÇÃO DAS LINHAS #####
+	{ path: 'programacao-linhas', component: ProgramacaoLinhasComponent },
+	{
+		path: 'programacao-linhas/detProgramacao-linhas/:acao/:filial/:pk',
+		component: DetProgramacaoLinhasComponent,
+	},
+	{ path: 'programacao-linhas/detProgramacao-linhas/:acao', component: DetProgramacaoLinhasComponent },
+	{ path: 'programacao-linhas/viewProgramacao-linhas/:filial/:pk', component: ViewProgramacaoLinhasComponent },
 ];
 
 @NgModule({
 	imports: [RouterModule.forRoot(routes)],
 	exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

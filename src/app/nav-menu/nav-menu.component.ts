@@ -59,7 +59,12 @@ export class NavMenuComponent {
 			label: 'Operacional',
 			shortLabel: 'Operacional',
 			icon: 'po-icon po-icon-steering-wheel',
-			subItems: [],
+			subItems: [
+				{
+					label: 'Programação das linhas',
+					action: this.navigate.bind(this, '/programacao-linhas'),
+				},
+			],
 		},
 		{
 			label: 'Financeiro',

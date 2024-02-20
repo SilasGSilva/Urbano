@@ -34,6 +34,9 @@ import { ViewLinhasComponent } from './cadastros/linhas/view-linhas/view-linhas.
 import { FrotasComponent } from './cadastros/frotas/frotas.component';
 import { DetFrotasComponent } from './cadastros/frotas/det-frotas/det-frotas.component';
 import { ViewFrotasComponent } from './cadastros/frotas/view-frotas/view-frotas.component';
+import { ProgramacaoLinhasComponent } from './operacional/programacao-linhas/programacao-linhas.component';
+import { ViewProgramacaoLinhasComponent } from './operacional/programacao-linhas/view-programacao-linhas/view-programacao-linhas.component';
+import { DetProgramacaoLinhasComponent } from './operacional/programacao-linhas/det-programacao-linhas/det-programacao-linhas.component';
 
 @NgModule({
 	declarations: [
@@ -66,6 +69,9 @@ import { ViewFrotasComponent } from './cadastros/frotas/view-frotas/view-frotas.
 		FrotasComponent,
 		DetFrotasComponent,
 		ViewFrotasComponent,
+  ProgramacaoLinhasComponent,
+  ViewProgramacaoLinhasComponent,
+  DetProgramacaoLinhasComponent,
 	],
 	imports: [
 		BrowserModule,

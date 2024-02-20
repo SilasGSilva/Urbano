@@ -19,6 +19,12 @@ export class PoComboMotoristaStruct implements PoComboOption {
 	matricula?: string = '';
 	filial: string = '';
 }
+
+export class ProgramacaoLinhasLinhasComboStruct implements PoComboOption {
+	prefixo: string = '';
+	value: string = '';
+	label: string = '';
+}
 /**
  * RecursoComboService
  * Utilizado no combo de tipo de recurso
@@ -225,6 +231,75 @@ export class FuncaoComboService implements PoComboFilter {
 					(field: any) => field.id == 'RJ_FUNCAO'
 				).value;
 				itemReturn.label = response.resources[0].models[0].fields.find((field: any) => field.id == 'RJ_DESC').value;
+
+				return itemReturn;
+			})
+		);
+	}
+}
+
+// ##### COMBO LINHAS | PROGRAMAÇÃO DE LINHAS #####
+@Injectable({
+	providedIn: 'root',
+})
+export class LinhasProgramacaoComboService implements PoComboFilter {
+	private endpoint: string = 'FRETAMENTOURBANO/local';
+
+	constructor(private apiService: ApiService) {}
+
+	getFilteredData(params: any, filterParams?: any): Observable<ProgramacaoLinhasLinhasComboStruct[]> {
+		let httpParams = new HttpParams();
+		let filter: string = '';
+		if (filterParams) {
+			filter = filterParams;
+		}
+
+		if (params.value != '') {
+			filter =
+				" AND (UPPER(GI1_COD) LIKE UPPER('%" +
+				params.value +
+				"%') OR " +
+				" UPPER(GI1_DESCRI) LIKE UPPER('%" +
+				params.value +
+				"%') ) ";
+		}
+		httpParams = httpParams.append('filter', filter);
+
+		return this.apiService.get(this.endpoint, httpParams).pipe(
+			map((response: any) => {
+				const items: ProgramacaoLinhasLinhasComboStruct[] = [];
+				let hasNext = true;
+
+				response.Localidade.forEach((resource: any) => {
+					let itemReturn: ProgramacaoLinhasLinhasComboStruct = new ProgramacaoLinhasLinhasComboStruct();
+					itemReturn.value = resource.codLocal;
+					itemReturn.label = resource.descLocal;
+					itemReturn.prefixo = resource.codMuni;
+
+					items.push(itemReturn);
+
+					if (params.page * params.pageSize >= response.total) {
+						hasNext = false;
+					}
+				});
+				return items;
+			})
+		);
+	}
+
+	getObjectByValue(value: string | number, filterParams?: any): Observable<PoComboOption> {
+		let params = new HttpParams();
+
+		let filter: string = ``;
+
+		params = params.append('FILTER', filter);
+
+		return this.apiService.get(this.endpoint, params).pipe(
+			map((response: any) => {
+				let itemReturn = new ProgramacaoLinhasLinhasComboStruct();
+
+				itemReturn.value = response.codLocal;
+				itemReturn.label = response.descLocal;
 
 				return itemReturn;
 			})

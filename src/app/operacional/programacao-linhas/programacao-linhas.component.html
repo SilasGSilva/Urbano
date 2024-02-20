@@ -1,0 +1,98 @@
+<po-page-default p-title="Frota" [p-breadcrumb]="breadcrumb">
+	<!-- Grid-->
+	<!-- Combo de status da programação -->
+	<po-combo
+		#statusFilterCombo
+		name="status"
+		class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
+		p-label="Status da programação"
+		[p-options]="[
+			{ value: '01', label: 'Programação gerada' },
+			{ value: '02', label: 'Sem programação' }
+		]"
+		(p-change)="setFilters(); clearFilter('status')"
+		p-clean="true"
+		p-placeholder="Selecionar"
+		[p-sort]="true">
+		<!-- <ng-template p-combo-option-template let-option>
+			<div class="po-row">
+				<div class="po-sm-10 po-md-9 po-lg-11">
+					<div class="po-font-text-large-bold">{{ option.label }}</div>
+					<div class="po-font-text-smaller po-ml-1">Código: {{ option.value }}</div>
+				</div>
+			</div>
+		</ng-template> -->
+	</po-combo>
+
+	<!-- Combo de linhas -->
+	<po-combo
+		#linhaFilterCombo
+		name="linha"
+		class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
+		p-label="Linha"
+		[p-filter-service]="linhaComboService"
+		[p-filter-params]="linhaFilter"
+		(p-change)="setFilters(); clearFilter('linha')"
+		p-clean="true"
+		p-placeholder="Selecionar"
+		[p-sort]="true">
+		<ng-template p-combo-option-template let-option>
+			<div class="po-row">
+				<div class="po-sm-10 po-md-9 po-lg-11">
+					<div class="po-font-text-small-bold">{{ option.prefixo }}</div>
+					<div class="po-font-text-small">Código: {{ option.value }}</div>
+					<div class="po-font-text-small">Descrição: {{ option.label }}</div>
+				</div>
+			</div>
+		</ng-template>
+	</po-combo>
+
+	<po-datepicker-range
+		#periodoFilterDatepicker
+		class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
+		p-label="Período"></po-datepicker-range>
+
+	<!-- Tabela com itens de frotas -->
+	<po-table
+		class="po-md-12 po-pl-0 po-pt-2"
+		[p-columns]="columnsProgLinhas"
+		[p-items]="listProgLinhas"
+		p-sort="true"
+		(p-sort-by)="sortTable($event)"
+		p-hide-columns-manager="true"
+		p-striped="true"
+		p-hide-text-overflow
+		[p-actions]="actions"
+		(p-show-more)="actionShowMore()"
+		[p-show-more-disabled]="isShowMoreDisabled"
+		p-striped="true"
+		[p-height]="nHeightMonitor"
+		[p-loading]="isLoading">
+		<ng-template p-table-row-template let-rowItem let-i="rowIndex" let-value [p-table-row-template-show]="verifyDetails">
+			<div style="width: 53%; padding-left: 8rem">
+				<po-table
+					p-hide-columns-manager="true"
+					[p-columns]="[
+						{ property: 'versaoAnterior', label: 'Versões anteriores', type: 'link', width: '165px' },
+						{ property: 'status' },
+						{ property: 'periodo', label: 'Período' }
+					]"
+					[p-items]="[
+						{
+							versaoAnterior: rowItem.details[0].versaoAnterior,
+							status: rowItem.details[0].status,
+							periodo: rowItem.details[0].periodo
+						}
+					]"></po-table>
+			</div>
+		</ng-template>
+	</po-table>
+</po-page-default>
+
+<po-modal #modalActions [p-title]="titleModal">
+	<p class="po-font-text-large">{{ textModal }}</p>
+	<po-modal-footer>
+		<po-button p-label="Cancelar" p-kind="tertiary" (p-click)="modalActions.close()"> </po-button>
+		<po-button [p-label]="labelButtonModal" p-danger="true" p-kind="primary" (p-click)="callActions()">
+		</po-button></po-modal-footer
+></po-modal>
