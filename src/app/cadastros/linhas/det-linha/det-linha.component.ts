@@ -298,40 +298,40 @@ export class DetLinhaComponent implements OnInit {
 			//Seta valor para os campos
 			this._fwModel
 				.getModel('H6VMASTER')
-				.setValue('H6V_PREFIX', ChangeUndefinedToEmpty(this.linhaForm.value.prefixo.toUpperCase()));
+				.setValue('H6V_PREFIX', ChangeUndefinedToEmpty(this.linhaForm.value.prefixo));
 			this._fwModel
 				.getModel('H6VMASTER')
-				.setValue('H6V_CODLIN', ChangeUndefinedToEmpty(this.linhaForm.value.codlinha.toUpperCase()));
+				.setValue('H6V_CODLIN', ChangeUndefinedToEmpty(this.linhaForm.value.codlinha));
 			this._fwModel
 				.getModel('H6VMASTER')
-				.setValue('H6V_DESCRI', ChangeUndefinedToEmpty(this.linhaForm.value.descricao.toUpperCase()));
+				.setValue('H6V_DESCRI', ChangeUndefinedToEmpty(this.linhaForm.value.descricao));
 			this._fwModel
 				.getModel('H6VMASTER')
-				.setValue('H6V_ORIGEM', ChangeUndefinedToEmpty(this.linhaForm.value.origem.toUpperCase()));
+				.setValue('H6V_ORIGEM', ChangeUndefinedToEmpty(this.linhaForm.value.origem));
 			this._fwModel
 				.getModel('H6VMASTER')
-				.setValue('H6V_DESTIN', ChangeUndefinedToEmpty(this.linhaForm.value.destino.toUpperCase()));
+				.setValue('H6V_DESTIN', ChangeUndefinedToEmpty(this.linhaForm.value.destino));
 			this._fwModel
 				.getModel('H6VMASTER')
-				.setValue('H6V_ORGAO', ChangeUndefinedToEmpty(this.linhaForm.value.orgaoregulamentador.toUpperCase()));
+				.setValue('H6V_ORGAO', ChangeUndefinedToEmpty(this.linhaForm.value.orgaoregulamentador));
 			this._fwModel
 				.getModel('H6VMASTER')
-				.setValue('H6V_TARIFA', ChangeUndefinedToEmpty(this.linhaForm.value.tarifa.toUpperCase()));
+				.setValue('H6V_TARIFA', ChangeUndefinedToEmpty(this.linhaForm.value.tarifa));
 			this._fwModel
 				.getModel('H6VMASTER')
-				.setValue('H6V_PEDAGI', ChangeUndefinedToEmpty(this.linhaForm.value.pedagio.toUpperCase()));
+				.setValue('H6V_PEDAGI', ChangeUndefinedToEmpty(this.linhaForm.value.pedagio));
 			this._fwModel
 				.getModel('H6VMASTER')
-				.setValue('H6V_CLSFIS', ChangeUndefinedToEmpty(this.linhaForm.value.classificacaofiscal.toUpperCase()));
+				.setValue('H6V_CLSFIS', ChangeUndefinedToEmpty(this.linhaForm.value.classificacaofiscal));
 			this._fwModel
 				.getModel('H6VMASTER')
-				.setValue('H6V_KMLINH', ChangeUndefinedToEmpty(this.linhaForm.value.kmdalinha.toUpperCase()));
+				.setValue('H6V_KMLINH', ChangeUndefinedToEmpty(this.linhaForm.value.kmdalinha));
 			this._fwModel
 				.getModel('H6VMASTER')
-				.setValue('H6V_CATEGO', ChangeUndefinedToEmpty(this.linhaForm.value.categoria.toUpperCase()));
+				.setValue('H6V_CATEGO', ChangeUndefinedToEmpty(this.linhaForm.value.categoria));
 			this._fwModel
 				.getModel('H6VMASTER')
-				.setValue('H6V_STATUS', ChangeUndefinedToEmpty(this.linhaForm.value.status.toUpperCase()));
+				.setValue('H6V_STATUS', ChangeUndefinedToEmpty(this.linhaForm.value.status));
 
 			if (this.action == 'incluir') {
 				this._fwModel.operation = 3;

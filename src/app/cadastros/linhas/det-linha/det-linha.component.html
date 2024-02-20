@@ -14,7 +14,7 @@
             <po-input
                 class="po-lg-2"
                 name="prefixo"
-                p-label="Prefixo Linha*"
+                p-label="Prefixo Linha"
                 p-placeholder="Digite"
                 formControlName="prefixo"
                 [p-maxlength]= 10
@@ -26,7 +26,7 @@
             <po-input
                 class="po-lg-2"
                 name="codlinha"
-                p-label="Código Linha*"
+                p-label="Código Linha"
                 p-placeholder="Digite"
                 formControlName="codlinha"
                 [p-maxlength]= 4
@@ -38,8 +38,8 @@
 
             <po-input
                 class="po-lg-8"
-                name="descricao*"
-                p-label="Descrição*"
+                name="descricao"
+                p-label="Descrição"
                 p-placeholder="Digite"
                 formControlName="descricao"
                 p-required="true"
@@ -52,7 +52,7 @@
                 class="po-lg-4" 
                 name="origem"
                 formControlName="origem"  
-                p-label="Origem*"
+                p-label="Origem"
                 [p-filter-service]="origemComboService"
                 p-placeholder="Selecionar"
                 p-clean="true"
@@ -83,7 +83,7 @@
                 class="po-lg-4" 
                 name="destino"
                 formControlName="destino"  
-                p-label="Destino*"
+                p-label="Destino"
                 [p-filter-service]="destinoComboService"
                 p-placeholder="Selecionar"
                 p-clean="true"
@@ -115,7 +115,7 @@
                 name="orgaoregulamentador"
                 formControlName="orgaoregulamentador"
                 [p-filter-service]="orgaoRegulamentador"
-                p-label="Órgão regulamentador*"
+                p-label="Órgão regulamentador"
                 p-placeholder="Selecionar"
                 p-clean="true"
             >
@@ -140,7 +140,7 @@
                 name="tarifa"
                 formControlName="tarifa"  
                 [p-filter-service]="tarifaComboService"
-                p-label="Tarifa*"
+                p-label="Tarifa"
                 p-placeholder="Selecionar"
                 p-clean="true"
             >
@@ -167,6 +167,7 @@
                 p-label="Pedagio"
                 p-placeholder="Selecionar"
                 p-clean="true"
+                [p-optional]="true"
             >
                 <ng-template p-combo-option-template let-option>
                     <div class="po-row">
@@ -191,6 +192,7 @@
                 [p-options]="ListClassificacao"
                 p-placeholder="Selecionar"
                 p-clean="true"
+                [p-optional]="true"
             >
                 <ng-template p-combo-option-template let-option>
                     <div class="po-row">
@@ -211,7 +213,7 @@
                 <po-input
                     class="po-lg-4"
                     name="kmdalinha"
-                    p-label="Km da linha*"
+                    p-label="Km da linha"
                     p-placeholder="Digite"
                     formControlName="kmdalinha"
                     [p-maxlength]= 8
@@ -228,6 +230,7 @@
                     p-placeholder="Selecionar"
                     [p-filter-service]="categoriaComboService"
                     p-clean="true"
+                    [p-optional]="true"
                 >
                     <ng-template p-combo-option-template let-option>
                         <div class="po-row">
