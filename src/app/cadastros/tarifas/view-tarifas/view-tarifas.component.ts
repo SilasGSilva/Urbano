@@ -76,7 +76,7 @@ export class ViewTarifasComponent {
 	 * @since    2024
 	 * @version  v1
 	 *******************************************************************************/
-	getTarifaDynamicView() {
+	async getTarifaDynamicView() {
 		this.changeLoading();
 		this.itemsHistorico = [];
 		let params = new HttpParams();
@@ -91,32 +91,9 @@ export class ViewTarifasComponent {
 				)} - ${FindValueByName(data.models[0].fields, 'H6S_DESCRI')}`;
 				this.breadcrumb.items[2].label = this.title;
 				let details = data.models[0].models;
-				let formaPag: string = '';
-				details.forEach(details => {
-					if (details.id == 'H6TDETAIL') {
-						details.items.forEach(historico => {
-							let detHistorico = {} as Historico;
-							detHistorico.valorTarifa = FindValueByName(historico.fields, 'H6T_VALOR');
-							detHistorico.dataIniVigencia = MakeDate(
-								FindValueByName(historico.fields, 'H6T_DTINIV'),
-								'yyyy-mm-dd'
-							);
-							detHistorico.dataFimVigencia = MakeDate(
-								FindValueByName(historico.fields, 'H6T_DTFIMV'),
-								'yyyy-mm-dd'
-							);
+				let formaPag = this.getFormaPagamento(details);
+				this.getHistorico(details);
 
-							this.itemsHistorico = [...this.itemsHistorico, detHistorico];
-						});
-					} else {
-						details.items.forEach(itemFormaPag => {
-							if (formaPag != '') {
-								formaPag += '; ';
-							}
-							formaPag += FindValueByName(itemFormaPag.fields, 'H6U_CODH6R');
-						});
-					}
-				});
 				this.itemsDynamicView = {
 					codigo: FindValueByName(data.models[0].fields, 'H6S_CODIGO'),
 					descricao: FindValueByName(data.models[0].fields, 'H6S_DESCRI'),
@@ -157,5 +134,52 @@ export class ViewTarifasComponent {
 		} else {
 			this.isShowLoading = true;
 		}
+	}
+	/**
+	 * @name getHistorico
+	 * @description Função responsável por trazer os dados de historico
+	 * @param details grids
+	 * @author   Serviços | Breno Gomes
+	 * @since    2024
+	 * @version  v1
+	 */
+	async getHistorico(details) {
+		details.forEach(details => {
+			if (details.id == 'H6TDETAIL') {
+				details.items.forEach(historico => {
+					let detHistorico = {} as Historico;
+					detHistorico.valorTarifa = FindValueByName(historico.fields, 'H6T_VALOR');
+					detHistorico.dataIniVigencia = MakeDate(FindValueByName(historico.fields, 'H6T_DTINIV'), 'yyyy-mm-dd');
+					detHistorico.dataFimVigencia = MakeDate(FindValueByName(historico.fields, 'H6T_DTFIMV'), 'yyyy-mm-dd');
+
+					this.itemsHistorico = [...this.itemsHistorico, detHistorico];
+				});
+			}
+		});
+	}
+	/**
+	 * @name getFormaPagamento
+	 * @description Função responsável por trazer os dados de formas de pagamento
+	 * @param details grids
+	 * @author   Serviços | Breno Gomes
+	 * @since    2024
+	 * @version  v1
+	 */
+	getFormaPagamento(details) {
+		let formaPag: string = '';
+		details.forEach(details => {
+			if (details.id == 'H6UDETAIL') {
+				details.items.forEach(itemFormaPag => {
+					if (formaPag != '') {
+						formaPag += '; ';
+					}
+					formaPag +=
+						FindValueByName(itemFormaPag.fields, 'H6U_CODH6R') +
+						' - ' +
+						FindValueByName(itemFormaPag.fields, 'H6U_DESH6R');
+				});
+			}
+		});
+		return formaPag;
 	}
 }
