@@ -79,12 +79,13 @@ export class DetLinhaComponent implements OnInit {
 	classificacaofiscalFilterCombo!: PoComboComponent
 
 	public editView: boolean = false;
+	public isShowLoading: boolean = false;
+	public isVisibleBtn: boolean = true;
 
 	public action: string = '';
 	public pk: string = '';
 	public title: string = '';
-	public isLoadingBtn: boolean = false;
-	isHideLoadingTela: boolean = true;
+
 	listStatus: PoRadioGroupOption[] = ListStatus;
 
 	public breadcrumb: PoBreadcrumb = {
@@ -97,7 +98,6 @@ export class DetLinhaComponent implements OnInit {
 	public linhaForm!: FormGroup;
 	public ListPedagio: Array<PoSelectOption> = ListPedagio;
 	public ListClassificacao: Array<PoSelectOption> = ClassificaoFiscal;
-	public filterParams: string = ""
 
 	constructor(
 		private _activatedRoute: ActivatedRoute,
@@ -123,11 +123,13 @@ export class DetLinhaComponent implements OnInit {
 			case 'editar':
 				this.editView = true;
 				this.title = 'Editar linha'
+				this.isVisibleBtn = false;
 				this.breadcrumb.items[2].label = 'Editar linha';
 				this.getLinha();
 				break;
 			case 'incluir':
 				this.title = 'Incluir linha';
+				this.isVisibleBtn = true;
 				this.breadcrumb.items[2].label = 'Incluir linha';
 				break;
 		}
@@ -153,6 +155,7 @@ export class DetLinhaComponent implements OnInit {
    *******************************************************************************/
 	createForm(): any {
 		const linha: linhaForm = {} as linhaForm;
+		this.changeLoading();
 		this.linhaForm = this._formBuilder.group({
 
 			prefixo: [
@@ -210,8 +213,7 @@ export class DetLinhaComponent implements OnInit {
    * @version  v1
    *******************************************************************************/
 	getLinha() {
-		this.isHideLoadingTela = false;
-
+		this.changeLoading();
 		let params = new HttpParams();
 		this._fwModel.reset();
 		this._fwModel.setEndPoint('GTPU003/' + this.pk);
@@ -244,7 +246,7 @@ export class DetLinhaComponent implements OnInit {
 				this._fwModel.reset();
 			},
 			complete: () => {
-				this.isHideLoadingTela = true;
+				this.changeLoading();
 			},
 		});
 
@@ -272,10 +274,8 @@ export class DetLinhaComponent implements OnInit {
    *******************************************************************************/
 	saveLinha(stay: boolean): void {
 		const isSubmitable: boolean = this.linhaForm.valid;
-
+		this.changeLoading();
 		if (isSubmitable) {
-			this.isLoadingBtn = true;
-
 			this._fwModel.reset();
 			this._fwModel.setModelId('GTPU003');
 			this._fwModel.setEndPoint('GTPU003/')
@@ -337,25 +337,24 @@ export class DetLinhaComponent implements OnInit {
 				this._fwModel.operation = 3;
 				this._fwModel.post().subscribe({
 					next: () => {
-						this._poNotification.success('Linha cadastra com sucesso!');
 						if (stay) {
 							this._fwModel.reset();
-							this.linhaForm.reset();
+							this.linhaForm.reset();							
 							this.linhaForm.patchValue({
 								status: '1',
 							});
 						} else {
 							this.onClickCancel();
-							this._fwModel.reset()
 						}
 					},
 					error: error => {
 						this._poNotification.error(error.error.errorMessage);
 						this._fwModel.reset();
+						this.changeLoading();
 					},
 					complete: () => {
-						this.isLoadingBtn = false;
-						this.isHideLoadingTela = true;
+						this.changeLoading();
+						this._poNotification.success('Linha cadastra com sucesso!');
 					},
 				});
 			} else {
@@ -365,27 +364,35 @@ export class DetLinhaComponent implements OnInit {
 				this._fwModel.put().subscribe({
 					next: () => {
 						this._poNotification.success('Linha alterada com sucesso!');
-						if (stay) {
-							this.title = 'Incluir linha';
-							this.breadcrumb.items[2].label = 'Incluir linha';
-							this._fwModel.reset();
-							this.linhaForm.reset();
-							this.linhaForm.patchValue({
-								status: '1',
-							});
-						} else {
-							this.onClickCancel();
-							this._fwModel.reset()
-						}
+						this.onClickCancel();
+						this.changeLoading();
 					},
 					error: error => {
 						this._poNotification.error(error.error.errorMessage);
 						this._fwModel.reset();
+						this.changeLoading();
 					},
 				});
 			}
 		} else {
 			this._poNotification.error(ValidaNotificacao(this.linhaForm));
+			this.changeLoading();
 		}
 	}
-}
+
+	/*******************************************************************************
+	 * @name changeLoading
+	 * @description Função responsável por trocar o valor da flag isShowLoading,
+	 * para mostrar ou esconder o loading na tela
+	 * @author   Serviços | Levy Santos
+	 * @since    2024
+	 * @version  v1
+	*******************************************************************************/
+	changeLoading() {
+		if (this.isShowLoading) {
+			this.isShowLoading = false;
+		} else {
+			this.isShowLoading = true;
+		}
+	}	
+}	

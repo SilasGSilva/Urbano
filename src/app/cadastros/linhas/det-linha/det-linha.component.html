@@ -4,7 +4,7 @@
 >
     <po-loading-overlay
         [p-screen-lock]="true" 
-        [hidden]="isHideLoadingTela" 
+        [hidden]="isShowLoading" 
         p-text="Carregando Linha"
     >
     </po-loading-overlay>
@@ -76,7 +76,6 @@
 
                     </div>
                 </ng-template>
-
             </po-combo>
 
             <po-combo
@@ -108,7 +107,6 @@
 
                     </div>
                 </ng-template>
-
             </po-combo>
 
             <po-combo
@@ -271,6 +269,7 @@
                         p-label="Salvar e incluir novo" 
                         p-kind="secondary"
                         [p-disabled]="!linhaForm.valid"
+                        *ngIf="isVisibleBtn"
                         (p-click)="saveLinha(true)"
                     > 
                     </po-button>
