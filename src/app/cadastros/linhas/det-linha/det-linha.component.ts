@@ -27,12 +27,7 @@ import {
 import {
 	PoNotificationService
 } from '@po-ui/ng-components';
-import {
-	CategoriaComboService,
-	LocalidadeComboService,
-	OrgaoRegulamentadorComboService,
-	PagarComboService
-} from 'src/app/services/adaptors/wsurbano-adapter.service';
+
 import {
 	FwProtheusModel
 } from 'src/app/services/models/fw-protheus.model';
@@ -46,6 +41,12 @@ import {
 import {
 	ValidaNotificacao
 } from 'src/app/services/functions/validateForm';
+import { 
+	CategoriaComboService, 
+	OrgaoRegulamentadorComboService, 
+	TarifaComboService 
+} from 'src/app/services/combo-filter.service';
+import { LocalidadeComboService } from 'src/app/services/adaptors/wsurbano-adapter.service';
 
 @Component({
 	selector: 'app-det-linha',
@@ -54,7 +55,7 @@ import {
 	providers: [
 		LocalidadeComboService,
 		OrgaoRegulamentadorComboService,
-		PagarComboService,
+		TarifaComboService,
 		CategoriaComboService
 	]
 })
@@ -78,7 +79,6 @@ export class DetLinhaComponent implements OnInit {
 	classificacaofiscalFilterCombo!: PoComboComponent
 
 	public editView: boolean = false;
-	public isVisibleBtn: boolean = false;
 
 	public action: string = '';
 	public pk: string = '';
@@ -108,7 +108,7 @@ export class DetLinhaComponent implements OnInit {
 		public origemComboService: LocalidadeComboService,
 		public destinoComboService: LocalidadeComboService,
 		public orgaoRegulamentador: OrgaoRegulamentadorComboService,
-		public tarifaComboService: PagarComboService,
+		public tarifaComboService: TarifaComboService,
 		public categoriaComboService: CategoriaComboService
 	) {
 		// Ação
@@ -128,7 +128,6 @@ export class DetLinhaComponent implements OnInit {
 				break;
 			case 'incluir':
 				this.title = 'Incluir linha';
-				this.isVisibleBtn = true;
 				this.breadcrumb.items[2].label = 'Incluir linha';
 				break;
 		}
@@ -368,7 +367,6 @@ export class DetLinhaComponent implements OnInit {
 						this._poNotification.success('Linha alterada com sucesso!');
 						if (stay) {
 							this.title = 'Incluir linha';
-							this.isVisibleBtn = true;
 							this.breadcrumb.items[2].label = 'Incluir linha';
 							this._fwModel.reset();
 							this.linhaForm.reset();

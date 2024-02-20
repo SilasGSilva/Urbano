@@ -23,14 +23,14 @@ import {
 	Router
 } from '@angular/router';
 import {
-	DestinoComboService,
-	OrigemComboService,
-	PrefixoComboService
-} from 'src/app/services/adaptors/wsurbano-adapter.service';
-import {
 	FwProtheusModel,
 	Resource
 } from 'src/app/services/models/fw-protheus.model';
+import { 
+	DestinoComboService, 
+	OrigemComboService, 
+	PrefixoComboService 
+} from 'src/app/services/combo-filter.service';
 
 @Component({
 	selector: 'app-linhas',

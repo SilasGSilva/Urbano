@@ -19,6 +19,12 @@ export class PoComboMotoristaStruct implements PoComboOption {
 	matricula?: string = '';
 	filial: string = '';
 }
+
+export class FilterComboStruct implements PoComboOption {
+	label: string = '';
+	value: string = '';
+	desc: string = '';
+}
 /**
  * RecursoComboService
  * Utilizado no combo de tipo de recurso
@@ -231,3 +237,419 @@ export class FuncaoComboService implements PoComboFilter {
 		);
 	}
 }
+
+@Injectable({
+	providedIn: 'root',
+})
+export class CategoriaComboService implements PoComboFilter {
+	private endpoint: string = 'fwmodel/GTPA011';
+
+	constructor(private apiService: ApiService) { }
+
+	getFilteredData(params: any, filterParams?: any): Observable<FilterComboStruct[]> {
+		let httpParams = new HttpParams();
+		let filter: string = '';
+		if (filterParams) {
+			filter = filterParams;
+		}
+
+		if (params.value != '') {
+			filter =
+				" UPPER(GYR_CODIGO) LIKE UPPER('%" +
+				params.value +
+				"%') OR " +
+				" UPPER(GYR_DESCRI) LIKE UPPER('%" +
+				params.value +
+				"%') ";
+		}
+		httpParams = httpParams.append('filter', filter);
+
+		// return of(items);
+		return this.apiService.get(this.endpoint, httpParams).pipe(
+			map((response: any) => {
+				const items: FilterComboStruct[] = [];
+
+				response.resources.forEach((resource: any) => {
+					let itemReturn: FilterComboStruct = new FilterComboStruct();
+
+					itemReturn.value = resource.models[0].fields.find(field => field.id === 'GYR_CODIGO').value;
+					itemReturn.label = resource.models[0].fields.find(field => field.id === 'GYR_DESCRI').value;
+
+					items.push(itemReturn);
+				});
+				return items;
+			})
+		);
+	}
+
+	getObjectByValue(value: string | number, filterParams?: any): Observable<PoComboOption> {
+		let params = new HttpParams();
+		let filter: string = `GYR_CODIGO='${value}'`;
+
+		if (filterParams != undefined) {
+			filter += ' AND ' + filterParams;
+		}
+		params = params.append('FILTER', filter);
+
+		return this.apiService.get(this.endpoint, params).pipe(
+			map((response: any) => {
+				let itemReturn = new FilterComboStruct();
+				itemReturn.value = response.resources[0].models[0].fields.find(field => field.id == 'GYR_CODIGO')?.value;
+				itemReturn.label = response.resources[0].models[0].fields.find(field => field.id == 'GYR_DESCRI')?.value;
+
+				return itemReturn;
+			})
+		);
+	}
+}
+
+@Injectable({
+	providedIn: 'root',
+})
+export class TarifaComboService implements PoComboFilter {
+	private endpoint: string = 'fwmodel/GTPU002';
+
+	constructor(private apiService: ApiService) { }
+
+	getFilteredData(params: any, filterParams?: any): Observable<FilterComboStruct[]> {
+		let httpParams = new HttpParams();
+		let filter: string = '';
+		if (filterParams) {
+			filter = filterParams;
+		}
+
+		if (params.value != '') {
+			filter =
+				" UPPER(H6S_CODIGO) LIKE UPPER('%" +
+				params.value +
+				"%') OR " +
+				" UPPER(H6S_DESCRI) LIKE UPPER('%" +
+				params.value +
+				"%') ";
+		}
+		httpParams = httpParams.append('filter', filter);
+
+		// return of(items);
+		return this.apiService.get(this.endpoint, httpParams).pipe(
+			map((response: any) => {
+				const items: FilterComboStruct[] = [];
+
+				response.resources.forEach((resource: any) => {
+					let itemReturn: FilterComboStruct = new FilterComboStruct();
+
+					itemReturn.value = resource.models[0].fields.find(field => field.id === 'H6S_CODIGO').value;
+					itemReturn.label = resource.models[0].fields.find(field => field.id === 'H6S_DESCRI').value;
+
+					items.push(itemReturn);
+
+				});
+				return items;
+			})
+		);
+	}
+
+	getObjectByValue(value: string | number, filterParams?: any): Observable<PoComboOption> {
+		let params = new HttpParams();
+		let filter: string = `H6S_CODIGO='${value}'`;
+
+		if (filterParams != undefined) {
+			filter += ' AND ' + filterParams;
+		}
+		params = params.append('FILTER', filter);
+
+		return this.apiService.get(this.endpoint, params).pipe(
+			map((response: any) => {
+				let itemReturn = new FilterComboStruct();
+				itemReturn.value = response.resources[0].models[0].fields.find(field => field.id == 'H6S_CODIGO')?.value;
+				itemReturn.label = response.resources[0].models[0].fields.find(field => field.id == 'H6S_DESCRI')?.value;
+
+				return itemReturn;
+			})
+		);
+	}
+}
+
+@Injectable({
+	providedIn: 'root',
+})
+export class OrgaoRegulamentadorComboService implements PoComboFilter {
+	private endpoint: string = 'fwmodel/GTPA000';
+
+	constructor(private apiService: ApiService) { }
+
+	getFilteredData(params: any, filterParams?: any): Observable<FilterComboStruct[]> {
+		let httpParams = new HttpParams();
+		let filter: string = '';
+		if (filterParams) {
+			filter = filterParams;
+		}
+
+		if (params.value != '') {
+			filter =
+				" UPPER(GI0_COD) LIKE UPPER('%" +
+				params.value +
+				"%') OR " +
+				" UPPER(GI0_DESCRI) LIKE UPPER('%" +
+				params.value +
+				"%') ";
+		}
+		httpParams = httpParams.append('filter', filter);
+
+		// return of(items);
+		return this.apiService.get(this.endpoint, httpParams).pipe(
+			map((response: any) => {
+				const items: FilterComboStruct[] = [];
+				let hasNext = true;
+
+				response.resources.forEach((resource: any) => {
+					let itemReturn: FilterComboStruct = new FilterComboStruct();
+
+					itemReturn.value = resource.models[0].fields.find(field => field.id === 'GI0_COD').value;
+					itemReturn.label = resource.models[0].fields.find(field => field.id === 'GI0_DESCRI').value;
+
+					items.push(itemReturn);
+
+					if (params.page * params.pageSize >= response.total) {
+						hasNext = false;
+					}
+				});
+				return items;
+			})
+		);
+	}
+
+	getObjectByValue(value: string | number, filterParams?: any): Observable<PoComboOption> {
+		let params = new HttpParams();
+		let filter: string = `GI0_COD='${value}'`;
+
+		if (filterParams != undefined) {
+			filter += ' AND ' + filterParams;
+		}
+		params = params.append('FILTER', filter);
+
+		return this.apiService.get(this.endpoint, params).pipe(
+			map((response: any) => {
+				let itemReturn = new FilterComboStruct();
+				itemReturn.value = response.resources[0].models[0].fields.find(field => field.id == 'GI0_COD')?.value;
+				itemReturn.label = response.resources[0].models[0].fields.find(field => field.id == 'GI0_DESCRI')?.value;
+
+				return itemReturn;
+			})
+		);
+	}
+}
+
+@Injectable({
+	providedIn: 'root',
+})
+export class DestinoComboService implements PoComboFilter {
+	private endpoint: string = 'fwmodel/GTPU003';
+
+	constructor(private apiService: ApiService) { }
+
+	getFilteredData(params: any, filterParams?: any): Observable<FilterComboStruct[]> {
+		let httpParams = new HttpParams();
+		let filter: string = '';
+		if (filterParams) {
+			filter = filterParams;
+		}
+
+		if (params.value != '') {
+			filter =
+				" UPPER(H6V_DESTIN) LIKE UPPER('%" +
+				params.value +
+				"%') OR " +
+				" UPPER(H6V_DESTDE) LIKE UPPER('%" +
+				params.value +
+				"%') ";
+		}
+		httpParams = httpParams.append('filter', filter);
+
+		// return of(items);
+		return this.apiService.get(this.endpoint, httpParams).pipe(
+			map((response: any) => {
+				const items: FilterComboStruct[] = [];
+				let hasNext = true;
+
+				response.resources.forEach((resource: any) => {
+					let itemReturn: FilterComboStruct = new FilterComboStruct();
+
+					itemReturn.value = resource.models[0].fields.find(field => field.id === 'H6V_DESTIN').value;
+					itemReturn.label = resource.models[0].fields.find(field => field.id === 'H6V_DESTDE').value;
+					itemReturn.desc = resource.models[0].fields.find(field => field.id === 'H6V_DESTIN').value;
+
+					items.push(itemReturn);
+
+					if (params.page * params.pageSize >= response.total) {
+						hasNext = false;
+					}
+				});
+				return items;
+			})
+		);
+	}
+
+	getObjectByValue(): Observable<PoComboOption> {
+		let params = new HttpParams();
+
+		let filter: string = ``;
+
+		params = params.append('FILTER', filter);
+
+		return this.apiService.get(this.endpoint, params).pipe(
+			map((response: any) => {
+				let itemReturn = new FilterComboStruct();
+
+				itemReturn.value = response.codLocal;
+				itemReturn.label = response.descLocal;
+				itemReturn.desc = response.codMuni;
+
+				return itemReturn;
+			})
+		);
+	}
+}
+
+@Injectable({
+	providedIn: 'root',
+})
+export class OrigemComboService implements PoComboFilter {
+	private endpoint: string = 'fwmodel/GTPU003';
+
+	constructor(private apiService: ApiService) { }
+
+	getFilteredData(params: any, filterParams?: any): Observable<FilterComboStruct[]> {
+		let httpParams = new HttpParams();
+		let filter: string = '';
+		if (filterParams) {
+			filter = filterParams;
+		}
+
+		if (params.value != '') {
+			filter =
+				" UPPER(H6V_ORIGEM) LIKE UPPER('%" +
+				params.value +
+				"%') OR " +
+				" UPPER(H6V_ORIDES) LIKE UPPER('%" +
+				params.value +
+				"%') ";
+		}
+		httpParams = httpParams.append('filter', filter);
+
+		// return of(items);
+		return this.apiService.get(this.endpoint, httpParams).pipe(
+			map((response: any) => {
+				const items: FilterComboStruct[] = [];
+				let hasNext = true;
+
+				response.resources.forEach((resource: any) => {
+					let itemReturn: FilterComboStruct = new FilterComboStruct();
+
+					itemReturn.value = resource.models[0].fields.find(field => field.id === 'H6V_ORIGEM').value;
+					itemReturn.label = resource.models[0].fields.find(field => field.id === 'H6V_ORIDES').value;
+					itemReturn.desc = resource.models[0].fields.find(field => field.id === 'H6V_ORIGEM').value;
+
+					items.push(itemReturn);
+
+					if (params.page * params.pageSize >= response.total) {
+						hasNext = false;
+					}
+				});
+				return items;
+			})
+		);
+	}
+
+	getObjectByValue(): Observable<PoComboOption> {
+		let params = new HttpParams();
+
+		let filter: string = ``;
+
+		params = params.append('FILTER', filter);
+
+		return this.apiService.get(this.endpoint, params).pipe(
+			map((response: any) => {
+				let itemReturn = new FilterComboStruct();
+
+				itemReturn.value = response.codLocal;
+				itemReturn.label = response.descLocal;
+				itemReturn.desc = response.codMuni;
+
+				return itemReturn;
+			})
+		);
+	}
+}
+
+@Injectable({
+	providedIn: 'root',
+})
+export class PrefixoComboService implements PoComboFilter {
+	private endpoint: string = 'fwmodel/GTPU003';
+
+	constructor(private apiService: ApiService) { }
+
+	getFilteredData(params: any, filterParams?: any): Observable<FilterComboStruct[]> {
+		let httpParams = new HttpParams();
+		let filter: string = '';
+		if (filterParams) {
+			filter = filterParams;
+		}
+
+		if (params.value != '') {
+			filter =
+				" UPPER(H6V_PREFIX) LIKE UPPER('%" +
+				params.value +
+				"%') OR " +
+				" UPPER(H6V_DESCRI) LIKE UPPER('%" +
+				params.value +
+				"%') ";
+		}
+		httpParams = httpParams.append('filter', filter);
+
+		// return of(items);
+		return this.apiService.get(this.endpoint, httpParams).pipe(
+			map((response: any) => {
+				const items: FilterComboStruct[] = [];
+				let hasNext = true;
+
+				response.resources.forEach((resource: any) => {
+					let itemReturn: FilterComboStruct = new FilterComboStruct();
+
+					itemReturn.value = resource.models[0].fields.find(field => field.id === 'H6V_PREFIX').value;
+					itemReturn.label = resource.models[0].fields.find(field => field.id === 'H6V_DESCRI').value;
+					itemReturn.desc = resource.models[0].fields.find(field => field.id === 'H6V_PREFIX').value;
+
+					items.push(itemReturn);
+
+					if (params.page * params.pageSize >= response.total) {
+						hasNext = false;
+					}
+				});
+				return items;
+			})
+		);
+	}
+
+	getObjectByValue(): Observable<PoComboOption> {
+		let params = new HttpParams();
+
+		let filter: string = ``;
+
+		params = params.append('FILTER', filter);
+
+		return this.apiService.get(this.endpoint, params).pipe(
+			map((response: any) => {
+				let itemReturn = new FilterComboStruct();
+
+				itemReturn.value = response.codLocal;
+				itemReturn.label = response.descLocal;
+				itemReturn.desc = response.codMuni;
+
+				return itemReturn;
+			})
+		);
+	}
+}
+
+
