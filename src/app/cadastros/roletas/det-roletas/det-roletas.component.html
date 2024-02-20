@@ -5,22 +5,23 @@
 	<form [formGroup]="roletaForm" class="po-row po-pl-0">
 		<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2 po-mt-1">
 			<po-input
-				formControlName="codigo"
+				formControlName="identificador"
 				class="po-lg-4"
-				name="codigo"
-				p-label="Código*"
+				name="identificador"
+				p-label="Código"
 				[p-show-required]="true"
-				p-placeholder="000004"
-				[p-maxlength]="6">
+				p-placeholder="Digite"
+				[p-maxlength]="30">
 			</po-input>
 
 			<po-input
 				formControlName="descricao"
 				class="po-lg-8"
 				name="descricao"
-				p-label="Descrição*"
+				p-label="Descrição"
 				[p-show-required]="true"
-				p-placeholder="Descrição da roleta">
+				p-placeholder="Digite"
+				[p-maxlength]="60">
 			</po-input>
 		</div>
 	</form>
@@ -32,16 +33,9 @@
 				class="po-ml-1"
 				p-label="Salvar e incluir novo"
 				(p-click)="saveRoleta(true)"
-				p-kind="secondary"
-				[p-disabled]="!roletaForm.valid">
+				p-kind="secondary">
 			</po-button>
-			<po-button
-				class="po-ml-1"
-				p-label="Salvar"
-				(p-click)="saveRoleta(false)"
-				p-kind="primary"
-				[p-disabled]="!roletaForm.valid">
-			</po-button>
+			<po-button class="po-ml-1" p-label="Salvar" (p-click)="saveRoleta(false)" p-kind="primary"> </po-button>
 		</div>
 	</div>
 </po-page-default>

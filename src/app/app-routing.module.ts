@@ -94,7 +94,7 @@ const routes: Routes = [
 		component: DetValidadoresComponent,
 	},
 
-	// ##### TARIFAS #####
+	// ##### ROLETAS #####
 	{ path: 'roletas', component: RoletasComponent },
 	{
 		path: 'roletas/detRoletas/:acao/:filial/:pk',
