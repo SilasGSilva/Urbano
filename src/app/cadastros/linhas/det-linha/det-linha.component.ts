@@ -81,6 +81,7 @@ export class DetLinhaComponent implements OnInit {
 	public editView: boolean = false;
 	public isShowLoading: boolean = false;
 	public isVisibleBtn: boolean = true;
+	public isClean: boolean = false;
 
 	public action: string = '';
 	public pk: string = '';
@@ -325,7 +326,7 @@ export class DetLinhaComponent implements OnInit {
 				.setValue('H6V_CLSFIS', ChangeUndefinedToEmpty(this.linhaForm.value.classificacaofiscal));
 			this._fwModel
 				.getModel('H6VMASTER')
-				.setValue('H6V_KMLINH', ChangeUndefinedToEmpty(this.linhaForm.value.kmdalinha));
+				.setValue('H6V_KMLINH', ChangeUndefinedToEmpty(this.linhaForm.value.kmdalinha).toString());
 			this._fwModel
 				.getModel('H6VMASTER')
 				.setValue('H6V_CATEGO', ChangeUndefinedToEmpty(this.linhaForm.value.categoria));
@@ -394,5 +395,17 @@ export class DetLinhaComponent implements OnInit {
 		} else {
 			this.isShowLoading = true;
 		}
-	}	
+	}
+	
+	/*******************************************************************************
+	 * @name setClean
+	 * @description Função responsável por trocar o valor da flag isClean,
+	 * para mostrar ou esconder o clean dos combos
+	 * @author   Serviços | Silas Gomes
+	 * @since    2024
+	 * @version  v1
+	*******************************************************************************/
+	setClean() {
+        this.isClean = true;
+    }
 }	

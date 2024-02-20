@@ -55,7 +55,8 @@
                 p-label="Origem"
                 [p-filter-service]="origemComboService"
                 p-placeholder="Selecionar"
-                p-clean="true"
+                (p-change)="setClean()"
+                [p-clean]="isClean"
             >
                 <ng-template p-combo-option-template let-option>
                     <div class="po-row">
@@ -86,7 +87,8 @@
                 p-label="Destino"
                 [p-filter-service]="destinoComboService"
                 p-placeholder="Selecionar"
-                p-clean="true"
+                (p-change)="setClean()"
+                [p-clean]="isClean"
             >
                 <ng-template p-combo-option-template let-option>
                     <div class="po-row">
@@ -117,7 +119,8 @@
                 [p-filter-service]="orgaoRegulamentador"
                 p-label="Órgão regulamentador"
                 p-placeholder="Selecionar"
-                p-clean="true"
+                (p-change)="setClean()"
+                [p-clean]="isClean"
             >
                 <ng-template p-combo-option-template let-option>
                     <div class="po-row">
@@ -142,7 +145,8 @@
                 [p-filter-service]="tarifaComboService"
                 p-label="Tarifa"
                 p-placeholder="Selecionar"
-                p-clean="true"
+                (p-change)="setClean()"
+                [p-clean]="isClean"
             >
                 <ng-template p-combo-option-template let-option>
                     <div class="po-row">
@@ -166,7 +170,8 @@
                 [p-options]="ListPedagio"
                 p-label="Pedagio"
                 p-placeholder="Selecionar"
-                p-clean="true"
+                (p-change)="setClean()"
+                [p-clean]="isClean"
                 [p-optional]="true"
             >
                 <ng-template p-combo-option-template let-option>
@@ -191,7 +196,8 @@
                 p-label="Classificação fiscal"
                 [p-options]="ListClassificacao"
                 p-placeholder="Selecionar"
-                p-clean="true"
+                (p-change)="setClean()"
+                [p-clean]="isClean"
                 [p-optional]="true"
             >
                 <ng-template p-combo-option-template let-option>
@@ -229,7 +235,8 @@
                     p-label="Categoria"
                     p-placeholder="Selecionar"
                     [p-filter-service]="categoriaComboService"
-                    p-clean="true"
+                    (p-change)="setClean()"
+                    [p-clean]="isClean"
                     [p-optional]="true"
                 >
                     <ng-template p-combo-option-template let-option>

@@ -38,8 +38,7 @@ export interface linhaForm {
 	tarifa: string;
 	pedagio: string;
 	classificacaofiscal: string;
-	kmdalinha: Number;
+	kmdalinha: string;
 	categoria: string;
 	status: string
-
 }
