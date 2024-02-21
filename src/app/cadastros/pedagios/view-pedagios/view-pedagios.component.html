@@ -1,0 +1,8 @@
+<po-page-default [p-title]="title" [p-breadcrumb]="breadcrumb" [p-actions]="actions">
+	<po-dynamic-view [p-fields]="columnsDynamicView" [p-value]="itemsDynamicView"></po-dynamic-view>
+
+	<p class="po-font-text-large text-color-gray po-mt-2 po-mb-2">Histórico de vigências</p>
+	<po-table [p-columns]="columnsTable" [p-items]="itemsTable" [p-hide-columns-manager]="true" [p-sort]="true"></po-table>
+</po-page-default>
+
+<po-loading-overlay [hidden]="!isShowLoading"></po-loading-overlay>

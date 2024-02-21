@@ -1,0 +1,86 @@
+<po-page-default p-title="Seções" [p-breadcrumb]="breadcrumb" [p-actions]="actions">
+	<!-- Grid-->
+	<!-- Combo de seção -->
+	<po-combo
+		#secaoFilterCombo
+		name="secao"
+		class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
+		p-label="Seção"
+		[p-filter-service]="secaoComboService"
+		[p-filter-params]="secaoFilter"
+		(p-change)="setFilters(); clearFilter('secao')"
+		p-clean="true"
+		p-placeholder="Selecionar"
+		[p-sort]="true">
+		<ng-template p-combo-option-template let-option>
+			<div class="po-row">
+				<div class="po-sm-10 po-md-9 po-lg-11">
+					<div class="po-font-text-large-bold">{{ option.label }}</div>
+					<div class="po-font-text-smaller po-ml-1">Código: {{ option.value }}</div>
+				</div>
+			</div>
+		</ng-template>
+	</po-combo>
+
+	<!-- Combo de linhas -->
+	<po-combo
+		#linhasFilterCombo
+		name="linhas"
+		class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
+		p-label="Linhas"
+		[p-filter-service]="linhasComboService"
+		[p-filter-params]="linhasFilter"
+		(p-change)="setFilters(); clearFilter('linhas')"
+		p-clean="true"
+		p-placeholder="Selecionar"
+		[p-sort]="true">
+		<ng-template p-combo-option-template let-option>
+			<div class="po-row">
+				<div class="po-sm-10 po-md-9 po-lg-11">
+					<div class="po-font-text-large-bold">{{ option.label }}</div>
+					<div class="po-font-text-smaller po-ml-1">Código: {{ option.value }}</div>
+				</div>
+			</div>
+		</ng-template>
+	</po-combo>
+
+	<!-- Combo de status -->
+	<po-combo
+		#statusilterCombo
+		name="status"
+		class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
+		p-label="Status"
+		[p-filter-service]="statusComboService"
+		[p-filter-params]="statusFilter"
+		(p-change)="setFilters(); clearFilter('status')"
+		p-clean="true"
+		p-placeholder="Selecionar"
+		[p-sort]="true">
+		<ng-template p-combo-option-template let-option>
+			<div class="po-row">
+				<div class="po-sm-10 po-md-9 po-lg-11">
+					<div class="po-font-text-large-bold">{{ option.label }}</div>
+					<div class="po-font-text-smaller po-ml-1">Código: {{ option.value }}</div>
+				</div>
+			</div>
+		</ng-template>
+	</po-combo>
+
+	<!-- Tabela com itens de seções -->
+	<po-table
+		class="po-md-12 po-pl-0 po-pt-2"
+		[p-columns]="columnsSecoes"
+		[p-items]="listSecoes"
+		p-sort="true"
+		(p-sort-by)="sortTable($event)"
+		p-hide-columns-manager="true"
+		p-striped="true"
+		p-hide-text-overflow
+		p-actions-right="true"
+		(p-show-more)="actionShowMore()"
+		[p-show-more-disabled]="isShowMoreDisabled"
+		p-striped="true"
+		[p-height]="nHeightMonitor"
+		[p-loading]="isLoading">
+	</po-table>
+</po-page-default>

@@ -1,0 +1,130 @@
+<po-page-default [p-title]="title" [p-breadcrumb]="breadcrumb">
+	<p class="po-font-text-large text-color-gray">
+		{{ subtitle }}
+	</p>
+	<form [formGroup]="tarifaForm" class="po-row po-pl-0">
+		<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2 po-mt-1">
+			<po-input
+				formControlName="codigo"
+				class="po-lg-4"
+				name="codigo"
+				p-label="Código"
+				p-disabled="true"
+				[p-show-required]="true"
+				[p-maxlength]="6">
+			</po-input>
+
+			<po-input
+				formControlName="descricao"
+				class="po-lg-8"
+				name="descricao"
+				p-label="Descrição"
+				[p-show-required]="true"
+				p-placeholder="Digite"
+				[p-maxlength]="50">
+			</po-input>
+		</div>
+		<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2">
+			<po-number
+				formControlName="valor"
+				class="po-lg-4"
+				name="valor"
+				p-label="Valor"
+				[p-show-required]="true"
+				p-placeholder="Digite">
+			</po-number>
+			<po-combo
+				#orgaoConcessorFilterCombo
+				name="orgaoConcessor"
+				formControlName="orgaoConcessor"
+				class="po-lg-4"
+				p-label="Orgão Concessor"
+				[p-filter-service]="orgaoConcessorComboService"
+				p-clean="true"
+				p-placeholder="Selecionar"
+				[p-sort]="true">
+				<ng-template p-combo-option-template let-option>
+					<div class="po-row">
+						<div class="po-sm-10 po-md-9 po-lg-11">
+							<div class="po-font-text-large-bold">
+								{{ option.label }}
+							</div>
+							<div class="po-font-text-smaller po-ml-1 po-ml-1">Código: {{ option.value }}</div>
+						</div>
+					</div>
+				</ng-template>
+			</po-combo>
+			<po-datepicker-range
+				#vigenciafilterRange
+				formControlName="vigencia"
+				class="po-lg-4"
+				name="vigencia"
+				p-label="Vigência"
+				(p-change)="setRangeFilter($event)"></po-datepicker-range>
+		</div>
+	</form>
+	<div class="po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2">
+		<po-lookup
+			#formasDePagamento
+			[(ngModel)]="listFormaPag"
+			class="po-xl-12 po-lg-12 po-md-12 po-sm-12"
+			p-label="Formas de pagamento"
+			name="formasDePagamento"
+			p-field-label="label"
+			p-field-value="value"
+			[p-columns]="columns"
+			[p-filter-service]="poLookUpFormasDePagamento"
+			[p-hide-columns-manager]="true"
+			[p-multiple]="true"
+			p-placeholder="Selecione">
+		</po-lookup>
+	</div>
+	<div class="po-row po-mt-4" style="justify-content: flex-end">
+		<div class="po-pull-right">
+			<po-button p-label="Cancelar" p-kind="tertiary" (p-click)="modalCancel.open()"> </po-button>
+			<po-button
+				*ngIf="isVisibleBtn"
+				class="po-ml-1"
+				p-label="Salvar e incluir novo"
+				(p-click)="saveTarifa(true)"
+				p-kind="secondary">
+			</po-button>
+			<po-button
+				class="po-ml-1"
+				p-label="Salvar"
+				(p-click)="editView ? modalConfirmation.open() : saveTarifa(false)"
+				p-kind="primary">
+			</po-button>
+		</div>
+	</div>
+
+	<p *ngIf="editView" class="po-font-text-large text-color-gray po-mt-4 po-mb-2">Histórico de vigências</p>
+	<div *ngIf="editView">
+		<po-table
+			[p-columns]="columnsHistorico"
+			[p-items]="itemsHistorico"
+			[p-hide-columns-manager]="true"
+			[p-sort]="true"
+			[p-height]="nHeightMonitor"></po-table>
+	</div>
+</po-page-default>
+
+<po-modal
+	#modalCancel
+	p-title="Cancelar"
+	[p-primary-action]="confirmCancel"
+	[p-secondary-action]="exitCancel"
+	[p-hide-close]="true">
+	Deseja realmente sair? Irá perder todos os dados não salvos</po-modal
+>
+
+<po-modal #modalConfirmation p-title="Histórico de gravação">
+	Deseja gerar histórico de gravação dessa alteração?
+	<po-modal-footer>
+		<po-button p-label="Cancelar" (p-click)="modalConfirmation.close()" p-kind="tertiary"> </po-button>
+		<po-button p-label="Não gerar" (p-click)="saveTarifa(false, false)"> </po-button>
+		<po-button p-label="Gerar histórico" p-kind="primary" (p-click)="saveTarifa(false, true)">
+		</po-button> </po-modal-footer
+></po-modal>
+
+<po-loading-overlay [hidden]="!isShowLoading"></po-loading-overlay>
