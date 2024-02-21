@@ -11,14 +11,16 @@
         class="po-lg-3 po-pl-0"
         p-label="Prefixo Linha"
         p-placeholder="Selecionar"
-        [p-filter-service]="localidadeComboService"
+        [p-filter-service]="prefixoComboService"
+        [p-filter-params]="filterPrefixo"
         p-clean="true"
-        (p-change)="setFilters()"
+        (p-change)="setFilters($event, 'comboprefixo'); clearFilter('comboprefixo')"
     >
     <ng-template p-combo-option-template let-option>
         <div class="po-row">
             <div class="po-sm-10 po-md-9 po-lg-11">
             <div class="po-font-text-large-bold">{{ option.label }}</div>
+            <div class="po-font-text-smaller" style="margin-left: 1em;">Prefixo: {{ option.desc }}</div>
             <div class="po-font-text-smaller po-ml-1">Prefixo: {{ option.value }}</div>
             </div>
         </div>
@@ -31,9 +33,12 @@
         name="comboorigem"
         class="po-lg-3 po-pl-0"
         p-label="Origem"
-        [p-filter-service]="localidadeComboService"
+        [p-filter-service]="origemComboService"
+        [p-filter-params]="filterOrigem"
+        [ngModel]="modelOrigem"
+        (ngModelChange)="modelOrigem = $event"
         p-placeholder="Selecionar"
-        (p-change)="setFilters()"
+        (p-change)="setFilters($event, 'comboorigem'); clearFilter('comboorigem')"
         p-clean="true"
     >
         <ng-template p-combo-option-template let-option>
@@ -58,8 +63,11 @@
         class="po-lg-3 po-pl-0"
         p-label="Destino"
         p-placeholder="Selecionar"
-        [p-filter-service]="localidadeComboService"
-        (p-change)="setFilters()"
+        [p-filter-service]="destinoComboService"
+        [p-filter-params]="filterDestino"
+        [ngModel]="modelDestino"
+        (ngModelChange)="modelDestino = $event"
+        (p-change)="setFilters($event, 'combodestino'); clearFilter('combodestino')"
         p-clean="true"
     >
         <ng-template p-combo-option-template let-option>
@@ -79,7 +87,7 @@
         p-label="Status"
         [p-options]="listStatus"
         p-placeholder="Selecionar"
-        (p-change)="setFilters()"
+        (p-change)="setFilters($event)"
         p-clean="true"
     >
     </po-combo>
