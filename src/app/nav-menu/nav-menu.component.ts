@@ -12,8 +12,7 @@ export class NavMenuComponent {
 	constructor(
 		private _router: Router,
 		public appComponent: AppComponent
-	) { }
-
+	) {}
 
 	public readonly logoTotvs: string = '/assets/icon-totvs.svg';
 	public pageName: string = '';
@@ -35,16 +34,16 @@ export class NavMenuComponent {
 					label: 'Formas de pagamento',
 					action: this.navigate.bind(this, '/formas-de-pagamento'),
 				},
-				{ label: 'Pedágio', action: this.navigate.bind(this, '/pedagios'), },
+				{ label: 'Pedágio', action: this.navigate.bind(this, '/pedagios') },
 				{
 					label: 'Tarifas',
 					action: this.navigate.bind(this, '/tarifas'),
 				},
 				{
 					label: 'Linhas',
-					action: this.navigate.bind(this, '/linhas')
+					action: this.navigate.bind(this, '/linhas'),
 				},
-				{ label: 'Seções', action: this.navigate.bind(this, '/secoes'), },
+				{ label: 'Seções', action: this.navigate.bind(this, '/secoes') },
 				{
 					label: 'Validadores',
 					action: this.navigate.bind(this, '/validadores'),
@@ -53,7 +52,7 @@ export class NavMenuComponent {
 					label: 'Roleta',
 					action: this.navigate.bind(this, '/roletas'),
 				},
-				{ label: 'Frota' },
+				{ label: 'Frota', action: this.navigate.bind(this, '/frota') },
 			],
 		},
 		{

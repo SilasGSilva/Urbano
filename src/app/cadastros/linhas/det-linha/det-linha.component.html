@@ -33,6 +33,7 @@
                 p-clean="true"
                 [p-show-required]="true"
 
+
             >
             </po-input>
 
@@ -46,6 +47,51 @@
                 p-clean="true"
              >
             </po-input>
+        >
+        </po-input>
+
+        <po-input
+            class="po-lg-8"
+            name="descricao*"
+            p-label="Descrição*"
+            p-placeholder="Digite"
+            formControlName="descricao"
+            p-required="true"
+            p-clean="true"
+         >
+        </po-input>
+
+        <po-combo
+            #origemFilterCombo
+            class="po-lg-4"
+            name="origem"
+            formControlName="origem"
+            p-label="Origem*"
+            [p-filter-service]="localidadeComboService"
+            p-placeholder="Selecionar"
+            (p-change)="setFilters()"
+            p-clean="true"
+        >
+            <ng-template p-combo-option-template let-option>
+                <div class="po-row">
+                    <div class="po-sm-10 po-md-9 po-lg-11">
+                    <div class="po-font-text-large-bold">
+                        {{ option.label + "-" + option.value }}
+                    </div>
+                    <div class="po-font-text-smaller po-ml-1">
+                        Prefixo: {{ option.label }}
+                    </div>
+                    <div class="po-font-text-smaller po-ml-1">
+                        Município: {{ option.value }}
+                    </div>
+                    <div class="po-font-text-smaller po-ml-1">
+                        Tipo: {{ option.desc }}
+                    </div>
+
+                    </div>
+
+                </div>
+            </ng-template>
 
             <po-combo
                 #origemFilterCombo
@@ -74,10 +120,40 @@
                                 Tipo: {{ option.desc }}
                             </div>                    
                         </div>
-
                     </div>
                 </ng-template>
             </po-combo>
+        <po-combo
+            #destinoFilterCombo
+            class="po-lg-4"
+            name="destino"
+            formControlName="destino"
+            p-label="Destino*"
+            [p-filter-service]="localidadeComboService"
+            p-placeholder="Selecionar"
+            (p-change)="setFilters()"
+            p-clean="true"
+        >
+            <ng-template p-combo-option-template let-option>
+                <div class="po-row">
+                    <div class="po-sm-10 po-md-9 po-lg-11">
+                    <div class="po-font-text-large-bold">
+                        {{ option.label + "-" + option.value }}
+                    </div>
+                    <div class="po-font-text-smaller po-ml-1">
+                        Prefixo: {{ option.label }}
+                    </div>
+                    <div class="po-font-text-smaller po-ml-1">
+                        Município: {{ option.value }}
+                    </div>
+                    <div class="po-font-text-smaller po-ml-1">
+                        Tipo: {{ option.desc }}
+                    </div>
+
+                    </div>
+
+                </div>
+            </ng-template>
 
             <po-combo
                 #destinoFilterCombo
@@ -106,7 +182,32 @@
                                 Tipo: {{ option.desc }}
                             </div>                    
                         </div>
-
+                      
+        <po-combo
+            #orgaoregulamentadorFilterCombo
+            class="po-lg-4"
+            name="orgaoregulamentador"
+            formControlName="orgaoregulamentador"
+            p-label="Órgão regulamentador*"
+            [p-filter-service]="localidadeComboService"
+            p-placeholder="Selecionar"
+            (p-change)="setFilters()"
+            p-clean="true"
+        >
+            <ng-template p-combo-option-template let-option>
+                <div class="po-row">
+                    <div class="po-sm-10 po-md-9 po-lg-11">
+                    <div class="po-font-text-large-bold">
+                        {{ option.label + "-" + option.value }}
+                    </div>
+                    <div class="po-font-text-smaller po-ml-1">
+                        Prefixo: {{ option.label }}
+                    </div>
+                    <div class="po-font-text-smaller po-ml-1">
+                        Município: {{ option.value }}
+                    </div>
+                    <div class="po-font-text-smaller po-ml-1">
+                        Tipo: {{ option.desc }}
                     </div>
                 </ng-template>
             </po-combo>
@@ -133,6 +234,7 @@
                             </div>
                         </div>                    
                     </div>
+
                 </ng-template>
             </po-combo>
 
@@ -156,7 +258,69 @@
                             </div>
                             <div class="po-font-text-smaller" style="margin-left:1em">
                                 Código: {{ option.value }}
-                            </div>                        
+                            </div>                       
+
+                </div>
+            </ng-template>
+        </po-combo>
+
+
+        <po-combo
+            #tarifaFilterCombo
+            class="po-lg-4"
+            name="tarifa"
+            formControlName="tarifa"
+            p-label="Tarifa*"
+            [p-filter-service]="localidadeComboService"
+            p-placeholder="Selecionar"
+            (p-change)="setFilters()"
+            p-clean="true"
+        >
+            <ng-template p-combo-option-template let-option>
+                <div class="po-row">
+                    <div class="po-sm-10 po-md-9 po-lg-11">
+                        <div class="po-font-text-large-bold">
+                            {{ option.label + "-" + option.value }}
+                        </div>
+                        <div class="po-font-text-smaller po-ml-1">
+                            Prefixo: {{ option.label }}
+                        </div>
+                        <div class="po-font-text-smaller po-ml-1">
+                            Município: {{ option.value }}
+                        </div>
+                        <div class="po-font-text-smaller po-ml-1">
+                            Tipo: {{ option.desc }}
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </po-combo>
+
+        <po-combo
+            #pedagioFilterCombo
+            class="po-lg-4"
+            name="pedagio"
+            formControlName="pedagio"
+            p-label="Pedagio"
+            [p-filter-service]="localidadeComboService"
+            p-placeholder="Selecionar"
+            (p-change)="setFilters()"
+            p-clean="true"
+        >
+            <ng-template p-combo-option-template let-option>
+                <div class="po-row">
+                    <div class="po-sm-10 po-md-9 po-lg-11">
+                        <div class="po-font-text-large-bold">
+                            {{ option.label + "-" + option.value }}
+                        </div>
+                        <div class="po-font-text-smaller po-ml-1">
+                            Prefixo: {{ option.label }}
+                        </div>
+                        <div class="po-font-text-smaller po-ml-1">
+                            Município: {{ option.value }}
+                        </div>
+                        <div class="po-font-text-smaller po-ml-1">
+                            Tipo: {{ option.desc }}
                         </div>
                     </div>
                 </ng-template>
@@ -183,6 +347,32 @@
                             <div class="po-font-text-smaller" style="margin-left:1em">
                                 Código: {{ option.value }}
                             </div>
+        <po-combo
+            #classificacaofiscalFilterCombo
+            class="po-lg-4"
+            name="classificacaofiscal"
+            formControlName="classificacaofiscal"
+            p-label="Classificação fiscal"
+            [p-filter-service]="localidadeComboService"
+            p-placeholder="Selecionar"
+            (p-change)="setFilters()"
+            p-clean="true"
+        >
+            <ng-template p-combo-option-template let-option>
+                <div class="po-row">
+                    <div class="po-sm-10 po-md-9 po-lg-11">
+                        <div class="po-font-text-large-bold">
+                            {{ option.label + "-" + option.value }}
+                        </div>
+                        <div class="po-font-text-smaller po-ml-1">
+                            Prefixo: {{ option.label }}
+                        </div>
+                        <div class="po-font-text-smaller po-ml-1">
+                            Município: {{ option.value }}
+                        </div>
+                        <div class="po-font-text-smaller po-ml-1">
+                            Tipo: {{ option.desc }}
+
                         </div>
                     </div>
                 </ng-template>
@@ -195,6 +385,12 @@
                 formControlName="classificacaofiscal"  
                 p-label="Classificação fiscal"
                 [p-options]="ListClassificacao"
+                #categoriaFilterCombo
+                class="po-lg-4"
+                name="categoria"
+                formControlName="categoria"
+                p-label="Categoria"
+                [p-filter-service]="localidadeComboService"
                 p-placeholder="Selecionar"
                 (p-change)="setClean()"
                 [p-clean]="isClean"
@@ -206,8 +402,17 @@
                             <div class="po-font-text-large-bold">
                                 {{ option.label }}
                             </div>
+
                             <div class="po-font-text-smaller" style="margin-left:1em">
                                 Código: {{ option.value }}
+                            <div class="po-font-text-smaller po-ml-1">
+                                Prefixo: {{ option.label }}
+                            </div>
+                            <div class="po-font-text-smaller po-ml-1">
+                                Município: {{ option.value }}
+                            </div>
+                            <div class="po-font-text-smaller po-ml-1">
+                                Tipo: {{ option.desc }}
                             </div>
                         </div>
                     </div>
@@ -263,6 +468,46 @@
 
                 >
                 </po-radio-group>
+
+            <po-radio-group
+                class="po-lg-3"
+                name="status"
+                p-label="Status da linha"
+                formControlName="status"
+                [p-options]="listStatus"
+                [p-required]="true"
+
+            >
+            </po-radio-group>
+        </div>
+        <!--Linha 4 com botões de ação-->
+            <div class="po-pull-right">
+
+                <po-button
+                    p-label="Cancelar"
+                    (p-click)="onClickCancel()"
+                    p-kind="tertiary"
+                >
+                </po-button>
+
+                <po-button
+                    class="po-ml-1"
+                    p-label="Salvar e incluir novo"
+                    p-kind="secondary"
+                    [p-disabled]="!linhaForm.valid"
+                    (p-click)="saveLinha(true)"
+                >
+                </po-button>
+
+                <po-button
+                    class="po-ml-1"
+                    p-label="Salvar"
+                    p-kind="primary"
+                    [p-disabled]="!linhaForm.valid"
+                    (p-click)="saveLinha(false)"
+                >
+                </po-button>
+
             </div>
             <!--Linha 4 com botões de ação-->
                 <div class="po-pull-right">
@@ -295,4 +540,5 @@
 
         </div>
     </form>
+</po-page-default>
 </po-page-default>

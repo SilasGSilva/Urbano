@@ -31,6 +31,9 @@ import { ViewSecoesComponent } from './cadastros/secoes/view-secoes/view-secoes.
 import { LinhasComponent } from './cadastros/linhas/linhas.component';
 import { DetLinhaComponent } from './cadastros/linhas/det-linha/det-linha.component';
 import { ViewLinhasComponent } from './cadastros/linhas/view-linhas/view-linhas.component';
+import { FrotasComponent } from './cadastros/frotas/frotas.component';
+import { DetFrotasComponent } from './cadastros/frotas/det-frotas/det-frotas.component';
+import { ViewFrotasComponent } from './cadastros/frotas/view-frotas/view-frotas.component';
 
 @NgModule({
 	declarations: [
@@ -59,7 +62,10 @@ import { ViewLinhasComponent } from './cadastros/linhas/view-linhas/view-linhas.
 		ViewSecoesComponent,
 		LinhasComponent,
 		DetLinhaComponent,
-		ViewLinhasComponent
+		ViewLinhasComponent,
+		FrotasComponent,
+		DetFrotasComponent,
+		ViewFrotasComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -73,4 +79,4 @@ import { ViewLinhasComponent } from './cadastros/linhas/view-linhas/view-linhas.
 	providers: [],
 	bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

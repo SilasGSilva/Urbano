@@ -7,8 +7,10 @@ export const ColumnsTariffs: Array<PoTableColumn> = [
 	{ property: 'codTariff', label: 'cod', sortable: false, visible: false },
 	{ property: 'labelTariff', label: 'Tarifa' },
 	{
-		property: 'value',
+		property: 'valor',
 		label: 'Valor',
+		type: 'currency',
+		format: 'BRL',
 	},
 	{
 		property: 'orgaoConcessor',
@@ -45,10 +47,12 @@ export const ColumnsTariffs: Array<PoTableColumn> = [
  */
 export class TariffsModel {
 	pk: string = '';
+	filial: string = '';
 	codTariff: string = '';
 	descTariff: string = '';
 	labelTariff: string = '';
 	orgaoConcessor?: string = '';
+	valor: number = 0;
 	vigencia?: string = '';
 	otherActions?: Array<string>;
 	index?: number;

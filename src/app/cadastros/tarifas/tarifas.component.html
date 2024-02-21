@@ -18,7 +18,7 @@
 					<div class="po-font-text-large-bold">
 						{{ option.label }}
 					</div>
-					<div class="po-font-text-smaller po-ml-1">Código: {{ option.value }}</div>
+					<div class="po-font-text-smaller">Código: {{ option.codigo }}</div>
 				</div>
 			</div>
 		</ng-template>
@@ -52,7 +52,7 @@
 		name="vigencia"
 		class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
 		p-label="Vigência"
-		(p-change)="setRangeFilter($event)"></po-datepicker-range>
+		(p-change)="setFilters($event)"></po-datepicker-range>
 
 	<!-- Tabela com itens de localidades -->
 	<po-table

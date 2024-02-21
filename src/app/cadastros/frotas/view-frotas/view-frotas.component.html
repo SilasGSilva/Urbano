@@ -1,0 +1,17 @@
+<po-page-default [p-title]="title" [p-breadcrumb]="breadcrumb" [p-actions]="actions">
+	<po-dynamic-view [p-fields]="columnsDynamicView" [p-value]="itemsDynamicView"></po-dynamic-view>
+	<po-table
+		class="po-md-12 po-pl-0 po-pt-2"
+		[p-columns]="columnsTable"
+		[p-items]="listTable"
+		p-sort="true"
+		(p-sort-by)="sortTable($event)"
+		p-hide-columns-manager="true"
+		p-striped="true"
+		p-hide-text-overflow
+		p-actions-right="true"
+		p-striped="true"
+		[p-height]="nHeightMonitor">
+	</po-table>
+</po-page-default>
+<po-loading-overlay [hidden]="!isShowLoading"></po-loading-overlay>

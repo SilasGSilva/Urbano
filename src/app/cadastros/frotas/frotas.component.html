@@ -1,14 +1,14 @@
-<po-page-default p-title="Seções" [p-breadcrumb]="breadcrumb" [p-actions]="actions">
+<po-page-default p-title="Frota" [p-breadcrumb]="breadcrumb" [p-actions]="actions">
 	<!-- Grid-->
-	<!-- Combo de seção -->
+	<!-- Combo de prefixo de veículo -->
 	<po-combo
-		#secaoFilterCombo
-		name="secao"
-		class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
-		p-label="Seção"
-		[p-filter-service]="secaoComboService"
-		[p-filter-params]="secaoFilter"
-		(p-change)="setFilters(); clearFilter('secao')"
+		#prefixoFilterCombo
+		name="prefixo"
+		class="po-xl-3 po-lg-3 po-md-12 po-sm-12 po-pl-0"
+		p-label="Prefixo veículo"
+		[p-filter-service]="prefixoComboService"
+		[p-filter-params]="prefixoFilter"
+		(p-change)="setFilters(); clearFilter('prefixo')"
 		p-clean="true"
 		p-placeholder="Selecionar"
 		[p-sort]="true">
@@ -22,15 +22,37 @@
 		</ng-template>
 	</po-combo>
 
-	<!-- Combo de linhas -->
+	<!-- Combo de placas -->
 	<po-combo
-		#linhasFilterCombo
-		name="linhas"
-		class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
-		p-label="Linhas"
-		[p-filter-service]="linhasComboService"
-		[p-filter-params]="linhasFilter"
-		(p-change)="setFilters(); clearFilter('linhas')"
+		#placaFilterCombo
+		name="placa"
+		class="po-xl-3 po-lg-3 po-md-12 po-sm-12 po-pl-0"
+		p-label="Placa"
+		[p-filter-service]="placaComboService"
+		[p-filter-params]="placaFilter"
+		(p-change)="setFilters(); clearFilter('placa')"
+		p-clean="true"
+		p-placeholder="Selecionar"
+		[p-sort]="true">
+		<ng-template p-combo-option-template let-option>
+			<div class="po-row">
+				<div class="po-sm-10 po-md-9 po-lg-11">
+					<div class="po-font-text-large-bold">{{ option.label }}</div>
+					<div class="po-font-text-smaller po-ml-1">Código: {{ option.value }}</div>
+				</div>
+			</div>
+		</ng-template>
+	</po-combo>
+
+	<!-- Combo de local -->
+	<po-combo
+		#localFilterCombo
+		name="local"
+		class="po-xl-3 po-lg-3 po-md-12 po-sm-12 po-pl-0"
+		p-label="Local"
+		[p-filter-service]="localComboService"
+		[p-filter-params]="localFilter"
+		(p-change)="setFilters(); clearFilter('local')"
 		p-clean="true"
 		p-placeholder="Selecionar"
 		[p-sort]="true">
@@ -46,9 +68,9 @@
 
 	<!-- Combo de status -->
 	<po-combo
-		#statusilterCombo
+		#statusFilterCombo
 		name="status"
-		class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
+		class="po-xl-3 po-lg-3 po-md-12 po-sm-12 po-pl-0"
 		p-label="Status"
 		[p-filter-service]="statusComboService"
 		[p-filter-params]="statusFilter"
@@ -66,11 +88,11 @@
 		</ng-template>
 	</po-combo>
 
-	<!-- Tabela com itens de seções -->
+	<!-- Tabela com itens de frotas -->
 	<po-table
 		class="po-md-12 po-pl-0 po-pt-2"
-		[p-columns]="columnsSecoes"
-		[p-items]="listSecoes"
+		[p-columns]="columnsFrotas"
+		[p-items]="listFrotas"
 		p-sort="true"
 		(p-sort-by)="sortTable($event)"
 		p-hide-columns-manager="true"

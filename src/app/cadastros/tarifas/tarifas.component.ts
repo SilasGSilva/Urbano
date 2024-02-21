@@ -1,51 +1,32 @@
 import { Component, ViewChild } from '@angular/core';
 import { PoBreadcrumb, PoComboComponent, PoPageAction, PoTableColumn, PoTableColumnSort } from '@po-ui/ng-components';
-import { OrgaoConcessorComboService, TarifaComboService } from 'src/app/services/adaptors/wsurbano-adapter.service';
 import { ColumnsTariffs, TariffsModel } from './tarifas.struct';
 import { HttpParams } from '@angular/common/http';
 import { FwProtheusModel, Resource } from 'src/app/services/models/fw-protheus.model';
-import { UtilsService } from 'src/app/services/functions/util.function';
+import { MakeDate, UtilsService, isNullOrUndefined } from 'src/app/services/functions/util.function';
 import { PoDatepickerRangeBaseComponent } from '@po-ui/ng-components/lib/components/po-field/po-datepicker-range/po-datepicker-range-base.component';
 import { Router } from '@angular/router';
+import { OrgaoConcedenteComboService, TarifasComboService } from 'src/app/services/combo-filter.service';
+import { ComboFilial } from '../motorista/motorista.struct';
 
 @Component({
 	selector: 'app-tarifas',
 	templateUrl: './tarifas.component.html',
 	styleUrls: ['./tarifas.component.css'],
+	providers: [TarifasComboService, OrgaoConcedenteComboService],
 })
 export class TarifasComponent {
-	@ViewChild('tarifaFilterCombo', { static: true })
-	tarifaFilterCombo!: PoComboComponent;
-
-	@ViewChild('orgaoConcessorFilterCombo', { static: true })
-	orgaoConcessorFilterCombo!: PoComboComponent;
-
-	@ViewChild('vigenciafilterRange', { static: true })
-	vigenciafilterRange!: PoDatepickerRangeBaseComponent;
-
-	constructor(
-		public tarifaComboService: TarifaComboService,
-		public orgaoConcessorComboService: OrgaoConcessorComboService,
-		private _fwModel: FwProtheusModel,
-		private _utilsService: UtilsService,
-		private _router: Router
-	) {
-		this.setColProperties();
-	}
-
 	//Declaração de variaveis
+	filters: string = '';
 	tarifaFilter: string = '';
 	orgaoConcessorFilter: string = '';
-	vigenciaStartFilter: string = '';
-	vigenciaEndFilter: string = '';
 
-	filters: string = '';
 	isLoading: boolean = false;
 	resetFilters: boolean = false;
 	isShowMoreDisabled: boolean = false;
 
-	nNextPage: number = 1;
 	nTotal: number = 0;
+	nNextPage: number = 1;
 	nPageSize: number = 10;
 	nRegIndex: number = 1;
 	nHeightMonitor: number = window.innerHeight * (window.innerHeight > 850 ? 0.6 : 0.6);
@@ -70,8 +51,21 @@ export class TarifasComponent {
 	];
 
 	public breadcrumb: PoBreadcrumb = {
-		items: [{ label: 'Fretamento Urbano', link: '/' }, { label: 'Cadastrar tarifas' }],
+		items: [{ label: 'Fretamento Urbano', link: '/' }, { label: 'Tarifas' }],
 	};
+
+	@ViewChild('tarifaFilterCombo', { static: true }) tarifaFilterCombo!: ComboFilial;
+	@ViewChild('orgaoConcessorFilterCombo', { static: true }) orgaoConcessorFilterCombo!: PoComboComponent;
+	@ViewChild('vigenciafilterRange', { static: true }) vigenciafilterRange!: PoDatepickerRangeBaseComponent;
+	constructor(
+		public tarifaComboService: TarifasComboService,
+		public orgaoConcessorComboService: OrgaoConcedenteComboService,
+		private _fwModel: FwProtheusModel,
+		private _utilsService: UtilsService,
+		private _router: Router
+	) {
+		this.setColProperties();
+	}
 
 	ngOnInit() {
 		this.getTarifas();
@@ -110,11 +104,12 @@ export class TarifasComponent {
 	 * @name setFilters
 	 * @description função chamada ao alterar o valor dos campos po-combo para
 	 *  filtrar o conteúdo baseado no filtro escolhido
-	 * @author   Serviços | Levy Santos
+	 * @param event - Quando aplicado o combo de vigência
+	 * @author   Serviços | Levy Santos, Breno Gomes
 	 * @since    2024
-	 * @version  v1
+	 * @version  v2
 	 *******************************************************************************/
-	setFilters() {
+	setFilters(event?: any) {
 		this.listTarifas = [];
 
 		this.filters = '';
@@ -126,28 +121,37 @@ export class TarifasComponent {
 			if (this.filters != '') {
 				this.filters += ' AND ';
 			}
-			this.filters += " GI1_COD = '" + this.tarifaFilterCombo.selectedOption.value + "' ";
+			this.filters += " RTRIM(H6S_FILIAL) + H6S_CODIGO = '" + this.tarifaFilterCombo.selectedOption.value + "' ";
 		}
 		if (this.orgaoConcessorFilterCombo !== undefined && this.orgaoConcessorFilterCombo.selectedOption !== undefined) {
 			this.orgaoConcessorFilter =
-				" AND ( UPPER(GI1_COD) LIKE UPPER('" +
+				" AND ( UPPER(H6S_CODGI0) LIKE UPPER('" +
 				this.orgaoConcessorFilterCombo.selectedOption.value +
 				"') OR " +
-				" UPPER(GI1_DESCRI) LIKE UPPER('" +
+				" UPPER(H6S_DESORG) LIKE UPPER('" +
 				this.orgaoConcessorFilterCombo.selectedOption.label +
 				"') )";
 			if (this.filters != '') {
 				this.filters += ' AND ';
 			}
 			this.filters +=
-				" ( UPPER(GI1_COD) LIKE UPPER('" +
+				" ( UPPER(H6S_CODGI0) LIKE UPPER('%" +
 				this.orgaoConcessorFilterCombo.selectedOption.value +
-				"') OR " +
-				" UPPER(GI1_DESCRI) LIKE UPPER('" +
+				"%') OR " +
+				" UPPER(H6S_DESORG) LIKE UPPER('%" +
 				this.orgaoConcessorFilterCombo.selectedOption.value +
-				"') )";
+				"%') )";
 		}
 
+		if (event != undefined && !isNullOrUndefined(event.start) && !isNullOrUndefined(event.end)) {
+			if (this.filters != '') {
+				this.filters += ' AND ';
+			}
+			this.filters +=
+				" H6S_DTINIV BETWEEN '" + event.start.replace(/-/g, '') + "' AND '" + event.end.replace(/-/g, '') + "'";
+			this.filters +=
+				" AND H6S_DTFIMV BETWEEN '" + event.start.replace(/-/g, '') + "' AND '" + event.end.replace(/-/g, '') + "'";
+		}
 		this.getTarifas();
 	}
 
@@ -200,22 +204,31 @@ export class TarifasComponent {
 					params = params.append('STARTINDEX', this.nRegIndex.toString());
 				}
 		}
-		this._fwModel.setEndPoint('GTPA001/');
+		this._fwModel.setEndPoint('GTPU002/');
 
 		this._fwModel.setVirtualField(true);
+		this._fwModel.setFirstLevel(true);
 		this._fwModel.get(params).subscribe(() => {
 			this._fwModel.resources.forEach((resource: Resource) => {
 				let tariffs = new TariffsModel();
 				tariffs.pk = resource.pk;
-
-				tariffs.codTariff = resource.getModel('GI1MASTER').getValue('GI1_COD');
+				tariffs.filial = resource.getModel('H6SMASTER').getValue('H6S_FILIAL');
+				tariffs.codTariff = resource.getModel('H6SMASTER').getValue('H6S_CODIGO');
 				tariffs.labelTariff =
-					resource.getModel('GI1MASTER').getValue('GI1_COD') +
+					resource.getModel('H6SMASTER').getValue('H6S_CODIGO') +
 					' - ' +
-					resource.getModel('GI1MASTER').getValue('GI1_DESCRI');
+					resource.getModel('H6SMASTER').getValue('H6S_DESCRI');
 
-				tariffs.descTariff = resource.getModel('GI1MASTER').getValue('GI1_DESCRI');
-
+				tariffs.descTariff = resource.getModel('H6SMASTER').getValue('H6S_DESCRI');
+				tariffs.orgaoConcessor =
+					resource.getModel('H6SMASTER').getValue('H6S_CODGI0') +
+					' - ' +
+					resource.getModel('H6SMASTER').getValue('H6S_DESORG');
+				tariffs.valor = parseFloat(resource.getModel('H6SMASTER').getValue('H6S_VALOR'));
+				tariffs.vigencia =
+					MakeDate(resource.getModel('H6SMASTER').getValue('H6S_DTINIV'), 'dd/mm/yyyy') +
+					' - ' +
+					MakeDate(resource.getModel('H6SMASTER').getValue('H6S_DTFIMV'), 'dd/mm/yyyy');
 				tariffs.otherActions = ['edit', 'view'];
 
 				this.listTarifas = [...this.listTarifas, tariffs];
@@ -239,7 +252,7 @@ export class TarifasComponent {
 	setShowMore(total: number) {
 		this.isLoading = false;
 		if (this.nRegIndex === 1) {
-			this.nRegIndex = this.nPageSize;
+			this.nRegIndex = this.nPageSize + 1;
 		} else {
 			this.nRegIndex += this.nPageSize;
 		}
@@ -249,19 +262,6 @@ export class TarifasComponent {
 		} else {
 			this.isShowMoreDisabled = true;
 		}
-	}
-
-	/*******************************************************************************
-	 * @name setRangeFilter
-	 * @description função chamada ao alterar o valor do campo vigência
-	 * @param event: any - objeto do datepicker range com o start e end
-	 * @author   Serviços | Levy Santos
-	 * @since    2024
-	 * @version  v1
-	 *******************************************************************************/
-	setRangeFilter(event: any) {
-		this.vigenciaStartFilter = event.start;
-		this.vigenciaEndFilter = event.end;
 	}
 
 	/*******************************************************************************
@@ -307,7 +307,7 @@ export class TarifasComponent {
 	 * @version  v1
 	 *******************************************************************************/
 	editTariff(event: any) {
-		this._router.navigate(['tarifas/detTarifas', 'editar', btoa(event.pk), event.pk]);
+		this._router.navigate(['tarifas/detTarifas', 'editar', btoa(event.filial), event.pk]);
 	}
 
 	/*******************************************************************************

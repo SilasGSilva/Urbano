@@ -12,22 +12,12 @@ import { ColumnsRoletas, RoletasModel } from './roletas.struct';
 	styleUrls: ['./roletas.component.css'],
 })
 export class RoletasComponent {
-	constructor(
-		private _fwModel: FwProtheusModel,
-		private _utilsService: UtilsService,
-		private _router: Router
-	) {
-		this.setColProperties();
-	}
-
 	//Declaração de variaveis
-	filters: string = '';
 	isLoading: boolean = false;
-	resetFilters: boolean = false;
 	isShowMoreDisabled: boolean = false;
 
-	nNextPage: number = 1;
 	nTotal: number = 0;
+	nNextPage: number = 1;
 	nPageSize: number = 10;
 	nRegIndex: number = 1;
 	nHeightMonitor: number = window.innerHeight * (window.innerHeight > 850 ? 0.6 : 0.6);
@@ -54,7 +44,13 @@ export class RoletasComponent {
 	public breadcrumb: PoBreadcrumb = {
 		items: [{ label: 'Fretamento Urbano', link: '/' }, { label: 'Cadastrar Roletas' }],
 	};
-
+	constructor(
+		private _fwModel: FwProtheusModel,
+		private _utilsService: UtilsService,
+		private _router: Router
+	) {
+		this.setColProperties();
+	}
 	ngOnInit() {
 		this.getRoletas();
 	}
@@ -98,19 +94,18 @@ export class RoletasComponent {
 		let params = new HttpParams();
 		this.isLoading = true;
 
-		//Caso haja filtro, não realizar paginação
-		if (this.filters != '') {
-			params = params.append('FILTER', this.filters);
-		} else {
-			if (this.nPageSize.toString() != '') params = params.append('COUNT', this.nPageSize.toString());
-			if (this.nRegIndex.toString() != '')
-				if (this.nTotal !== 0 && this.nRegIndex > this.nTotal) {
-					params = params.append('STARTINDEX', 1);
-				} else {
-					params = params.append('STARTINDEX', this.nRegIndex.toString());
-				}
+		if (this.nPageSize.toString() != '') {
+			params = params.append('COUNT', this.nPageSize.toString());
 		}
-		this._fwModel.setEndPoint('GTPA001/');
+		if (this.nRegIndex.toString() != '') {
+			if (this.nTotal !== 0 && this.nRegIndex > this.nTotal) {
+				params = params.append('STARTINDEX', 1);
+			} else {
+				params = params.append('STARTINDEX', this.nRegIndex.toString());
+			}
+		}
+		params.append('ORDERBY', 'ORDER BY H6Z_CODIGO ');
+		this._fwModel.setEndPoint('GTPU006/');
 
 		this._fwModel.setVirtualField(true);
 		this._fwModel.get(params).subscribe(() => {
@@ -118,14 +113,14 @@ export class RoletasComponent {
 				let roletas = new RoletasModel();
 				roletas.pk = resource.pk;
 
-				roletas.codRoleta = resource.getModel('GI1MASTER').getValue('GI1_COD');
-
-				roletas.descRoleta = resource.getModel('GI1MASTER').getValue('GI1_DESCRI');
+				roletas.codRoleta = resource.getModel('H6ZMASTER').getValue('H6Z_CODIGO');
+				roletas.identificador = resource.getModel('H6ZMASTER').getValue('H6Z_CODID ');
+				roletas.descRoleta = resource.getModel('H6ZMASTER').getValue('H6Z_DESCR');
 
 				roletas.labelRoleta =
-					resource.getModel('GI1MASTER').getValue('GI1_COD') +
+					resource.getModel('H6ZMASTER').getValue('H6Z_CODID') +
 					' - ' +
-					resource.getModel('GI1MASTER').getValue('GI1_DESCRI');
+					resource.getModel('H6ZMASTER').getValue('H6Z_DESCR');
 
 				roletas.outrasAcoes = ['edit'];
 
@@ -150,7 +145,7 @@ export class RoletasComponent {
 	setShowMore(total: number) {
 		this.isLoading = false;
 		if (this.nRegIndex === 1) {
-			this.nRegIndex = this.nPageSize;
+			this.nRegIndex = this.nPageSize + 1;
 		} else {
 			this.nRegIndex += this.nPageSize;
 		}
