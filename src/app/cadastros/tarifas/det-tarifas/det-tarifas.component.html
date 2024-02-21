@@ -8,9 +8,9 @@
 				formControlName="codigo"
 				class="po-lg-4"
 				name="codigo"
-				p-label="Código*"
+				p-label="Código"
+				p-disabled="true"
 				[p-show-required]="true"
-				p-placeholder="000004"
 				[p-maxlength]="6">
 			</po-input>
 
@@ -18,28 +18,28 @@
 				formControlName="descricao"
 				class="po-lg-8"
 				name="descricao"
-				p-label="Descrição*"
+				p-label="Descrição"
 				[p-show-required]="true"
-				p-placeholder="Descrição da tarifa">
+				p-placeholder="Digite"
+				[p-maxlength]="50">
 			</po-input>
 		</div>
 		<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2">
 			<po-number
 				formControlName="valor"
-				class="po-xl-4 po-lg-4 po-md-6 po-sm-12"
+				class="po-lg-4"
 				name="valor"
-				p-label="Valor*"
+				p-label="Valor"
 				[p-show-required]="true"
-				p-placeholder="5,20">
+				p-placeholder="Digite">
 			</po-number>
 			<po-combo
 				#orgaoConcessorFilterCombo
 				name="orgaoConcessor"
 				formControlName="orgaoConcessor"
-				class="po-xl-4 po-lg-4 po-md-12 po-sm-12 po-pl-0"
+				class="po-lg-4"
 				p-label="Orgão Concessor"
 				[p-filter-service]="orgaoConcessorComboService"
-				[p-filter-params]="orgaoConcessorFilter"
 				p-clean="true"
 				p-placeholder="Selecionar"
 				[p-sort]="true">
@@ -54,31 +54,31 @@
 					</div>
 				</ng-template>
 			</po-combo>
-
 			<po-datepicker-range
 				#vigenciafilterRange
 				formControlName="vigencia"
-				class="po-xl-4 po-lg-4 po-md-6 po-sm-12"
+				class="po-lg-4"
 				name="vigencia"
-				p-label="Vigência*"
-				(p-change)="setRangeFilter($event)">
-			</po-datepicker-range>
-		</div>
-		<div class="po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2">
-			<po-lookup
-				class="po-xl-12 po-lg-12 po-md-12 po-sm-12"
-				formControlName="formasDePagamento"
-				p-label="Formas de pagamento*"
-				name="formasDePagamento"
-				p-field-label="nickname"
-				p-field-value="id"
-				[p-columns]="columns"
-				[p-filter-service]="poLookUpFormasDePagamento"
-				[p-filter-params]="filterParamFormasDePagamento"
-				[p-hide-columns-manager]="true"
-				[p-multiple]="true"></po-lookup>
+				p-label="Vigência"
+				(p-change)="setRangeFilter($event)"></po-datepicker-range>
 		</div>
 	</form>
+	<div class="po-lg-12 po-md-12 po-sm-12 po-pl-0 po-pr-0 po-pb-2">
+		<po-lookup
+			#formasDePagamento
+			[(ngModel)]="listFormaPag"
+			class="po-xl-12 po-lg-12 po-md-12 po-sm-12"
+			p-label="Formas de pagamento"
+			name="formasDePagamento"
+			p-field-label="label"
+			p-field-value="value"
+			[p-columns]="columns"
+			[p-filter-service]="poLookUpFormasDePagamento"
+			[p-hide-columns-manager]="true"
+			[p-multiple]="true"
+			p-placeholder="Selecione">
+		</po-lookup>
+	</div>
 	<div class="po-row po-mt-4" style="justify-content: flex-end">
 		<div class="po-pull-right">
 			<po-button p-label="Cancelar" p-kind="tertiary" (p-click)="modalCancel.open()"> </po-button>
@@ -87,15 +87,13 @@
 				class="po-ml-1"
 				p-label="Salvar e incluir novo"
 				(p-click)="saveTarifa(true)"
-				p-kind="secondary"
-				[p-disabled]="!tarifaForm.valid">
+				p-kind="secondary">
 			</po-button>
 			<po-button
 				class="po-ml-1"
 				p-label="Salvar"
 				(p-click)="editView ? modalConfirmation.open() : saveTarifa(false)"
-				p-kind="primary"
-				[p-disabled]="!tarifaForm.valid">
+				p-kind="primary">
 			</po-button>
 		</div>
 	</div>
@@ -103,8 +101,8 @@
 	<p *ngIf="editView" class="po-font-text-large text-color-gray po-mt-4 po-mb-2">Histórico de vigências</p>
 	<div *ngIf="editView">
 		<po-table
-			[p-columns]="columnsTable"
-			[p-items]="itemsTable"
+			[p-columns]="columnsHistorico"
+			[p-items]="itemsHistorico"
 			[p-hide-columns-manager]="true"
 			[p-sort]="true"
 			[p-height]="nHeightMonitor"></po-table>

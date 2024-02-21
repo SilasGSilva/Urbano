@@ -15,6 +15,7 @@ export class FwProtheusModel {
 	models: Model[] = [];
 	resources!: Resource[];
 	private virtualField: boolean = false;
+	private firstLevel: boolean = false;
 	private endpoint = '';
 
 	constructor(private fwModelService: FwmodelProtheusService) {}
@@ -31,6 +32,10 @@ export class FwProtheusModel {
 		this.virtualField = value;
 	}
 
+	public setFirstLevel(value: boolean): void {
+		this.firstLevel = value;
+	}
+
 	public AddModel(id: string, modeltype: string): void {
 		const newModel = new Model();
 		newModel.id = id;
@@ -43,6 +48,8 @@ export class FwProtheusModel {
 	public get(params?: HttpParams) {
 		if (params == undefined) params = new HttpParams();
 		params = params.set('FIELDVIRTUAL', this.virtualField);
+		params = params.set('FIRSTLEVEL', this.firstLevel);
+		params = params.set('FIELDEMPTY', true);
 
 		return this.fwModelService.get(this.endpoint, params).pipe(
 			map((data: FwProtheusModel) => {

@@ -6,7 +6,7 @@ import { FwProtheusModel } from './models/fw-protheus.model';
 	providedIn: 'root',
 })
 export class FwmodelProtheusService {
-	 private apiUrl = 'http://138.219.88.134:8084/rest/fwmodel';
+	private apiUrl = 'http://138.219.88.134:8084/rest/fwmodel';
 	//private apiUrl = 'http://localhost:12173/rest/fwmodel';
 
 	constructor(private http: HttpClient) {}
