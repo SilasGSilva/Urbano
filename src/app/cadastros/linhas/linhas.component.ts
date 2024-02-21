@@ -1,6 +1,6 @@
-import {
-	Component,
-	ViewChild
+import { 
+	Component, 
+	ViewChild 
 } from '@angular/core';
 import {
 	PoBreadcrumb,
@@ -10,21 +10,21 @@ import {
 	PoTableAction,
 	PoTableColumn,
 } from '@po-ui/ng-components';
-import {
-	CollumnsLinhas,
-	LinhasModel,
-	ListStatus
+import { 
+	CollumnsLinhas, 
+	LinhasModel, 
+	ListStatus 
 } from './linha.struct';
-import {
-	HttpParams
+import { 
+	HttpParams 
 } from '@angular/common/http';
-import {
-	ActivatedRoute,
-	Router
+import { 
+	ActivatedRoute, 
+	Router 
 } from '@angular/router';
-import {
-	FwProtheusModel,
-	Resource
+import { 
+	FwProtheusModel, 
+	Resource 
 } from 'src/app/services/models/fw-protheus.model';
 import { 
 	DestinoComboService, 
@@ -75,6 +75,8 @@ export class LinhasComponent {
 	public filterOrigem: string = '';
 	public filterDestino: string = '';
 	public filterStatus: string = '';
+	public modelOrigem: string = '';
+	public modelDestino: string = '';
 
 	nNextPage: number = 1;
 	nPageSize: number = 10;
@@ -195,6 +197,9 @@ export class LinhasComponent {
 		this._fwModel.setEndPoint('GTPU003/');
 		this._fwModel.setVirtualField(true);
 		this._fwModel.get(params).subscribe(() => {
+			if (this.filters != '') {
+				this.listLinhas = [];
+			}
 			this._fwModel.resources.forEach((resource: Resource) => {
 				let linhas = new LinhasModel();
 				linhas.pk = resource.pk;
@@ -213,10 +218,9 @@ export class LinhasComponent {
 					' - ' +
 					resource.getModel('H6VMASTER').getValue('H6V_DESTDE');
 
-				linhas.status = resource.getModel('H6VMASTER').getValue('H6V_STATUS')
+				linhas.status = resource.getModel('H6VMASTER').getValue('H6V_STATUS');
 
 				linhas.outrasAcoes = ['editar', 'visualizar'];
-
 				this.listLinhas = [...this.listLinhas, linhas];
 				this.isLoading = false;
 			});
@@ -270,137 +274,80 @@ export class LinhasComponent {
 	 * @since    2024
 	 * @version  v1
 	 *******************************************************************************/
-	setFilters(event: any) {
-
+	setFilters(event: any, combo: string = '') {
 		this.listLinhas = [];
 		this.filters = '';
 		this.isShowMoreDisabled = false;
-
-		if (event == undefined) {
-			this.filterPrefixo = '';
+		if (event == undefined && combo == 'comboprefixo') {
 			this.filterOrigem = '';
 			this.filterDestino = '';
-		} else {
-			//filtros
-			if (this.prefixoFilterCombo !== undefined && this.prefixoFilterCombo.selectedOption !== undefined) {
-				if (this.filterOrigem != '') {
-					this.filterOrigem += (
-						" AND (UPPER(H6V_PREFIX) LIKE UPPER('" +
-						this.prefixoFilterCombo.selectedOption.value +
-						"') AND UPPER(H6V_DESCRI) LIKE UPPER('" +
-						this.prefixoFilterCombo.selectedOption.label + "'))"
-					);
-				} else {
-					this.filterOrigem = (
-						"UPPER(H6V_PREFIX) LIKE UPPER('" +
-						this.prefixoFilterCombo.selectedOption.value +
-						"') AND UPPER(H6V_DESCRI) LIKE UPPER('" +
-						this.prefixoFilterCombo.selectedOption.label + "')"
-					);
-				}
+		} else if (event == undefined && combo == 'comboorigem') {
+			this.filterOrigem = '';
+			this.filterDestino = '';
+		} else if (event == undefined && combo == 'combodestino') {
+			this.filterDestino = '';
+		}
 
-				if (this.filterDestino != '') {
-					this.filterDestino += (
-						" AND (UPPER(H6V_PREFIX) LIKE UPPER('" +
-						this.prefixoFilterCombo.selectedOption.value +
-						"') AND UPPER(H6V_DESCRI) LIKE UPPER('" +
-						this.prefixoFilterCombo.selectedOption.label + "'))"
-					);
-				} else {
-					this.filterDestino = (
-						"UPPER(H6V_PREFIX) LIKE UPPER('" +
-						this.prefixoFilterCombo.selectedOption.value +
-						"') AND UPPER(H6V_DESCRI) LIKE UPPER('" +
-						this.prefixoFilterCombo.selectedOption.label + "')"
-					);
-				}
+		//filtros
+		if (this.prefixoFilterCombo !== undefined && this.prefixoFilterCombo.selectedOption !== undefined) {
 
-				if (this.filters != '') {
-					this.filters += ' AND ';
-				}
-				this.filters += " H6V_PREFIX = '" + this.prefixoFilterCombo.selectedOption.value + "' ";
+			this.filterOrigem =
+				"UPPER(H6V_PREFIX) LIKE UPPER('" +
+				this.prefixoFilterCombo.selectedOption.value +
+				"') AND UPPER(H6V_DESCRI) LIKE UPPER('" +
+				this.prefixoFilterCombo.selectedOption.label +
+				"')";
+
+			this.filterDestino =
+				"UPPER(H6V_PREFIX) LIKE UPPER('" +
+				this.prefixoFilterCombo.selectedOption.value +
+				"') AND UPPER(H6V_DESCRI) LIKE UPPER('" +
+				this.prefixoFilterCombo.selectedOption.label +
+				"')";
+
+			if (this.filters != '') {
+				this.filters += ' AND ';
+			}
+			this.filters += " H6V_PREFIX = '" + this.prefixoFilterCombo.selectedOption.value + "' ";
+		}
+
+		if (this.origemFilterCombo !== undefined && this.origemFilterCombo.selectedOption !== undefined) {
+
+			if (this.filterDestino != '') {
+				this.filterDestino +=
+					" AND (UPPER(H6V_ORIGEM) LIKE UPPER('" +
+					this.origemFilterCombo.selectedOption.value +
+					"') AND UPPER(H6V_ORIDES) LIKE UPPER('" +
+					this.origemFilterCombo.selectedOption.label +
+					"'))";
+			} else {
+				this.filterDestino =
+					"UPPER(H6V_ORIGEM) LIKE UPPER('" +
+					this.origemFilterCombo.selectedOption.value +
+					"') AND UPPER(H6V_ORIDES) LIKE UPPER('" +
+					this.origemFilterCombo.selectedOption.label +
+					"')";
 			}
 
-			if (this.origemFilterCombo !== undefined && this.origemFilterCombo.selectedOption !== undefined) {
-				if (this.filterPrefixo != '') {
-					this.filterPrefixo += (
-						" AND (UPPER(H6V_ORIGEM) LIKE UPPER('" +
-						this.origemFilterCombo.selectedOption.value +
-						"') AND UPPER(H6V_ORIDES) LIKE UPPER('" +
-						this.origemFilterCombo.selectedOption.label + "'))"
-					);
-				} else {
-					this.filterPrefixo = (
-						"UPPER(H6V_ORIGEM) LIKE UPPER('" +
-						this.origemFilterCombo.selectedOption.value +
-						"') AND UPPER(H6V_ORIDES) LIKE UPPER('" +
-						this.origemFilterCombo.selectedOption.label + "')"
-					);
-				}
-
-				if (this.filterDestino != '') {
-					this.filterDestino += (
-						" AND (UPPER(H6V_ORIGEM) LIKE UPPER('" +
-						this.origemFilterCombo.selectedOption.value +
-						"') AND UPPER(H6V_ORIDES) LIKE UPPER('" +
-						this.origemFilterCombo.selectedOption.label + "'))"
-					);
-				} else {
-					this.filterDestino = (
-						"UPPER(H6V_ORIGEM) LIKE UPPER('" +
-						this.origemFilterCombo.selectedOption.value +
-						"') AND UPPER(H6V_ORIDES) LIKE UPPER('" +
-						this.origemFilterCombo.selectedOption.label + "')"
-					);
-				}
-
-				if (this.filters != '') {
-					this.filters += ' AND ';
-				}
-				this.filters += " H6V_ORIGEM = '" + this.origemFilterCombo.selectedOption.value + "' ";
+			if (this.filters != '') {
+				this.filters += ' AND ';
 			}
+			this.filters += " H6V_ORIGEM = '" + this.origemFilterCombo.selectedOption.value + "' ";
+		}
 
-			if (this.destinoFilterCombo !== undefined && this.destinoFilterCombo.selectedOption !== undefined) {
-				if (this.filterPrefixo != '') {
-					this.filterPrefixo += " AND (UPPER(H6V_DESTIN) LIKE UPPER('" +
-						this.destinoFilterCombo.selectedOption.value +
-						"') AND UPPER(H6V_DESTDE) LIKE UPPER('" +
-						this.destinoFilterCombo.selectedOption.label + "'))"
-				} else {
-					this.filterPrefixo = (
-						"UPPER(H6V_DESTIN) LIKE UPPER('" +
-						this.destinoFilterCombo.selectedOption.value +
-						"') AND UPPER(H6V_DESTDE) LIKE UPPER('" +
-						this.destinoFilterCombo.selectedOption.label + "')"
-					);
-				}
+		if (this.destinoFilterCombo !== undefined && this.destinoFilterCombo.selectedOption !== undefined) {
 
-				if (this.filterOrigem != '') {
-					this.filterOrigem += " AND (UPPER(H6V_DESTIN) LIKE UPPER('" +
-						this.destinoFilterCombo.selectedOption.value +
-						"') AND UPPER(H6V_DESTDE) LIKE UPPER('" +
-						this.destinoFilterCombo.selectedOption.label + "'))"
-				} else {
-					this.filterOrigem = (
-						"UPPER(H6V_DESTIN) LIKE UPPER('" +
-						this.destinoFilterCombo.selectedOption.value +
-						"') AND UPPER(H6V_DESTDE) LIKE UPPER('" +
-						this.destinoFilterCombo.selectedOption.label + "')"
-					);
-				}
-
-				if (this.filters != '') {
-					this.filters += ' AND ';
-				}
-				this.filters += " H6V_DESTIN = '" + this.destinoFilterCombo.selectedOption.value + "' ";
+			if (this.filters != '') {
+				this.filters += ' AND ';
 			}
+			this.filters += " H6V_DESTIN = '" + this.destinoFilterCombo.selectedOption.value + "' ";
+		}
 
-			if (this.statusFilterCombo.selectedOption !== undefined) {
-				if (this.filters != '') {
-					this.filters += ' AND ';
-				}
-				this.filters += "H6V_STATUS = '" + this.statusFilterCombo.selectedOption.value + "' ";
+		if (this.statusFilterCombo.selectedOption !== undefined) {
+			if (this.filters != '') {
+				this.filters += ' AND ';
 			}
+			this.filters += "H6V_STATUS = '" + this.statusFilterCombo.selectedOption.value + "' ";
 		}
 		this.getLinhas();
 	}
@@ -419,5 +366,26 @@ export class LinhasComponent {
 				col.icons[1].action = this.visualizar.bind(this); //visualizar
 			}
 		});
+	}
+
+	/*******************************************************************************
+	 * @name clearFilter
+	 * @description Limpa os filtros
+	 * @author   Serviços | Silas Gomes
+	 * @since       2024
+	 * @version v1
+	 *******************************************************************************/
+	clearFilter(filter: string) {
+		switch (filter) {
+			case 'comboprefixo':
+				this.modelOrigem = ''
+				this.modelDestino = ''
+				break;
+
+			case 'comboorigem':
+				this.modelDestino = ''
+				break;
+		}
+
 	}
 }

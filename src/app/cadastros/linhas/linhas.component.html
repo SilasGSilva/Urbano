@@ -14,7 +14,7 @@
         [p-filter-service]="prefixoComboService"
         [p-filter-params]="filterPrefixo"
         p-clean="true"
-        (p-change)="setFilters($event)"
+        (p-change)="setFilters($event, 'comboprefixo'); clearFilter('comboprefixo')"
     >
     <ng-template p-combo-option-template let-option>
         <div class="po-row">
@@ -34,8 +34,10 @@
         p-label="Origem"
         [p-filter-service]="origemComboService"
         [p-filter-params]="filterOrigem"
+        [ngModel]="modelOrigem"
+        (ngModelChange)="modelOrigem = $event"
         p-placeholder="Selecionar"
-        (p-change)="setFilters($event)"
+        (p-change)="setFilters($event, 'comboorigem'); clearFilter('comboorigem')"
         p-clean="true"
     >
         <ng-template p-combo-option-template let-option>
@@ -62,7 +64,9 @@
         p-placeholder="Selecionar"
         [p-filter-service]="destinoComboService"
         [p-filter-params]="filterDestino"
-        (p-change)="setFilters($event)"
+        [ngModel]="modelDestino"
+        (ngModelChange)="modelDestino = $event"
+        (p-change)="setFilters($event, 'combodestino'); clearFilter('combodestino')"
         p-clean="true"
     >
         <ng-template p-combo-option-template let-option>
