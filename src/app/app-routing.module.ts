@@ -151,7 +151,7 @@ const routes: Routes = [
 		component: DetProgramacaoLinhasComponent,
 	},
 	{ path: 'programacao-linhas/detProgramacao-linhas/:acao', component: DetProgramacaoLinhasComponent },
-	{ path: 'programacao-linhas/viewProgramacao-linhas/:filial/:pk', component: ViewProgramacaoLinhasComponent },
+	{ path: 'programacao-linhas/viewProgramacao-linhas/:filial/:pk', component: DetProgramacaoLinhasComponent },
 ];
 
 @NgModule({

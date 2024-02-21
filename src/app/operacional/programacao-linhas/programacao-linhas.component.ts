@@ -430,15 +430,18 @@ export class ProgramacaoLinhasComponent {
 
 			case 'view':
 				console.log(this.eventActive);
-				this._router.navigate(['./viewProgramacao-linhas', btoa(this.eventActive.pk), this.eventActive.codProg], {
+				this._router.navigate(['./viewProgramacao-linhas', btoa(this.eventActive.pk), this.eventActive.pk], {
 					relativeTo: this._activedRoute,
 				});
 				break;
 
 			case 'create':
-				this.titleModal = 'Desativar programação';
-				this.textModal = 'Tem certeza que deseja desativar a programação atual?';
-				this.labelButtonModal = 'Desativar programação';
+				this._router.navigate(
+					['./detProgramacao-linhas', 'incluir', btoa(this.eventActive.pk), this.eventActive.pk],
+					{
+						relativeTo: this._activedRoute,
+					}
+				);
 				break;
 		}
 	}

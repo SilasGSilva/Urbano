@@ -1,1 +1,110 @@
-<p>det-programacao-linhas works!</p>
+<po-page-default [p-title]="title" [p-breadcrumb]="breadcrumb" [p-actions]="actions">
+	<po-dynamic-view [p-fields]="columnsDynamicView" [p-value]="itemsDynamicView"></po-dynamic-view>
+	<div class="po-mt-5">
+		<po-stepper>
+			<po-step p-label="Cadastrar requisitos">
+				<div class="po-mt-3">
+					<po-container>
+						<p class="po-font-text-large-bold po-mb-4">Cadastre os requisitos para programar os horários:</p>
+						<form [formGroup]="progLinha" class="po-row po-pl-0">
+							<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12">
+								<po-number
+									formControlName="horaIni"
+									class="po-xl-3 po-lg-3 po-md-6 po-sm-12"
+									name="horaIni"
+									p-label="Horário de início (soltura)*"
+									[p-show-required]="true"
+									p-placeholder="09:00"
+									p-mask="99:99">
+								</po-number>
+
+								<po-number
+									formControlName="horaPartida"
+									class="po-xl-3 po-lg-3 po-md-6 po-sm-12"
+									name="horaPartida"
+									p-label="Horário de partida"
+									[p-show-required]="true"
+									p-placeholder="10:00"
+									p-mask="99:99">
+								</po-number>
+
+								<po-number
+									formControlName="horaChegada"
+									class="po-xl-3 po-lg-3 po-md-6 po-sm-12"
+									name="horaChegada"
+									p-label="Horário de chegada"
+									[p-show-required]="true"
+									p-placeholder="20:00"
+									p-mask="99:99">
+								</po-number>
+
+								<po-number
+									formControlName="horaFim"
+									class="po-xl-3 po-lg-3 po-md-6 po-sm-12"
+									name="horaFim"
+									p-label="Horário de término (recolhe)"
+									[p-show-required]="true"
+									p-placeholder="21:00"
+									p-mask="99:99">
+								</po-number>
+							</div>
+							<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12">
+								<po-number
+									formControlName="kmIni"
+									class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+									name="kmIni"
+									p-label="Km entre início e ponto de partida"
+									[p-show-required]="true"
+									p-placeholder="2"
+									maxlength="6">
+								</po-number>
+
+								<po-number
+									formControlName="kmFim"
+									class="po-xl-6 po-lg-6 po-md-12 po-sm-12"
+									name="kmFim"
+									p-label="Km entre chegada e término"
+									[p-show-required]="true"
+									p-placeholder="3"
+									maxlength="6">
+								</po-number>
+							</div>
+							<div class="po-xl-12 po-lg-12 po-md-12 po-sm-12">
+								<po-checkbox-group
+									[p-columns]="4"
+									name="dias"
+									formControlName="dias"
+									p-label="Dias da semana correspondente"
+									[p-options]="[
+										{ value: 'segunda', label: 'Segunda-feira' },
+										{ value: 'terca', label: 'Terça-feira' },
+										{ value: 'quarta', label: 'Quarta-feira' },
+										{ value: 'quinta', label: 'Quinta-feira' },
+										{ value: 'sexta', label: 'Sexta-feira' },
+										{ value: 'sabado', label: 'Sábado' },
+										{ value: 'domingo', label: 'Domingo' },
+										{ value: 'feriados', label: 'Feriados' }
+									]">
+								</po-checkbox-group>
+							</div>
+						</form>
+						<po-button p-label="Incluir" p-kind="tertiary" p-icon="po-icon po-icon-plus"></po-button>
+					</po-container>
+				</div>
+			</po-step>
+			<po-step p-label="Criar programações"></po-step>
+		</po-stepper>
+	</div>
+</po-page-default>
+
+<po-loading-overlay [hidden]="!isShowLoading"></po-loading-overlay>
+
+<po-modal #modalCancel p-title="Cancelar programação da linha">
+	<p class="po-font-text-large">
+		Tem certeza que cancelar a programação? <span class="po-font-text-large-bold">Todo o progresso será perdido.</span>
+	</p>
+	<po-modal-footer>
+		<po-button p-label="Fechar" p-kind="tertiary" (p-click)="modalCancel.close()"> </po-button>
+		<po-button p-label="Cancelar programação" p-danger="true" p-kind="primary" (p-click)="backToProg()">
+		</po-button></po-modal-footer
+></po-modal>
