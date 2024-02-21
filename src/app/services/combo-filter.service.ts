@@ -616,7 +616,7 @@ export class PrefixoComboService implements PoComboFilter {
 				response.resources.forEach((resource: any) => {
 					let itemReturn: FilterComboStruct = new FilterComboStruct();
 
-					itemReturn.value = resource.models[0].fields.find(field => field.id === 'H6V_PREFIX').value;
+					itemReturn.value = resource.models[0].fields.find(field => field.id === 'H6V_CODIGO').value;
 					itemReturn.label = resource.models[0].fields.find(field => field.id === 'H6V_DESCRI').value;
 					itemReturn.desc = resource.models[0].fields.find(field => field.id === 'H6V_PREFIX').value;
 

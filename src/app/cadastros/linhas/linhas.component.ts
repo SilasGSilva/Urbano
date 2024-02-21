@@ -308,7 +308,7 @@ export class LinhasComponent {
 			if (this.filters != '') {
 				this.filters += ' AND ';
 			}
-			this.filters += " H6V_PREFIX = '" + this.prefixoFilterCombo.selectedOption.value + "' ";
+			this.filters += " H6V_CODIGO = '" + this.prefixoFilterCombo.selectedOption.value + "' ";
 		}
 
 		if (this.origemFilterCombo !== undefined && this.origemFilterCombo.selectedOption !== undefined) {
